@@ -45,12 +45,14 @@ export function OnlineStatus() {
   }, []);
 
   return (
-    <p className="flex items-center justify-center gap-1.5 text-[0.6rem] font-medium tracking-[0.14em] text-cream/45">
+    <p className="flex items-center justify-center gap-1.5 text-[0.62rem] font-medium tracking-[0.14em] text-cream/45 sm:text-[0.68rem]">
       <span className="relative flex h-1.5 w-1.5" aria-hidden="true">
         <span className="absolute inline-flex h-full w-full animate-ping-slow rounded-full bg-online opacity-40" />
         <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-online/90" />
       </span>
-      {onlineCount} online
+      <span>{onlineCount} online</span>
+      <span className="text-cream/25">•</span>
+      <span className="text-cream/40">currently riding</span>
     </p>
   );
 }
