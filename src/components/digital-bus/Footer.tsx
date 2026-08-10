@@ -2,23 +2,25 @@ import { Heart } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="flex w-full flex-col items-center justify-between gap-3 text-[0.68rem] font-medium tracking-[0.06em] text-cream/50 sm:flex-row sm:text-[0.72rem]">
-      {/* Creator Attribution */}
-      <p className="flex items-center gap-1.5 text-center sm:text-left">
-        <span>Crafted for the long way home by</span>
-        <a
-          href="https://yashshinde.is-a.dev"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-semibold text-cream underline decoration-cream/30 underline-offset-2 transition-colors hover:text-cream hover:decoration-cream focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/50"
-        >
-          Yash
-        </a>
-        <span aria-label="love">❤️</span>
-      </p>
+    <footer className="grid w-full grid-cols-1 items-center justify-items-center gap-4 text-[0.68rem] font-medium tracking-[0.06em] text-cream/50 sm:grid-cols-3 sm:justify-between sm:text-[0.72rem]">
+      {/* LEFT: Creator Attribution */}
+      <div className="justify-self-center sm:justify-self-start text-center sm:text-left">
+        <p className="flex items-center gap-1.5">
+          <span>Crafted for the long way home by</span>
+          <a
+            href="https://yashshinde.is-a.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-cream underline decoration-cream/30 underline-offset-2 transition-colors hover:text-cream hover:decoration-cream focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/50"
+          >
+            Yash
+          </a>
+          <span aria-label="love">❤️</span>
+        </p>
+      </div>
 
-      {/* Support & Nyxen links */}
-      <div className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-5">
+      {/* CENTER: Support Button */}
+      <div className="justify-self-center text-center">
         <a
           href="https://www.thankyouverymuch.co/yash"
           target="_blank"
@@ -29,7 +31,10 @@ export function Footer() {
           <Heart className="h-3 w-3 text-red-400 fill-red-400/40 transition-transform duration-200 group-hover:scale-110" />
           <span>Support the journey</span>
         </a>
+      </div>
 
+      {/* RIGHT: Nyxen Link */}
+      <div className="justify-self-center sm:justify-self-end text-center sm:text-right">
         <a
           href="https://nyxen.in"
           target="_blank"

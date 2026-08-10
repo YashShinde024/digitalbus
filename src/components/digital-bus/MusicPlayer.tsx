@@ -58,11 +58,11 @@ export function MusicPlayer() {
         className="glass-panel group/player relative w-full overflow-hidden rounded-[26px] p-4 sm:p-5"
       >
         {/* Upper Track Details & Controls Section */}
-        <div className="flex flex-col gap-3.5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           {/* Left: Album Art & Track Meta */}
           <div className="flex items-center gap-3.5 sm:gap-4 min-w-0 flex-1">
             {/* Album Artwork */}
-            <div className="relative h-[56px] w-[56px] shrink-0 overflow-hidden rounded-[16px] bg-black/30 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.5),inset_0_0_0_1px_rgba(255,255,255,0.15)] sm:h-[64px] sm:w-[64px]">
+            <div className="relative h-[56px] w-[56px] shrink-0 overflow-hidden rounded-[14px] bg-black/30 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.5),inset_0_0_0_1px_rgba(255,255,255,0.15)] sm:h-[60px] sm:w-[60px]">
               {coverOk ? (
                 <img
                   key={displayCover}
@@ -74,7 +74,7 @@ export function MusicPlayer() {
                 />
               ) : (
                 <span className="grid h-full w-full place-items-center text-cream/40">
-                  <Disc3 className="h-7 w-7" aria-hidden="true" />
+                  <Disc3 className="h-7 w-7 animate-spin-slow" aria-hidden="true" />
                 </span>
               )}
             </div>
@@ -87,7 +87,7 @@ export function MusicPlayer() {
               >
                 {displayTitle}
               </p>
-              <p className="mt-0.5 truncate text-xs font-medium text-cream/55 sm:text-[0.8rem]">
+              <p className="mt-0.5 truncate text-[0.7rem] font-medium text-cream/55 sm:text-[0.78rem]">
                 {isLoading ? (
                   <span className="animate-pulse text-cream/80">Loading next ride...</span>
                 ) : (
@@ -95,27 +95,27 @@ export function MusicPlayer() {
                 )}
               </p>
               {error ? (
-                <div className="mt-1.5 flex items-center gap-2">
-                  <span className="text-[0.68rem] text-red-400 font-medium">Audio unavailable</span>
+                <div className="mt-1 flex items-center gap-2">
+                  <span className="text-[0.65rem] text-red-400 font-medium">Audio unavailable</span>
                   <button
                     type="button"
                     onClick={retry}
-                    className="flex items-center gap-1 rounded-full bg-white/10 px-2 py-0.5 text-[0.65rem] text-cream hover:bg-white/20 transition"
+                    className="flex items-center gap-1 rounded-full bg-white/10 px-2 py-0.5 text-[0.6rem] text-cream hover:bg-white/20 transition"
                   >
-                    <RefreshCw className="h-3 w-3" /> Retry
+                    <RefreshCw className="h-2.5 w-2.5" /> Retry
                   </button>
                 </div>
               ) : (
                 /* Small Spectrum directly under song info */
-                <div className="mt-2 sm:mt-2.5">
+                <div className="mt-1.5 w-28 shrink-0">
                   <AudioWaveform active={isPlaying && !isMuted} loading={isLoading} />
                 </div>
               )}
             </div>
           </div>
 
-          {/* Right: Mute & Ambient Sound Toggles + Controls */}
-          <div className="flex items-center justify-center sm:justify-end gap-1.5 shrink-0 pt-0.5 sm:pt-0">
+          {/* Right: Mute & Ambient Sound Toggles + Controls (Coherent horizontal grid) */}
+          <div className="flex items-center justify-center sm:justify-end gap-2 shrink-0 pt-1 sm:pt-0">
             {/* Ambient Engine Rumble Toggle */}
             <button
               type="button"
@@ -126,11 +126,11 @@ export function MusicPlayer() {
                   : "Turn on ambient bus road sounds"
               }
               title={isAmbientEnabled ? "Ambient Bus Sounds: ON" : "Ambient Bus Sounds: OFF"}
-              className={`grid h-8 w-8 place-items-center rounded-full text-cream/50 transition-all duration-200 hover:bg-white/10 hover:text-cream focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/40 ${
+              className={`grid h-9 w-9 place-items-center rounded-full text-cream/50 transition-all duration-200 hover:bg-white/10 hover:text-cream focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/40 ${
                 isAmbientEnabled ? "text-cream bg-white/15" : ""
               }`}
             >
-              <Radio className="h-3.5 w-3.5" />
+              <Radio className="h-4 w-4" />
             </button>
 
             {/* Main Audio Mute / Unmute Button */}
@@ -140,13 +140,13 @@ export function MusicPlayer() {
               aria-label={isMuted ? "Unmute music" : "Mute music"}
               title={isMuted ? "Unmute Music" : "Mute Music"}
               className={`grid h-9 w-9 place-items-center rounded-full text-cream/70 transition-all duration-200 hover:bg-white/10 hover:text-cream active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/40 ${
-                isMuted ? "text-red-400 bg-red-950/30 border border-red-500/30" : ""
+                isMuted ? "text-red-400 bg-red-950/30 border border-red-500/20" : ""
               }`}
             >
               {isMuted ? (
-                <VolumeX className="h-4 w-4 text-red-400" />
+                <VolumeX className="h-4.5 w-4.5 text-red-400" />
               ) : (
-                <Volume2 className="h-4 w-4 text-cream/80" />
+                <Volume2 className="h-4.5 w-4.5 text-cream/80" />
               )}
             </button>
 
@@ -162,17 +162,17 @@ export function MusicPlayer() {
         </div>
 
         {/* Next Song Preview Header */}
-        <div className="mt-3 flex items-center justify-between text-[0.65rem] font-medium tracking-[0.06em] text-cream/45 sm:text-[0.68rem]">
-          <span className="truncate max-w-[85%]">
-            <span className="uppercase text-cream/35 tracking-widest font-semibold mr-1.5">
+        <div className="mt-4 flex items-center justify-between text-[0.62rem] font-medium tracking-[0.06em] text-cream/40 sm:text-[0.65rem] border-t border-white/5 pt-2.5">
+          <span className="truncate max-w-full flex items-center gap-1.5">
+            <span className="uppercase text-cream/30 tracking-widest font-semibold text-[0.55rem]">
               Next
             </span>
-            <span className="truncate italic text-cream/55">{nextTrackTitle}</span>
+            <span className="truncate italic text-cream/50">{nextTrackTitle}</span>
           </span>
         </div>
 
         {/* Straight Horizontal Seek Line */}
-        <div className="mt-1 pt-1.5 border-t border-white/10">
+        <div className="mt-2.5">
           <ProgressBar progress={progress} duration={duration} onSeek={seek} />
         </div>
       </section>
