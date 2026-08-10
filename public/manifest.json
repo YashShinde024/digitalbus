@@ -1,0 +1,16 @@
+{
+  "name": "Digital Bus — डिजिटल बस",
+  "short_name": "Digital Bus",
+  "description": "A cozy web-based music experience inspired by Indian bus journeys, travel, nature, nostalgia, lo-fi and indie music.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#191512",
+  "theme_color": "#191512",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
