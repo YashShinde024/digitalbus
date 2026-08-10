@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
  */
 export function ToastBanner() {
   const [active, setActive] = useState(false);
-  const [message, setMessage] = useState("shhhhh... enjoy the music 🤫");
+  const [message, setMessage] = useState("Shhhhh... enjoy the music 🎧");
 
-  const showToast = (msg = "shhhhh... enjoy the music 🤫") => {
+  const showToast = (msg = "Shhhhh... enjoy the music 🎧") => {
     setMessage(msg);
     setActive(true);
     setTimeout(() => {
@@ -30,7 +30,7 @@ export function ToastBanner() {
       if (e.repeat) return;
 
       if (e.key === "b" || e.key === "B") {
-        showToast("shhhhh... enjoy the music 🤫");
+        showToast("Shhhhh... enjoy the music 🎧");
       }
     };
 

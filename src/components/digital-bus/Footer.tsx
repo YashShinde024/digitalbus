@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="flex w-full flex-col items-center justify-between gap-3 text-[0.68rem] font-medium tracking-[0.06em] text-cream/50 sm:flex-row sm:text-[0.72rem]">
       {/* Creator Attribution */}
       <p className="flex items-center gap-1.5 text-center sm:text-left">
-        <span>Crafted for the long way home ·</span>
+        <span>Crafted for the long way home by</span>
         <a
           href="https://yashshinde.is-a.dev"
           target="_blank"
