@@ -1,361 +1,452 @@
-# Digital Bus — डिजिटल बस
+# 🚌 Digital Bus
 
-[![Live Demo](https://img.shields.io/badge/Website-digitalbus.me-10b981?style=for-the-badge&logo=cloudflare)](https://digitalbus.me)
-[![React 19](https://img.shields.io/badge/React-19.2.0-61dafb?style=for-the-badge&logo=react)](https://react.dev)
-[![TanStack Start](https://img.shields.io/badge/Framework-TanStack_Start-ff4154?style=for-the-badge&logo=tanstack)](https://tanstack.com)
-[![Tailwind CSS v4](https://img.shields.io/badge/Styling-Tailwind_v4-38bdf8?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com)
-[![License: MIT](https://img.shields.io/badge/Code_License-MIT-blue?style=for-the-badge)](./LICENSE)
+> A cozy digital journey through music, memories, and the road ahead.
 
-A cozy, atmospheric, web-based music experience inspired by Indian bus journeys, mountain rain, nature, nostalgia, lo-fi, and indie music. Built with **React 19**, **TanStack Start & Router**, **Tailwind CSS v4**, and native **HTML5 Audio API**.
+**Digital Bus** is a browser-based ambient music experience inspired by long bus rides, Indian landscapes, nostalgic music, and quiet moments on the road.
 
-- **Live Website:** [https://digitalbus.me](https://digitalbus.me)
-- **Created by:** [Yash Shinde](https://yashshinde.is-a.dev)
-- **Support Project:** [thankyouverymuch.co/yash](https://www.thankyouverymuch.co/yash)
-- **Branding Partner:** [nyxen.in](https://nyxen.in)
+Instead of being another conventional music player, Digital Bus turns listening into a small visual journey — combining a cinematic Indian-inspired environment with an interactive music player.
+
+🌐 **Live:** https://digitalbus.me
 
 ---
 
-## 1. Project Overview
+## ✨ Experience
 
-**Digital Bus** is an immersive digital radio station designed to capture the cozy, nostalgic mood of traveling through misty mountain roads on a rainy Indian bus.
+Digital Bus is designed around a simple idea:
 
-Unlike traditional music streaming platforms with overwhelming playlists, search bars, and algorithmic queues, Digital Bus offers a passive, curated listening journey:
+> Sometimes you don't need a destination. You just need a good song and a window seat.
 
-- **No Playlist Selection:** Visitors step onto the bus and enjoy a continuous stream of lo-fi, indie, and nostalgic Indian tracks.
-- **Client-Side Journey:** Every visitor receives their own unique, randomized listening sequence per browser session.
-- **Cozy Atmospheric Layering:** Features a vintage bus stop background paired with a high-performance 60fps monsoon rain effect and an Apple iOS-inspired glassmorphism music player.
+The interface combines:
 
----
+- 🌄 Cinematic Indian-inspired landscapes
+- 🚌 Cozy bus journey atmosphere
+- 🎵 Curated music playback
+- 🌧️ Ambient rain effects
+- 🕒 Real-time date & time
+- 🟢 Live online listener count
+- 🎧 Spotify & YouTube Music shortcuts
+- 🎚️ Interactive audio visualization
+- 🪟 Apple-inspired glassmorphism
+- 📱 Responsive mobile experience
+- 🚌 Small interactive Easter eggs
 
-## 2. Features
-
-- 🚌 **Vintage Bus Artwork & Atmospheric Scene:** Native high-resolution environmental background with a vintage Indian bus parked by a mountain river.
-- 🌧️ **Cinematic Monsoon Rain Effect (`RainEffect.tsx`):** Lightweight 60fps HTML5 Canvas rain layer that respects `prefers-reduced-motion` and automatically pauses when switching browser tabs.
-- 🪔 **Hero Devanagari Wordmark (`BrandTitle.tsx`):** Large stacked `डिजिटल` / `बस` brand mark rendered in `Yatra One` typography.
-- 🔀 **Session Fisher-Yates Shuffle:** Generates a randomized track queue locally per visitor session without repeating songs.
-- 📻 **Single HTML5 Audio Engine (`useAudioPlayer.ts`):** High-performance playback using a single `HTMLAudioElement` instance to prevent duplicate audio streams.
-- 🔁 **Automatic Track Progression:** Audio `ended` event automatically advances and plays the next track in the user's shuffle queue.
-- 🏷️ **On-Demand ID3 Metadata & Artwork Extraction (`id3.ts`):** Parses MP3 ID3v2 tags and embedded album covers (APIC frames) on-demand using 256KB range requests without downloading entire audio files.
-- 🎛️ **Two Distinct Player Visuals:**
-  - **Small Spectrum (`AudioWaveform.tsx`):** Compact 16-bar decorative audio activity indicator placed directly under track metadata.
-  - **Straight Progress Line (`ProgressBar.tsx`):** Minimalist horizontal seek line with subtle position thumb and interactive click/drag seeking.
-- 🟢 **Real-Time Presence Counter (`OnlineStatus.tsx`):** Lightweight server-function presence engine (`src/lib/presence.ts`) displaying live active visitors anonymously (`● X online`).
-- 📱 **Fully Responsive Layout:** Optimized across 320px, 375px, 414px, 768px, 1024px, and 1440px+ viewports.
-- 🌐 **Comprehensive SEO + AEO + GEO:** Full OpenGraph image support, JSON-LD structured data (`WebSite`, `WebApplication`, `Person`), canonical URLs, `sitemap.xml`, `robots.txt`, and `manifest.json`.
+Every visitor gets their own independent listening experience.
 
 ---
 
-## 3. How the Music System Works
+## 🎵 Music Experience
 
-The audio system is engineered to be **100% client-side and serverless for playback**. Every user visiting Digital Bus listens to music independently without WebSocket overhead or global playback synchronization.
+Digital Bus uses a locally hosted music library rather than depending on an external streaming API for the core playback experience.
 
-### Audio Architecture Diagram
+The player supports:
 
+- Automatic playback progression
+- Unique shuffled playback per visitor
+- Play / Pause
+- Previous / Next
+- Seeking
+- Current playback time
+- Track duration
+- Album artwork
+- Artist information
+- Mini audio spectrum
+- Loading states
+- Failed-track handling
+- Persistent playback preferences
+
+When a track ends, the next track is automatically selected.
+
+Users don't need to manually choose a song every time they visit.
+
+---
+
+## 🎨 Visual Design
+
+The visual direction is inspired by:
+
+- Indian road journeys
+- Old buses
+- Mountain roads
+- Rainy evenings
+- Lofi aesthetics
+- Nostalgic Indian cinema
+- Cozy travel photography
+- Modern glassmorphism
+
+The interface intentionally avoids looking like a conventional Spotify clone.
+
+The goal is to make the website feel like a **digital window seat**.
+
+---
+
+## 🖥️ Interface
+
+The experience includes:
+
+### Digital Bus Header
+
+The main Hindi typography:
+
+**डिजिटल बस**
+
+with the English subtitle:
+
+**DIGITAL BUS**
+
+The header also contains:
+
+- Current time
+- Current date
+- Online listener count
+- Spotify shortcut
+- YouTube Music shortcut
+
+### Music Player
+
+The central player contains:
+
+- Album artwork
+- Song title
+- Artist
+- Mini spectrum visualization
+- Play / Pause
+- Previous / Next
+- Progress indicator
+- Current time
+- Total duration
+
+The player uses a translucent glass interface so the environment remains visible behind it.
+
+### Footer
+
+The footer contains:
+
+**Crafted for the long way home · Yash ❤️**
+
+along with:
+
+- Support the journey
+- Nyxen
+
+---
+
+## 🚌 Easter Eggs
+
+Digital Bus contains a few small interactions hidden throughout the experience.
+
+For example:
+
+### Bus Horn
+
+Press:
+
+```text
+B
 ```
-User Action (Play / Seek / Auto-Next)
-                  │
-                  ▼
-         MusicPlayer Component
-                  │
-                  ▼
-       useAudioPlayer Hook (State Engine)
-        ├── Fisher-Yates Session Shuffle
-        ├── On-Demand ID3 Metadata Parser (id3.ts)
-        └── Event Listeners (play, pause, ended, timeupdate, error)
-                  │
-                  ▼
-       HTMLAudioElement (Single Instance)
-                  │
-                  ▼
-   Static Audio Files (`/public/Songs/*.mp3`)
+
+to trigger the bus horn.
+
+The interaction is intentionally subtle and does not interrupt music playback.
+
+---
+
+## 🌧️ Ambient Experience
+
+The website can enhance the journey with subtle environmental effects such as:
+
+- Rain
+- Background atmosphere
+- Time-based lighting
+- Gentle motion
+- Audio-reactive visualization
+
+Effects are designed to remain lightweight and never overpower the music.
+
+The experience also respects:
+
+```text
+prefers-reduced-motion
 ```
 
-### Key Technical Behaviors
-
-1. **On-Demand Metadata Loading:** `preload="metadata"` is enforced. When a track loads, `extractID3Metadata()` fetches only the first 256KB (`bytes=0-262144`) of the MP3 file using HTTP Range Requests to parse ID3v2 tags and APIC picture frames.
-2. **Fisher-Yates Session Shuffle:** When a user opens Digital Bus, a session shuffle order array is created:
-   ```ts
-   function shuffleArray(size: number): number[] {
-     const array = Array.from({ length: size }, (_, i) => i);
-     for (let i = array.length - 1; i > 0; i--) {
-       const j = Math.floor(Math.random() * (i + 1));
-       [array[i], array[j]] = [array[j]!, array[i]!];
-     }
-     return array;
-   }
-   ```
-3. **Auto-Next Track Continuity:** Native `audio.addEventListener("ended", ...)` triggers `autoPlayNextRef.current = true` and updates `queueIndex`, automatically loading and starting the next track in the shuffled sequence.
-4. **Error Skipping:** If an audio file fails to load or returns a 404/network error, the player attempts 3 auto-skips to the next valid track before showing a manual retry button.
+where applicable.
 
 ---
 
-## 4. Multi-User / Online Presence System
+## 📱 Responsive Design
 
-While music playback is **completely local to each visitor's browser**, Digital Bus displays a live count of active visitors using a lightweight presence engine powered by TanStack Start server functions (`src/lib/presence.ts`).
+Digital Bus is designed to work across:
 
-### Presence Mechanics
+- Desktop
+- Laptop
+- Tablet
+- Mobile
+- Mobile landscape
 
-- **Anonymous Session ID:** Every browser session generates a random string (`crypto.randomUUID()`).
-- **Heartbeat:** `OnlineStatus.tsx` sends a lightweight HTTP ping (`pingPresence(sessionId)`) every 10 seconds.
-- **Server Store & Pruning:** Active sessions are kept in an in-memory Map. Sessions without a heartbeat for over 30 seconds are pruned automatically.
-- **Privacy & Security:** Zero personal data, IP addresses, usernames, or cookies are stored or collected.
-
----
-
-## 5. Tech Stack
-
-| Technology                    | Purpose                                        |
-| ----------------------------- | ---------------------------------------------- |
-| **React 19.2**                | UI Component Architecture & State              |
-| **TanStack Start & Router**   | Full-Stack Meta-Framework & Type-Safe Routing  |
-| **TanStack Query v5**         | Client Data Fetching & Query Management        |
-| **Tailwind CSS v4**           | Design System, Utility Classes & Glassmorphism |
-| **Nitro & Cloudflare Module** | SSR Engine & Serverless Deployment             |
-| **Lucide React**              | Minimalist UI Icons                            |
-| **TypeScript 5.8**            | Type Safety & Developer Experience             |
+The interface adapts the player, typography, navigation, footer, and interactive elements for smaller screens.
 
 ---
 
-## 6. Project Structure
+## 🛠️ Tech Stack
 
-```
+Digital Bus is built with modern web technologies.
+
+### Frontend
+
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+
+### Audio
+
+- HTML5 Audio
+- Web Audio API
+- Audio-reactive visualization
+
+### UI
+
+- Responsive CSS
+- Glassmorphism
+- CSS animations
+- Browser APIs
+
+### Deployment
+
+The project is designed to be deployable as a modern static frontend.
+
+---
+
+## 📁 Project Structure
+
+```text
 digital-bus/
+│
 ├── public/
-│   ├── Songs/             # 70+ MP3 audio files
-│   ├── bus-stop-bg.jpg    # Main background artwork
-│   ├── og-image.png       # OpenGraph social preview image
-│   ├── favicon.svg        # Custom bus vector icon
-│   ├── manifest.json      # Web Application Manifest
-│   ├── robots.txt         # Search engine crawler instructions
-│   └── sitemap.xml        # XML Sitemap referencing https://digitalbus.me
+│   ├── Songs/
+│   │   └── *.mp3
+│   ├── bus-stop-bg.jpg
+│   ├── favicon/
+│   └── og-image.png
+│
 ├── src/
 │   ├── components/
-│   │   └── digital-bus/
-│   │       ├── AudioWaveform.tsx     # Small 16-bar decorative spectrum
-│   │       ├── BrandTitle.tsx        # Large stacked Devanagari hero title (डिजिटल / बस)
-│   │       ├── Clock.tsx             # Live date and time indicator
-│   │       ├── DigitalBus.tsx        # Main container & background layout
-│   │       ├── Footer.tsx            # Footer with creator & support links
-│   │       ├── MusicLinks.tsx        # Spotify & YouTube Music links
-│   │       ├── MusicPlayer.tsx       # Apple glassmorphism player panel
-│   │       ├── OnlineStatus.tsx      # Real-time online visitor counter
-│   │       ├── PlayerControls.tsx    # Play/Pause, Next, Previous buttons
-│   │       ├── ProgressBar.tsx       # Primary straight horizontal seek bar
-│   │       └── RainEffect.tsx        # 60fps HTML5 Canvas monsoon rain layer
-│   ├── data/
-│   │   └── playlist.ts               # Playlist catalog & external links
+│   │   ├── digital-bus/
+│   │   └── ui/
 │   ├── hooks/
-│   │   └── useAudioPlayer.ts         # Single audio engine & shuffle state hook
 │   ├── lib/
-│   │   ├── id3.ts                    # ID3v2 tag & cover art range-request parser
-│   │   └── presence.ts               # Presence server function (`pingPresence`)
-│   ├── routes/
-│   │   ├── __root.tsx                # Meta, SEO, JSON-LD & root shell
-│   │   └── index.tsx                 # Home route entry point
-│   ├── server.ts                     # TanStack Start server handler
-│   ├── start.ts                      # Client entry point
-│   └── styles.css                    # Design tokens & glassmorphism utilities
+│   ├── data/
+│   └── routes/
+│
+├── .gitignore
+├── README.md
 ├── package.json
 ├── tsconfig.json
 ├── vite.config.ts
-└── README.md
+└── ...
 ```
 
----
-
-## 7. Core Components
-
-- **`DigitalBus.tsx`:** Manages page layout hierarchy (`Background Image` → `Rain Layer (z-[1])` → `Scene Veil (z-[2])` → `Interactive UI (z-10)`).
-- **`BrandTitle.tsx`:** Renders the stacked hero Devanagari title (`डिजिटल` / `बस`) using `Yatra One` font and soft drop shadow.
-- **`MusicPlayer.tsx`:** Apple-inspired glass container featuring backdrop blur (`blur-2xl`), subtle white border, and soft halo lighting.
-- **`ProgressBar.tsx`:** Interactive straight progress line supporting click-to-seek, drag-to-seek, and formatted timestamps (`0:42 / 4:18`).
-- **`AudioWaveform.tsx`:** Compact 16-bar animated spectrum indicator under track info.
-- **`RainEffect.tsx`:** 60fps HTML5 Canvas rain generator with slanted monsoon raindrops and atmospheric mist.
-- **`OnlineStatus.tsx`:** Displays live visitor count (`● X online`) with glowing pulse dot.
+> The exact structure may evolve as the project grows.
 
 ---
 
-## 8. Adding Music
+## 🚀 Getting Started
 
-To add new songs to Digital Bus:
-
-1. **Add MP3 File:** Place the audio file in `public/Songs/` (e.g., `public/Songs/YourSong.mp3`).
-2. **(Optional) Embed ID3 Tags:** For best results, embed ID3v2 tags (Title, Artist, and Cover Artwork) into the MP3 file using an audio editor like TagScanner or Mp3tag.
-3. **Register in `src/data/playlist.ts`:**
-   ```ts
-   {
-     id: 75,
-     title: "Song Name",
-     artist: "Artist Name",
-     audio: "/Songs/YourSong.mp3",
-     cover: "/bus-stop-bg.jpg" // Fallback cover if ID3 artwork is absent
-   }
-   ```
-4. **Test:** Run `npm run dev` and click **Next** to verify playback, artwork extraction, and timestamps.
-
----
-
-## 9. Local Development
-
-### Prerequisites
-
-- **Node.js**: v18.0.0 or higher
-- **npm**: v9.0.0 or higher
-
-### Installation
+### 1. Clone the repository
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/yashshinde/digital-bus.git
+git clone https://github.com/YashShinde024/digitalbus.git
 cd digital-bus
+```
 
-# 2. Install dependencies
+### 2. Install dependencies
+
+```bash
 npm install
+```
 
-# 3. Start local development server
+### 3. Start the development server
+
+```bash
 npm run dev
 ```
 
-The application will be running at `http://localhost:3000`.
+The application will be available at the local development URL shown by Vite.
 
-### Available Scripts
-
-- `npm run dev`: Starts the Vite development server.
-- `npm run build`: Compiles production client, SSR, and Nitro server bundles.
-- `npm run preview`: Previews the production build locally.
-- `npm run lint`: Runs ESLint for code quality checks.
-- `npm run format`: Formats code using Prettier.
-
----
-
-## 10. Environment Variables
-
-Digital Bus runs out of the box without requiring mandatory third-party API keys or environment variables.
-
-Optional environment configuration for Cloudflare Workers / Nitro deployment:
-
-```env
-# Optional port configuration for local previews
-PORT=3000
-```
-
----
-
-## 11. Deployment
-
-Digital Bus is built using **TanStack Start** with **Nitro** configured for the `cloudflare-module` preset.
-
-### Deploying to Cloudflare Workers
+### 4. Create a production build
 
 ```bash
-# 1. Build the production bundle
 npm run build
-
-# 2. Deploy using Nitro / Wrangler
-npx wrangler deploy
 ```
 
-The build output is generated in `.output/server/` and `.output/public/`.
+### 5. Preview the production build
+
+```bash
+npm run preview
+```
 
 ---
 
-## 12. SEO / AEO / GEO Implementation
+## 🎶 Adding Music
 
-Digital Bus is optimized for search engines, AI answer engines, and social media previews:
+Songs are stored locally inside the project's public audio directory.
 
-- **Canonical URL:** `https://digitalbus.me/`
-- **Title Tag:** `Digital Bus — Lo-Fi, Indie & Indian Music for the Journey`
-- **OpenGraph:** `og:image` pointing to `https://digitalbus.me/og-image.png`.
-- **JSON-LD Structured Data (`__root.tsx`):**
-  ```json
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "@id": "https://digitalbus.me/#website",
-        "url": "https://digitalbus.me/",
-        "name": "Digital Bus",
-        "alternateName": "डिजिटल बस",
-        "publisher": { "@id": "https://digitalbus.me/#person" }
-      },
-      {
-        "@type": "WebApplication",
-        "@id": "https://digitalbus.me/#webapp",
-        "name": "Digital Bus Radio",
-        "applicationCategory": "MultimediaApplication"
-      },
-      {
-        "@type": "Person",
-        "@id": "https://digitalbus.me/#person",
-        "name": "Yash Shinde",
-        "url": "https://yashshinde.is-a.dev"
-      }
-    ]
-  }
-  ```
-- **Sitemap & Robots:** `public/sitemap.xml` and `public/robots.txt`.
+Track metadata and artwork are handled by the application's music system.
+
+When adding new tracks, make sure:
+
+- The audio file is supported by modern browsers.
+- File names are safe and predictable.
+- Album artwork is embedded or supplied correctly.
+- Track metadata is correctly mapped.
+- Large unnecessary files are avoided.
 
 ---
 
-## 13. Performance Optimizations
+## 🔀 Per-Visitor Playback
 
-- **Range Request ID3 Extraction:** Reads only 256KB of MP3 headers for ID3 tag parsing instead of fetching full 10MB audio files.
-- **No Unnecessary Preloading:** Uses `preload="metadata"` and single `HTMLAudioElement` instance.
-- **Canvas Rain Animation:** Uses `requestAnimationFrame` with tab visibility detection (`visibilitychange`) to pause rain rendering when hidden.
-- **Session State:** Shuffle order array is computed once per session in React memory.
+Digital Bus does not use one global player state for everyone.
 
----
+Each visitor has their own:
 
-## 14. Accessibility (a11y)
+- Current track
+- Playback position
+- Shuffle order
+- Player state
+- Preferences
 
-- **Keyboard Navigation:** Progress slider supports `ArrowLeft` and `ArrowRight` keyboard seeking.
-- **ARIA Labels:** Explicit `aria-label` attributes on player controls, seek slider, and external links.
-- **Prefers Reduced Motion:** Rain animation and wave pulses automatically pause when `prefers-reduced-motion: reduce` is enabled.
-- **Focus Rings:** Visible focus outlines (`focus-visible:ring-1`) for all interactive buttons and links.
+This means two people can visit Digital Bus simultaneously and listen to completely different songs.
 
 ---
 
-## 15. Privacy
+## 🟢 Online Counter
 
-- **No Cookies:** Digital Bus uses zero cookies.
-- **No User Tracking:** No personal data, IP addresses, or location data are logged or collected.
-- **Independent Playback:** Audio playback state exists exclusively in each visitor's browser.
-- **Anonymous Presence:** Presence heartbeats use randomly generated UUID session tokens stored temporarily in memory.
+The online counter represents active visitors currently using Digital Bus.
 
----
+The system is designed so that individual users do not control the displayed count manually.
 
-## 16. Security
-
-- **Safe External Links:** All external links (`Yash`, `Support`, `Nyxen`, `Spotify`, `YouTube Music`) use `target="_blank" rel="noopener noreferrer"`.
-- **Strict Content Headers:** Static headers generated via Nitro `.output/public/_headers`.
+The implementation can be evolved independently from the music player.
 
 ---
 
-## 17. Troubleshooting
+## 🔍 SEO & Discoverability
 
-### Audio fails to play automatically
+Digital Bus includes a dedicated SEO layer covering:
 
-Browsers enforce strict autoplay policies. If audio fails to start on initial load, click the **Play** button once to grant browser audio context permission.
+- Page title
+- Meta description
+- Canonical URL
+- Open Graph metadata
+- Social sharing metadata
+- Structured metadata where appropriate
+- Robots configuration
+- Sitemap
+- Semantic HTML
+- Search-friendly content
 
-### Cover art shows fallback icon
+Primary website:
 
-If an MP3 file lacks an embedded APIC picture frame, Digital Bus gracefully displays the fallback artwork (`/bus-stop-bg.jpg`).
+**[https://digitalbus.me](https://digitalbus.me)**
+
+The project is designed around the concept of a digital music journey rather than a generic music player.
 
 ---
 
-## 18. License & Music Copyright
+## 🌐 External Links
 
-- **Source Code License:** The source code of Digital Bus is licensed under the [MIT License](./LICENSE).
-- **Audio Assets Notice:** Audio files contained within `public/Songs/` belong to their respective original artists and copyright owners. Audio assets are included strictly for demonstration and non-commercial streaming purposes and are **NOT** covered under the MIT open-source code license.
+Digital Bus connects users to:
+
+- Spotify
+- YouTube Music
+- Yash's portfolio
+- Nyxen
+- Support page
+
+External links should always open safely and remain independent from the core listening experience.
 
 ---
 
-## 19. Credits & Support
+## ❤️ Support
 
-Crafted with ❤️ for the journey by **Yash Shinde**.
+If you enjoy the Digital Bus experience and want to support its development:
 
-- **Portfolio:** [yashshinde.is-a.dev](https://yashshinde.is-a.dev)
-- **Live Radio:** [digitalbus.me](https://digitalbus.me)
-- **Branding:** [nyxen.in](https://nyxen.in)
-- **Support the Journey:** [thankyouverymuch.co/yash](https://www.thankyouverymuch.co/yash)
+**Support the journey**
+
+Support page:
+
+[https://www.thankyouverymuch.co/yash](https://www.thankyouverymuch.co/yash)
+
+Every bit of support helps keep the project moving.
+
+---
+
+## 👨‍💻 Created By
+
+**Yash Shinde**
+
+Full Stack Developer & Founder at Nyxen.
+
+Portfolio:
+
+[https://yashshinde.is-a.dev](https://yashshinde.is-a.dev)
+
+Nyxen:
+
+[https://nyxen.in](https://nyxen.in)
+
+---
+
+## 🏢 Built Under Nyxen
+
+Digital Bus is an independent project created under **Nyxen**.
+
+**Innovate. Build. Empower.**
+
+[https://nyxen.in](https://nyxen.in)
+
+---
+
+## 📜 License
+
+MIT License — see [LICENSE](./LICENSE) for details.
+
+---
+
+## 🛣️ Roadmap
+
+Possible future improvements:
+
+- [ ] More journey environments
+- [ ] More atmospheric effects
+- [ ] Additional ambient sounds
+- [ ] More interactive Easter eggs
+- [ ] Expanded audio visualization
+- [ ] Improved accessibility
+- [ ] More personalized journey experiences
+- [ ] Additional performance optimizations
+- [ ] More curated music collections
+
+The roadmap may change as Digital Bus evolves.
+
+---
+
+## ⭐ Why Digital Bus?
+
+There are thousands of music players on the internet.
+
+Digital Bus isn't trying to be another one.
+
+It's a small place to:
+
+**put on your headphones,**
+
+**look out the window,**
+
+**and let the road go by.**
+
+🚌🌧️🎧
+
+---
+
+**Digital Bus — डिजिटल बस**
+
+*For the long way home.*

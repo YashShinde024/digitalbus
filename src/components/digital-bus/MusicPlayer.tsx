@@ -120,7 +120,11 @@ export function MusicPlayer() {
             <button
               type="button"
               onClick={toggleAmbient}
-              aria-label={isAmbientEnabled ? "Turn off ambient bus road sounds" : "Turn on ambient bus road sounds"}
+              aria-label={
+                isAmbientEnabled
+                  ? "Turn off ambient bus road sounds"
+                  : "Turn on ambient bus road sounds"
+              }
               title={isAmbientEnabled ? "Ambient Bus Sounds: ON" : "Ambient Bus Sounds: OFF"}
               className={`grid h-8 w-8 place-items-center rounded-full text-cream/50 transition-all duration-200 hover:bg-white/10 hover:text-cream focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/40 ${
                 isAmbientEnabled ? "text-cream bg-white/15" : ""
@@ -160,7 +164,9 @@ export function MusicPlayer() {
         {/* Next Song Preview Header */}
         <div className="mt-3 flex items-center justify-between text-[0.65rem] font-medium tracking-[0.06em] text-cream/45 sm:text-[0.68rem]">
           <span className="truncate max-w-[85%]">
-            <span className="uppercase text-cream/35 tracking-widest font-semibold mr-1.5">Next</span>
+            <span className="uppercase text-cream/35 tracking-widest font-semibold mr-1.5">
+              Next
+            </span>
             <span className="truncate italic text-cream/55">{nextTrackTitle}</span>
           </span>
         </div>

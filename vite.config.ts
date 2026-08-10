@@ -1,10 +1,16 @@
-// Vite configuration — the @lovable.dev/vite-tanstack-config package already
-// bundles TanStack Start, viteReact, tailwindcss, tsConfigPaths, nitro, etc.
-// Do NOT add them manually or the app will break with duplicate plugins.
-import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import viteReact from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import tsconfigPaths from "vite-tsconfig-paths";
+import { defineConfig } from "vite";
 
 export default defineConfig({
-  tanstackStart: {
-    server: { entry: "server" },
-  },
+  plugins: [
+    tsconfigPaths(),
+    tailwindcss(),
+    tanstackStart({
+      server: { entry: "server" },
+    }),
+    viteReact(),
+  ],
 });

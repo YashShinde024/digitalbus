@@ -82,23 +82,26 @@ export function useAudioPlayer(playlist: Track[]) {
 
   const nextRef = useRef<() => void>(() => {});
 
-  const next = useCallback((autoPlay = true) => {
-    autoPlayNextRef.current = autoPlay;
-    setQueueIndex((prev) => {
-      const nextIdx = prev + 1;
-      let targetIndex = nextIdx;
-      if (nextIdx >= shuffleOrder.current.length) {
-        shuffleOrder.current = shuffleArray(playlist.length);
-        targetIndex = 0;
-      }
-      try {
-        localStorage.setItem(STORAGE_INDEX_KEY, String(targetIndex));
-      } catch {
-        // Ignore storage errors
-      }
-      return targetIndex;
-    });
-  }, [playlist.length]);
+  const next = useCallback(
+    (autoPlay = true) => {
+      autoPlayNextRef.current = autoPlay;
+      setQueueIndex((prev) => {
+        const nextIdx = prev + 1;
+        let targetIndex = nextIdx;
+        if (nextIdx >= shuffleOrder.current.length) {
+          shuffleOrder.current = shuffleArray(playlist.length);
+          targetIndex = 0;
+        }
+        try {
+          localStorage.setItem(STORAGE_INDEX_KEY, String(targetIndex));
+        } catch {
+          // Ignore storage errors
+        }
+        return targetIndex;
+      });
+    },
+    [playlist.length],
+  );
 
   useEffect(() => {
     nextRef.current = () => next(true);
@@ -226,14 +229,17 @@ export function useAudioPlayer(playlist: Track[]) {
     audio.load();
 
     if (shouldAutoPlay) {
-      void audio.play().then(() => {
-        if (isSubscribed) {
-          setIsPlaying(true);
-          setIsLoading(false);
-        }
-      }).catch((err) => {
-        console.warn("Autoplay transition catch:", err);
-      });
+      void audio
+        .play()
+        .then(() => {
+          if (isSubscribed) {
+            setIsPlaying(true);
+            setIsLoading(false);
+          }
+        })
+        .catch((err) => {
+          console.warn("Autoplay transition catch:", err);
+        });
     }
 
     void extractID3Metadata(currentTrack.audio).then((meta) => {
