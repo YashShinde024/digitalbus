@@ -1,4 +1,4 @@
-import { Disc3, RefreshCw } from "lucide-react";
+import { Disc3, RefreshCw, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useState } from "react";
 import { playlist } from "@/data/playlist";
 import { useAudioPlayer } from "@/hooks/useAudioPlayer";
@@ -11,11 +11,14 @@ export function MusicPlayer() {
     displayTitle,
     displayArtist,
     displayCover,
+    nextTrackTitle,
     isPlaying,
     isLoading,
     progress,
     duration,
     error,
+    isAmbientEnabled,
+    toggleAmbient,
     toggle,
     next,
     previous,
@@ -74,14 +77,17 @@ export function MusicPlayer() {
               )}
             </div>
 
-            {/* Track Info & Small Spectrum Indicator */}
+            {/* Track Info & Mini Spectrum */}
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold tracking-tight text-cream sm:text-[0.98rem]">
+              <p
+                key={displayTitle}
+                className="truncate text-sm font-semibold tracking-tight text-cream sm:text-[0.98rem] animate-fade-in"
+              >
                 {displayTitle}
               </p>
               <p className="mt-0.5 truncate text-xs font-medium text-cream/55 sm:text-[0.8rem]">
                 {isLoading ? (
-                  <span className="animate-pulse text-cream/80">Loading track...</span>
+                  <span className="animate-pulse text-cream/80">Loading next ride...</span>
                 ) : (
                   displayArtist
                 )}
@@ -97,7 +103,7 @@ export function MusicPlayer() {
                   </button>
                 </div>
               ) : (
-                /* Element A: Small Spectrum directly under song info */
+                /* Small Spectrum directly under song info */
                 <div className="mt-2 sm:mt-2.5">
                   <AudioWaveform active={isPlaying} loading={isLoading} />
                 </div>
@@ -105,8 +111,26 @@ export function MusicPlayer() {
             </div>
           </div>
 
-          {/* Right: Controls (Prev, Play/Pause, Next) */}
-          <div className="flex items-center justify-center sm:justify-end shrink-0 pt-0.5 sm:pt-0">
+          {/* Right: Controls & Ambient Sound Toggle */}
+          <div className="flex items-center justify-center sm:justify-end gap-2.5 shrink-0 pt-0.5 sm:pt-0">
+            {/* Ambient Sound Toggle Button */}
+            <button
+              type="button"
+              onClick={toggleAmbient}
+              aria-label={isAmbientEnabled ? "Mute ambient bus sounds" : "Enable ambient bus sounds"}
+              title={isAmbientEnabled ? "Ambient Bus Sounds: ON" : "Ambient Bus Sounds: OFF"}
+              className={`grid h-8 w-8 place-items-center rounded-full text-cream/60 transition-all duration-200 hover:bg-white/10 hover:text-cream focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/40 ${
+                isAmbientEnabled ? "text-cream/90 bg-white/10" : ""
+              }`}
+            >
+              {isAmbientEnabled ? (
+                <Volume2 className="h-4 w-4 text-cream/90" />
+              ) : (
+                <VolumeX className="h-4 w-4 text-cream/40" />
+              )}
+            </button>
+
+            {/* Main Playback Controls */}
             <PlayerControls
               isPlaying={isPlaying}
               isLoading={isLoading}
@@ -117,8 +141,16 @@ export function MusicPlayer() {
           </div>
         </div>
 
-        {/* Element B: Large Straight Horizontal Progress Line at Bottom */}
-        <div className="mt-3.5 sm:mt-4 pt-2.5 border-t border-white/10">
+        {/* Next Song Preview Header */}
+        <div className="mt-3 flex items-center justify-between text-[0.65rem] font-medium tracking-[0.06em] text-cream/45 sm:text-[0.68rem]">
+          <span className="truncate max-w-[75%]">
+            <span className="uppercase text-cream/35 tracking-widest font-semibold mr-1.5">Next</span>
+            <span className="truncate italic text-cream/55">{nextTrackTitle}</span>
+          </span>
+        </div>
+
+        {/* Straight Horizontal Seek Line */}
+        <div className="mt-1 pt-1.5 border-t border-white/10">
           <ProgressBar progress={progress} duration={duration} onSeek={seek} />
         </div>
       </section>

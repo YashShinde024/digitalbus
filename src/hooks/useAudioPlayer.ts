@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Track } from "@/data/playlist";
+import { setAmbientVolume, startAmbientBus, stopAmbientBus } from "@/lib/audioEffects";
 import { extractID3Metadata, type ID3Metadata } from "@/lib/id3";
 
-/**
- * Fisher-Yates unbiased shuffle algorithm.
- * Generates an independent randomized track order per browser session.
- */
 function shuffleArray(size: number): number[] {
   const array = Array.from({ length: size }, (_, i) => i);
   for (let i = array.length - 1; i > 0; i--) {
@@ -15,15 +12,15 @@ function shuffleArray(size: number): number[] {
   return array;
 }
 
-export function useAudioPlayer(playlist: Track[]) {
-  // Single Audio instance ref to guarantee zero competing audio elements
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+const STORAGE_INDEX_KEY = "digital_bus_last_queue_index";
+const STORAGE_TIME_KEY = "digital_bus_last_time";
+const STORAGE_AMBIENT_KEY = "digital_bus_ambient_enabled";
 
-  // Session-unique shuffle order
+export function useAudioPlayer(playlist: Track[]) {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const shuffleOrder = useRef<number[]>([]);
   const [queueIndex, setQueueIndex] = useState(0);
 
-  // Flags for automatic playback transitions
   const autoPlayNextRef = useRef(false);
   const failedAttemptsRef = useRef(0);
 
@@ -33,42 +30,70 @@ export function useAudioPlayer(playlist: Track[]) {
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [error, setError] = useState(false);
+  const [isAmbientEnabled, setIsAmbientEnabled] = useState(false);
 
-  // Extracted ID3 metadata (Title, Artist, Cover Artwork)
+  // ID3 Metadata
   const [id3Meta, setId3Meta] = useState<ID3Metadata | null>(null);
 
-  // Initialize Fisher-Yates shuffle order once per session
+  // Restore saved session index & ambient preference from localStorage
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // Ambient sound preference
+    try {
+      const savedAmbient = localStorage.getItem(STORAGE_AMBIENT_KEY);
+      if (savedAmbient === "true") {
+        setIsAmbientEnabled(true);
+      }
+    } catch {
+      // Ignore storage errors
+    }
+
+    // Queue shuffle order & index
     if (playlist.length > 0 && shuffleOrder.current.length === 0) {
       shuffleOrder.current = shuffleArray(playlist.length);
+      try {
+        const savedIdx = localStorage.getItem(STORAGE_INDEX_KEY);
+        if (savedIdx !== null) {
+          const parsed = parseInt(savedIdx, 10);
+          if (!isNaN(parsed) && parsed >= 0 && parsed < playlist.length) {
+            setQueueIndex(parsed);
+          }
+        }
+      } catch {
+        // Ignore storage errors
+      }
     }
   }, [playlist.length]);
 
-  // Current track resolved from the shuffled queue
+  // Current track resolved from shuffled queue
   const currentTrackIndex = shuffleOrder.current[queueIndex] ?? 0;
   const currentTrack = playlist[currentTrackIndex] ?? playlist[0];
 
-  // Ref to hold current next callback to prevent stale closures in event listeners
+  // Preview of the next track in shuffled queue
+  const nextTrackIndex = shuffleOrder.current[(queueIndex + 1) % playlist.length] ?? 0;
+  const nextTrack = playlist[nextTrackIndex];
+
   const nextRef = useRef<() => void>(() => {});
 
-  // Define next track callback
-  const next = useCallback(
-    (autoPlay = true) => {
-      autoPlayNextRef.current = autoPlay;
+  const next = useCallback((autoPlay = true) => {
+    autoPlayNextRef.current = autoPlay;
+    setQueueIndex((prev) => {
+      const nextIdx = prev + 1;
+      let targetIndex = nextIdx;
+      if (nextIdx >= shuffleOrder.current.length) {
+        shuffleOrder.current = shuffleArray(playlist.length);
+        targetIndex = 0;
+      }
+      try {
+        localStorage.setItem(STORAGE_INDEX_KEY, String(targetIndex));
+      } catch {
+        // Ignore storage errors
+      }
+      return targetIndex;
+    });
+  }, [playlist.length]);
 
-      setQueueIndex((prev) => {
-        const nextIdx = prev + 1;
-        if (nextIdx >= shuffleOrder.current.length) {
-          shuffleOrder.current = shuffleArray(playlist.length);
-          return 0;
-        }
-        return nextIdx;
-      });
-    },
-    [playlist.length],
-  );
-
-  // Keep nextRef updated
   useEffect(() => {
     nextRef.current = () => next(true);
   }, [next]);
@@ -108,6 +133,14 @@ export function useAudioPlayer(playlist: Track[]) {
       if (audio.duration && Number.isFinite(audio.duration)) {
         setDuration(audio.duration);
       }
+      // Save currentTime periodically
+      if (Math.floor(audio.currentTime) % 5 === 0) {
+        try {
+          localStorage.setItem(STORAGE_TIME_KEY, String(audio.currentTime));
+        } catch {
+          // Ignore
+        }
+      }
     };
 
     const onLoadedMetadata = () => {
@@ -117,7 +150,6 @@ export function useAudioPlayer(playlist: Track[]) {
     };
 
     const onEnded = () => {
-      // Automatically advance & play next track on completion
       autoPlayNextRef.current = true;
       setIsPlaying(false);
       nextRef.current();
@@ -129,7 +161,6 @@ export function useAudioPlayer(playlist: Track[]) {
       setError(true);
       failedAttemptsRef.current += 1;
 
-      // Automatically attempt to skip to next track if failedAttempts < 3
       if (failedAttemptsRef.current < 3) {
         setTimeout(() => {
           autoPlayNextRef.current = true;
@@ -161,7 +192,7 @@ export function useAudioPlayer(playlist: Track[]) {
     };
   }, []);
 
-  // Load current track into the single audio element & extract ID3 tags
+  // Load current track into single audio element & extract ID3 tags
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !currentTrack) return;
@@ -169,34 +200,27 @@ export function useAudioPlayer(playlist: Track[]) {
     let isSubscribed = true;
     const shouldAutoPlay = autoPlayNextRef.current;
 
-    // Reset progress & error
     setProgress(0);
     setDuration(0);
     setError(false);
     setIsLoading(true);
     setId3Meta(null);
 
-    // Update single audio source
     audio.pause();
     audio.src = currentTrack.audio;
     audio.load();
 
-    // If autoPlay is set, trigger play immediately after setting src
     if (shouldAutoPlay) {
-      void audio
-        .play()
-        .then(() => {
-          if (isSubscribed) {
-            setIsPlaying(true);
-            setIsLoading(false);
-          }
-        })
-        .catch((err) => {
-          console.warn("Autoplay transition catch:", err);
-        });
+      void audio.play().then(() => {
+        if (isSubscribed) {
+          setIsPlaying(true);
+          setIsLoading(false);
+        }
+      }).catch((err) => {
+        console.warn("Autoplay transition catch:", err);
+      });
     }
 
-    // Extract ID3 metadata & cover art on demand
     void extractID3Metadata(currentTrack.audio).then((meta) => {
       if (isSubscribed) {
         setId3Meta(meta);
@@ -208,6 +232,25 @@ export function useAudioPlayer(playlist: Track[]) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queueIndex, currentTrack?.audio]);
+
+  // Ambient sound toggle handler
+  const toggleAmbient = useCallback(() => {
+    setIsAmbientEnabled((prev) => {
+      const nextState = !prev;
+      try {
+        localStorage.setItem(STORAGE_AMBIENT_KEY, String(nextState));
+      } catch {
+        // Ignore
+      }
+
+      if (nextState) {
+        startAmbientBus(0.06);
+      } else {
+        stopAmbientBus();
+      }
+      return nextState;
+    });
+  }, []);
 
   // Controls
   const toggle = useCallback(() => {
@@ -222,6 +265,9 @@ export function useAudioPlayer(playlist: Track[]) {
         .then(() => {
           setIsPlaying(true);
           setIsLoading(false);
+          if (isAmbientEnabled) {
+            setAmbientVolume(0.06);
+          }
         })
         .catch((err) => {
           console.warn("Autoplay / Play rejected:", err);
@@ -233,14 +279,22 @@ export function useAudioPlayer(playlist: Track[]) {
       setIsPlaying(false);
       setIsLoading(false);
     }
-  }, []);
+  }, [isAmbientEnabled]);
 
   const previous = useCallback(() => {
     const audio = audioRef.current;
     const wasPlaying = isPlaying || (audio ? !audio.paused : true);
     autoPlayNextRef.current = wasPlaying;
 
-    setQueueIndex((prev) => (prev > 0 ? prev - 1 : shuffleOrder.current.length - 1));
+    setQueueIndex((prev) => {
+      const targetIndex = prev > 0 ? prev - 1 : shuffleOrder.current.length - 1;
+      try {
+        localStorage.setItem(STORAGE_INDEX_KEY, String(targetIndex));
+      } catch {
+        // Ignore
+      }
+      return targetIndex;
+    });
   }, [isPlaying]);
 
   const retry = useCallback(() => {
@@ -273,13 +327,14 @@ export function useAudioPlayer(playlist: Track[]) {
     setProgress(t);
   }, []);
 
-  // Display metadata (prefer ID3 tags, fallback to track properties)
   const displayTitle = id3Meta?.title || currentTrack?.title || "Digital Bus Track";
   const displayArtist = id3Meta?.artist || currentTrack?.artist || "Driver's Radio";
   const displayCover = id3Meta?.coverUrl || currentTrack?.cover || "/bus-stop-bg.jpg";
+  const nextTrackPreviewTitle = nextTrack?.title || "Next Song";
 
   return {
     track: currentTrack,
+    nextTrackTitle: nextTrackPreviewTitle,
     displayTitle,
     displayArtist,
     displayCover,
@@ -290,6 +345,8 @@ export function useAudioPlayer(playlist: Track[]) {
     progress,
     duration,
     error,
+    isAmbientEnabled,
+    toggleAmbient,
     toggle,
     next: () => next(true),
     previous,
