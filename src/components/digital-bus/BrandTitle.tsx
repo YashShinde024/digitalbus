@@ -15,10 +15,10 @@ export function BrandTitle() {
 
     if (clickCountRef.current >= 5) {
       clickCountRef.current = 0;
-      const triggerFn = (window as unknown as { triggerBusHornBanner?: (msg?: string) => void })
-        .triggerBusHornBanner;
+      const triggerFn = (window as unknown as { triggerToastBanner?: (msg?: string) => void })
+        .triggerToastBanner;
       if (triggerFn) {
-        triggerFn("🚌 PAA-PAAAN! • अरे! बस रोक क्यों दी? 🛑");
+        triggerFn("अरे! बस रोक क्यों दी? 🚌");
       }
     }
   }, []);

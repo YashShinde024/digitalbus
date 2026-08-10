@@ -1,24 +1,37 @@
-import { createServerFn } from "@tanstack/react-start";
+/**
+ * Client-Side Presence Estimation
+ * Uses BroadcastChannel to count active local tabs/sessions without requiring
+ * external server function calls or triggering localhost connection errors.
+ */
 
-// In-memory presence map storing active session timestamps
-const activeSessions = new Map<string, number>();
-const TIMEOUT_MS = 15000; // 15 seconds inactivity threshold
+let channel: BroadcastChannel | null = null;
+const sessionIds = new Set<string>();
 
-function cleanupExpired() {
-  const now = Date.now();
-  for (const [id, lastSeen] of activeSessions.entries()) {
-    if (now - lastSeen > TIMEOUT_MS) {
-      activeSessions.delete(id);
+export function getOnlineCount(): number {
+  if (typeof window === "undefined") return 1;
+
+  try {
+    const myId =
+      sessionStorage.getItem("digital_bus_client_id") ||
+      Math.random().toString(36).substring(2) + Date.now().toString(36);
+    sessionStorage.setItem("digital_bus_client_id", myId);
+    sessionIds.add(myId);
+
+    if (!channel && typeof BroadcastChannel !== "undefined") {
+      channel = new BroadcastChannel("digital_bus_presence");
+      channel.onmessage = (event) => {
+        if (event.data?.type === "ping" && event.data?.id) {
+          sessionIds.add(event.data.id);
+          channel?.postMessage({ type: "pong", id: myId });
+        } else if (event.data?.type === "pong" && event.data?.id) {
+          sessionIds.add(event.data.id);
+        }
+      };
+      channel.postMessage({ type: "ping", id: myId });
     }
+  } catch {
+    // Ignore channel errors
   }
-}
 
-export const pingPresence = createServerFn({ method: "POST" })
-  .validator((data: { clientId: string }) => data)
-  .handler(async ({ data }) => {
-    cleanupExpired();
-    if (data?.clientId) {
-      activeSessions.set(data.clientId, Date.now());
-    }
-    return { onlineCount: Math.max(1, activeSessions.size) };
-  });
+  return Math.max(1, sessionIds.size);
+}

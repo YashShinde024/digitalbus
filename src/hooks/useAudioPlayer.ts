@@ -41,7 +41,6 @@ export function useAudioPlayer(playlist: Track[]) {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // Mute & Ambient preferences
     try {
       const savedMuted = localStorage.getItem(STORAGE_MUTED_KEY);
       if (savedMuted === "true") {
@@ -52,10 +51,9 @@ export function useAudioPlayer(playlist: Track[]) {
         setIsAmbientEnabled(true);
       }
     } catch {
-      // Ignore storage errors
+      // Ignore
     }
 
-    // Queue shuffle order & index
     if (playlist.length > 0 && shuffleOrder.current.length === 0) {
       shuffleOrder.current = shuffleArray(playlist.length);
       try {
@@ -67,16 +65,14 @@ export function useAudioPlayer(playlist: Track[]) {
           }
         }
       } catch {
-        // Ignore storage errors
+        // Ignore
       }
     }
   }, [playlist.length]);
 
-  // Current track resolved from shuffled queue
   const currentTrackIndex = shuffleOrder.current[queueIndex] ?? 0;
   const currentTrack = playlist[currentTrackIndex] ?? playlist[0];
 
-  // Preview of the next track in shuffled queue
   const nextTrackIndex = shuffleOrder.current[(queueIndex + 1) % playlist.length] ?? 0;
   const nextTrack = playlist[nextTrackIndex];
 
@@ -95,7 +91,7 @@ export function useAudioPlayer(playlist: Track[]) {
         try {
           localStorage.setItem(STORAGE_INDEX_KEY, String(targetIndex));
         } catch {
-          // Ignore storage errors
+          // Ignore
         }
         return targetIndex;
       });
@@ -107,13 +103,12 @@ export function useAudioPlayer(playlist: Track[]) {
     nextRef.current = () => next(true);
   }, [next]);
 
-  // Initialize single HTML5 Audio element & event listeners
+  // Initialize HTML5 Audio element & event listeners
   useEffect(() => {
     const audio = new Audio();
     audio.preload = "metadata";
     audioRef.current = audio;
 
-    // Apply saved mute state
     try {
       const savedMuted = localStorage.getItem(STORAGE_MUTED_KEY);
       if (savedMuted === "true") {
@@ -143,6 +138,7 @@ export function useAudioPlayer(playlist: Track[]) {
       if (autoPlayNextRef.current) {
         void audio.play().catch(() => {
           setIsPlaying(false);
+          setIsLoading(false);
         });
       }
     };
@@ -183,7 +179,7 @@ export function useAudioPlayer(playlist: Track[]) {
         setTimeout(() => {
           autoPlayNextRef.current = true;
           nextRef.current();
-        }, 1000);
+        }, 1200);
       }
     };
 
@@ -224,8 +220,11 @@ export function useAudioPlayer(playlist: Track[]) {
     setIsLoading(true);
     setId3Meta(null);
 
+    // Properly encode URI for filenames with spaces/special characters
+    const encodedUrl = encodeURI(currentTrack.audio);
+
     audio.pause();
-    audio.src = currentTrack.audio;
+    audio.src = encodedUrl;
     audio.load();
 
     if (shouldAutoPlay) {
@@ -237,12 +236,16 @@ export function useAudioPlayer(playlist: Track[]) {
             setIsLoading(false);
           }
         })
-        .catch((err) => {
-          console.warn("Autoplay transition catch:", err);
+        .catch(() => {
+          // Autoplay policy prevented playback — keep player ready without throwing console error
+          if (isSubscribed) {
+            setIsPlaying(false);
+            setIsLoading(false);
+          }
         });
     }
 
-    void extractID3Metadata(currentTrack.audio).then((meta) => {
+    void extractID3Metadata(encodedUrl).then((meta) => {
       if (isSubscribed) {
         setId3Meta(meta);
       }
@@ -254,7 +257,6 @@ export function useAudioPlayer(playlist: Track[]) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queueIndex, currentTrack?.audio]);
 
-  // Main Audio Mute Toggle
   const toggleMute = useCallback(() => {
     setIsMuted((prev) => {
       const nextState = !prev;
@@ -270,7 +272,6 @@ export function useAudioPlayer(playlist: Track[]) {
     });
   }, []);
 
-  // Ambient sound toggle handler
   const toggleAmbient = useCallback(() => {
     setIsAmbientEnabled((prev) => {
       const nextState = !prev;
@@ -289,7 +290,6 @@ export function useAudioPlayer(playlist: Track[]) {
     });
   }, []);
 
-  // Controls
   const toggle = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -306,8 +306,7 @@ export function useAudioPlayer(playlist: Track[]) {
             setAmbientVolume(0.06);
           }
         })
-        .catch((err) => {
-          console.warn("Autoplay / Play rejected:", err);
+        .catch(() => {
           setIsPlaying(false);
           setIsLoading(false);
         });
@@ -341,7 +340,7 @@ export function useAudioPlayer(playlist: Track[]) {
     setIsLoading(true);
     failedAttemptsRef.current = 0;
     autoPlayNextRef.current = true;
-    audio.src = currentTrack.audio;
+    audio.src = encodeURI(currentTrack.audio);
     audio.load();
     void audio
       .play()
