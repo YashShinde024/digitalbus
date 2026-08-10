@@ -34,7 +34,7 @@ export function DigitalBus() {
   }, []);
 
   return (
-    <main className="relative min-h-[100svh] w-full overflow-hidden bg-ink select-none flex flex-col justify-between">
+    <main className="relative min-h-[100svh] w-full overflow-hidden bg-ink select-none">
       {/* Top Sliding Toast Banner for B-key shortcut */}
       <ToastBanner />
 
@@ -64,16 +64,14 @@ export function DigitalBus() {
       />
 
       {/* 4. Main Interactive UI Layer */}
-      <div className="relative z-10 flex min-h-[100svh] flex-col justify-between px-4 pb-6 pt-6 sm:px-10 sm:pb-8 sm:pt-8">
+      <div className="relative z-10 flex min-h-[100svh] flex-col justify-between px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] sm:px-9 sm:pb-6 sm:pt-6">
         {/* Header - Viewport Centered Stacked Brand Title */}
         <header className="relative w-full">
-          <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4 sm:grid-cols-[1fr_auto_1fr]">
-            <div className="flex justify-start">
-              <Clock />
-            </div>
+          <div className="grid grid-cols-2 items-start gap-3 sm:grid-cols-[1fr_auto_1fr] sm:gap-6">
+            <Clock />
 
             {/* Desktop Center Focal Hero Wordmark */}
-            <div className="hidden sm:flex flex-col items-center gap-2 text-center">
+            <div className="hidden sm:flex flex-col items-center gap-1.5 text-center">
               <BrandTitle />
               <OnlineStatus />
             </div>
@@ -84,20 +82,20 @@ export function DigitalBus() {
           </div>
 
           {/* Mobile Header Title */}
-          <div className="mt-4 flex flex-col items-center gap-2 text-center sm:hidden">
+          <div className="mt-1 flex flex-col items-center gap-1.5 text-center sm:hidden">
             <BrandTitle />
             <OnlineStatus />
           </div>
         </header>
 
-        {/* Lower-Center Floating Glass Music Player Container (More breathing room) */}
-        <div className="mx-auto w-full max-w-[34rem] py-4 mt-auto mb-6 sm:mb-12 flex flex-col gap-2">
+        {/* Lower-Center Floating Glass Music Player Container */}
+        <div className="mx-auto w-full max-w-[34rem] py-2 sm:py-3 mt-auto mb-2 sm:mb-3 flex flex-col gap-1.5">
           <JourneyTicker />
           <MusicPlayer />
         </div>
 
         {/* Footer System */}
-        <div className="w-full pt-4">
+        <div className="w-full pt-1">
           <Footer />
         </div>
       </div>
