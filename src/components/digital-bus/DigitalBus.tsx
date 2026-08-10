@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AtmosphereOverlay } from "./AtmosphereOverlay";
 import { BrandTitle } from "./BrandTitle";
+import { BusHornBanner } from "./BusHornBanner";
 import { Clock } from "./Clock";
 import { Footer } from "./Footer";
 import { JourneyTicker } from "./JourneyTicker";
@@ -34,6 +35,9 @@ export function DigitalBus() {
 
   return (
     <main className="relative min-h-[100svh] w-full overflow-hidden bg-ink select-none">
+      {/* Top Sliding Bus Horn Banner */}
+      <BusHornBanner />
+
       {/* 1. Background artwork with subtle desktop mouse parallax */}
       <img
         src="/bus-stop-bg.jpg"

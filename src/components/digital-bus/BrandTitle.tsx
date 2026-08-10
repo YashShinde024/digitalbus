@@ -1,10 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { playBusHorn } from "@/lib/audioEffects";
+import { useCallback, useRef } from "react";
 
 export function BrandTitle() {
   const clickCountRef = useRef(0);
   const clickTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Handle 5-click Easter Egg
   const handleTitleClick = useCallback(() => {
@@ -17,43 +15,16 @@ export function BrandTitle() {
 
     if (clickCountRef.current >= 5) {
       clickCountRef.current = 0;
-      playBusHorn();
-      setToastMessage("अरे! बस रोक क्यों दी? 🚌");
-      setTimeout(() => setToastMessage(null), 3000);
+      const triggerFn = (window as unknown as { triggerBusHornBanner?: (msg?: string) => void })
+        .triggerBusHornBanner;
+      if (triggerFn) {
+        triggerFn("🚌 PAA-PAAAN! • अरे! बस रोक क्यों दी? 🛑");
+      }
     }
-  }, []);
-
-  // Handle Keyboard 'B' Key Horn Easter Egg
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        target &&
-        (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)
-      ) {
-        return;
-      }
-
-      if (e.key === "b" || e.key === "B") {
-        playBusHorn();
-        setToastMessage("🚌 *POOP-POOP!*");
-        setTimeout(() => setToastMessage(null), 1500);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   return (
     <div className="relative select-none text-center flex flex-col items-center">
-      {/* Toast Notification Popup */}
-      {toastMessage && (
-        <div className="absolute -top-10 z-50 animate-bounce rounded-full border border-white/20 bg-black/80 px-3 py-1 text-xs font-medium text-cream shadow-lg backdrop-blur-md">
-          {toastMessage}
-        </div>
-      )}
-
       {/* Large Stacked Hero Hindi Wordmark */}
       <button
         type="button"

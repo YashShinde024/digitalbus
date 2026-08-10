@@ -1,4 +1,4 @@
-// Web Audio API Synthesizer for Bus Horn and Travel Ambience
+// Web Audio API Synthesizer for Authentic Indian Bus Horn and Travel Ambience
 
 let audioCtx: AudioContext | null = null;
 let ambientSource: AudioBufferSourceNode | null = null;
@@ -19,40 +19,63 @@ function getAudioContext(): AudioContext {
 }
 
 /**
- * Synthesizes a classic Indian bus dual-tone horn ("peep-peep")
- * using Web Audio API oscillators.
+ * Synthesizes an authentic Indian pneumatic bus trumpet horn ("Paa-Paaan!")
+ * modeling classic Tata/Leyland dual-tone brass pressure horns.
  */
 export function playBusHorn() {
   try {
     const ctx = getAudioContext();
     const now = ctx.currentTime;
 
-    const masterGain = ctx.createGain();
-    masterGain.gain.setValueAtTime(0.18, now);
-    masterGain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
-    masterGain.connect(ctx.destination);
+    // Helper to trigger a single pneumatic brass honk pulse
+    const createHonkPulse = (startTime: number, duration: number, volume: number) => {
+      const gainNode = ctx.createGain();
+      gainNode.gain.setValueAtTime(0, startTime);
+      gainNode.gain.linearRampToValueAtTime(volume, startTime + 0.02); // Sharp attack
+      gainNode.gain.setValueAtTime(volume, startTime + duration - 0.04);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
 
-    // Dual-frequency Indian bus horn (F3 # / A3 tone)
-    const osc1 = ctx.createOscillator();
-    const osc2 = ctx.createOscillator();
+      // Bandpass filter for authentic metallic trumpet resonance
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(680, startTime);
+      filter.Q.setValueAtTime(2.2, startTime);
 
-    osc1.type = "sawtooth";
-    osc2.type = "sine";
+      // Low Freq oscillator (Tata bus 310 Hz tone)
+      const oscLow = ctx.createOscillator();
+      oscLow.type = "sawtooth";
+      oscLow.frequency.setValueAtTime(312, startTime);
+      oscLow.frequency.exponentialRampToValueAtTime(308, startTime + duration);
 
-    osc1.frequency.setValueAtTime(370, now);
-    osc2.frequency.setValueAtTime(465, now);
+      // High Freq oscillator (Tata bus 392 Hz tone)
+      const oscHigh = ctx.createOscillator();
+      oscHigh.type = "sawtooth";
+      oscHigh.frequency.setValueAtTime(392, startTime);
+      oscHigh.frequency.exponentialRampToValueAtTime(386, startTime + duration);
 
-    // Subtle pitch modulation (honk pulse)
-    osc1.frequency.exponentialRampToValueAtTime(350, now + 0.5);
-    osc2.frequency.exponentialRampToValueAtTime(440, now + 0.5);
+      // Sub-harmonic sine tone for depth
+      const oscSub = ctx.createOscillator();
+      oscSub.type = "sine";
+      oscSub.frequency.setValueAtTime(156, startTime);
 
-    osc1.connect(masterGain);
-    osc2.connect(masterGain);
+      oscLow.connect(filter);
+      oscHigh.connect(filter);
+      oscSub.connect(filter);
+      filter.connect(gainNode);
+      gainNode.connect(ctx.destination);
 
-    osc1.start(now);
-    osc2.start(now);
-    osc1.stop(now + 0.55);
-    osc2.stop(now + 0.55);
+      oscLow.start(startTime);
+      oscHigh.start(startTime);
+      oscSub.start(startTime);
+
+      oscLow.stop(startTime + duration);
+      oscHigh.stop(startTime + duration);
+      oscSub.stop(startTime + duration);
+    };
+
+    // Authentic Indian dual honk rhythm: "PAA-PAAAN!"
+    createHonkPulse(now, 0.18, 0.22); // First short burst
+    createHonkPulse(now + 0.24, 0.38, 0.26); // Second main loud blast
   } catch (err) {
     console.warn("AudioContext horn synthesis blocked:", err);
   }
@@ -65,24 +88,22 @@ export function startAmbientBus(volume = 0.05) {
   if (isAmbientPlaying) return;
   try {
     const ctx = getAudioContext();
-    const bufferSize = ctx.sampleRate * 3; // 3 seconds buffer
+    const bufferSize = ctx.sampleRate * 3;
     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const data = buffer.getChannelData(0);
 
     let lastOut = 0.0;
     for (let i = 0; i < bufferSize; i++) {
       const white = Math.random() * 2 - 1;
-      // Brown noise filter algorithm
       data[i] = (lastOut + 0.02 * white) / 1.02;
       lastOut = data[i];
-      data[i] *= 3.5; // Gain compensation
+      data[i] *= 3.5;
     }
 
     ambientSource = ctx.createBufferSource();
     ambientSource.buffer = buffer;
     ambientSource.loop = true;
 
-    // Low-pass filter for deep diesel engine rumble
     const filter = ctx.createBiquadFilter();
     filter.type = "lowpass";
     filter.frequency.setValueAtTime(140, ctx.currentTime);
@@ -107,7 +128,7 @@ export function stopAmbientBus() {
       ambientSource.stop();
       ambientSource.disconnect();
     } catch {
-      // Ignore cleanup errors
+      // Ignore
     }
     ambientSource = null;
   }
