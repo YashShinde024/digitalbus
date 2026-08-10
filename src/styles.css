@@ -145,25 +145,38 @@
 }
 
 @keyframes wave {
-  0%, 100% { transform: scaleY(0.35); }
-  50% { transform: scaleY(1); }
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* Tasteful, subtle scene veil — preserves artwork warmth while providing text readability */
 @utility scene-veil {
   background:
     radial-gradient(120% 90% at 50% 45%, transparent 55%, oklch(0.12 0.015 50 / 0.3) 100%),
-    linear-gradient(to bottom,
+    linear-gradient(
+      to bottom,
       oklch(0.12 0.015 50 / 0.25) 0%,
       transparent 22%,
       transparent 55%,
       oklch(0.11 0.015 48 / 0.35) 80%,
-      oklch(0.09 0.015 45 / 0.6) 100%);
+      oklch(0.09 0.015 45 / 0.6) 100%
+    );
 }
 
 @utility grain-overlay {
@@ -174,12 +187,7 @@
 
 /* Translucent warm/neutral Apple-inspired glass surface */
 @utility glass-panel {
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.12),
-      rgba(255, 255, 255, 0.05)
-    );
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
   backdrop-filter: blur(32px) saturate(160%);
   -webkit-backdrop-filter: blur(32px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -187,7 +195,9 @@
     0 24px 50px -16px rgba(0, 0, 0, 0.5),
     inset 0 1px 1px rgba(255, 255, 255, 0.25),
     inset 0 -1px 1px rgba(0, 0, 0, 0.2);
-  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
 }
 
 .glass-panel:hover {
@@ -212,7 +222,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;

@@ -52,18 +52,21 @@ export function useAudioPlayer(playlist: Track[]) {
   const nextRef = useRef<() => void>(() => {});
 
   // Define next track callback
-  const next = useCallback((autoPlay = true) => {
-    autoPlayNextRef.current = autoPlay;
+  const next = useCallback(
+    (autoPlay = true) => {
+      autoPlayNextRef.current = autoPlay;
 
-    setQueueIndex((prev) => {
-      const nextIdx = prev + 1;
-      if (nextIdx >= shuffleOrder.current.length) {
-        shuffleOrder.current = shuffleArray(playlist.length);
-        return 0;
-      }
-      return nextIdx;
-    });
-  }, [playlist.length]);
+      setQueueIndex((prev) => {
+        const nextIdx = prev + 1;
+        if (nextIdx >= shuffleOrder.current.length) {
+          shuffleOrder.current = shuffleArray(playlist.length);
+          return 0;
+        }
+        return nextIdx;
+      });
+    },
+    [playlist.length],
+  );
 
   // Keep nextRef updated
   useEffect(() => {
@@ -180,14 +183,17 @@ export function useAudioPlayer(playlist: Track[]) {
 
     // If autoPlay is set, trigger play immediately after setting src
     if (shouldAutoPlay) {
-      void audio.play().then(() => {
-        if (isSubscribed) {
-          setIsPlaying(true);
-          setIsLoading(false);
-        }
-      }).catch((err) => {
-        console.warn("Autoplay transition catch:", err);
-      });
+      void audio
+        .play()
+        .then(() => {
+          if (isSubscribed) {
+            setIsPlaying(true);
+            setIsLoading(false);
+          }
+        })
+        .catch((err) => {
+          console.warn("Autoplay transition catch:", err);
+        });
     }
 
     // Extract ID3 metadata & cover art on demand

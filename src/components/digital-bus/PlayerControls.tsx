@@ -47,12 +47,7 @@ export function PlayerControls({
       </button>
 
       {/* Next Track */}
-      <button
-        type="button"
-        aria-label="Next track"
-        onClick={onNext}
-        className={secondaryBtn}
-      >
+      <button type="button" aria-label="Next track" onClick={onNext} className={secondaryBtn}>
         <SkipForward className="h-[18px] w-[18px] fill-current" />
       </button>
     </div>

@@ -11,9 +11,7 @@ export function useClock() {
 
   if (!now) return { time: "", date: "" };
 
-  const time = now
-    .toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })
-    .toUpperCase();
+  const time = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }).toUpperCase();
   const date = now
     .toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" })
     .toUpperCase()

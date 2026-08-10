@@ -27,7 +27,7 @@ export function ProgressBar({ progress, duration, onSeek }: Props) {
       setDragProgress(ratio * duration);
       onSeek(ratio);
     },
-    [duration, onSeek]
+    [duration, onSeek],
   );
 
   const startDrag = (e: React.PointerEvent) => {

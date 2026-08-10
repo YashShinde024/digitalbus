@@ -25,7 +25,10 @@ export function DigitalBus() {
 
       {/* 3. Scene veil & grain overlay (Behind UI) */}
       <div className="scene-veil absolute inset-0 z-[2] pointer-events-none" aria-hidden="true" />
-      <div className="grain-overlay absolute inset-0 z-[3] pointer-events-none" aria-hidden="true" />
+      <div
+        className="grain-overlay absolute inset-0 z-[3] pointer-events-none"
+        aria-hidden="true"
+      />
 
       {/* 4. Main Interactive UI Layer */}
       <div className="relative z-10 flex min-h-[100svh] flex-col justify-between px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] sm:px-9 sm:pb-6 sm:pt-6">

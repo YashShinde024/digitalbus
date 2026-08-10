@@ -15,10 +15,7 @@ export function AudioWaveform({ active, loading = false }: Props) {
   const isAnimating = active && !loading;
 
   return (
-    <div
-      className="flex h-4 items-center gap-[2.5px] max-w-[110px]"
-      aria-hidden="true"
-    >
+    <div className="flex h-4 items-center gap-[2.5px] max-w-[110px]" aria-hidden="true">
       {BARS.map((h, i) => (
         <span
           key={i}

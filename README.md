@@ -17,9 +17,10 @@ A cozy, atmospheric, web-based music experience inspired by Indian bus journeys,
 
 ## 1. Project Overview
 
-**Digital Bus** is an immersive digital radio station designed to capture the cozy, nostalgic mood of traveling through misty mountain roads on a rainy Indian bus. 
+**Digital Bus** is an immersive digital radio station designed to capture the cozy, nostalgic mood of traveling through misty mountain roads on a rainy Indian bus.
 
 Unlike traditional music streaming platforms with overwhelming playlists, search bars, and algorithmic queues, Digital Bus offers a passive, curated listening journey:
+
 - **No Playlist Selection:** Visitors step onto the bus and enjoy a continuous stream of lo-fi, indie, and nostalgic Indian tracks.
 - **Client-Side Journey:** Every visitor receives their own unique, randomized listening sequence per browser session.
 - **Cozy Atmospheric Layering:** Features a vintage bus stop background paired with a high-performance 60fps monsoon rain effect and an Apple iOS-inspired glassmorphism music player.
@@ -93,6 +94,7 @@ User Action (Play / Seek / Auto-Next)
 While music playback is **completely local to each visitor's browser**, Digital Bus displays a live count of active visitors using a lightweight presence engine powered by TanStack Start server functions (`src/lib/presence.ts`).
 
 ### Presence Mechanics
+
 - **Anonymous Session ID:** Every browser session generates a random string (`crypto.randomUUID()`).
 - **Heartbeat:** `OnlineStatus.tsx` sends a lightweight HTTP ping (`pingPresence(sessionId)`) every 10 seconds.
 - **Server Store & Pruning:** Active sessions are kept in an in-memory Map. Sessions without a heartbeat for over 30 seconds are pruned automatically.
@@ -102,15 +104,15 @@ While music playback is **completely local to each visitor's browser**, Digital 
 
 ## 5. Tech Stack
 
-| Technology | Purpose |
-|---|---|
-| **React 19.2** | UI Component Architecture & State |
-| **TanStack Start & Router** | Full-Stack Meta-Framework & Type-Safe Routing |
-| **TanStack Query v5** | Client Data Fetching & Query Management |
-| **Tailwind CSS v4** | Design System, Utility Classes & Glassmorphism |
-| **Nitro & Cloudflare Module** | SSR Engine & Serverless Deployment |
-| **Lucide React** | Minimalist UI Icons |
-| **TypeScript 5.8** | Type Safety & Developer Experience |
+| Technology                    | Purpose                                        |
+| ----------------------------- | ---------------------------------------------- |
+| **React 19.2**                | UI Component Architecture & State              |
+| **TanStack Start & Router**   | Full-Stack Meta-Framework & Type-Safe Routing  |
+| **TanStack Query v5**         | Client Data Fetching & Query Management        |
+| **Tailwind CSS v4**           | Design System, Utility Classes & Glassmorphism |
+| **Nitro & Cloudflare Module** | SSR Engine & Serverless Deployment             |
+| **Lucide React**              | Minimalist UI Icons                            |
+| **TypeScript 5.8**            | Type Safety & Developer Experience             |
 
 ---
 
@@ -196,6 +198,7 @@ To add new songs to Digital Bus:
 ## 9. Local Development
 
 ### Prerequisites
+
 - **Node.js**: v18.0.0 or higher
 - **npm**: v9.0.0 or higher
 
@@ -227,7 +230,7 @@ The application will be running at `http://localhost:3000`.
 
 ## 10. Environment Variables
 
-Digital Bus runs out of the box without requiring mandatory third-party API keys or environment variables. 
+Digital Bus runs out of the box without requiring mandatory third-party API keys or environment variables.
 
 Optional environment configuration for Cloudflare Workers / Nitro deployment:
 
@@ -332,9 +335,11 @@ Digital Bus is optimized for search engines, AI answer engines, and social media
 ## 17. Troubleshooting
 
 ### Audio fails to play automatically
+
 Browsers enforce strict autoplay policies. If audio fails to start on initial load, click the **Play** button once to grant browser audio context permission.
 
 ### Cover art shows fallback icon
+
 If an MP3 file lacks an embedded APIC picture frame, Digital Bus gracefully displays the fallback artwork (`/bus-stop-bg.jpg`).
 
 ---

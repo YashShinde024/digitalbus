@@ -119,11 +119,7 @@ export function MusicPlayer() {
 
         {/* Element B: Large Straight Horizontal Progress Line at Bottom */}
         <div className="mt-3.5 sm:mt-4 pt-2.5 border-t border-white/10">
-          <ProgressBar
-            progress={progress}
-            duration={duration}
-            onSeek={seek}
-          />
+          <ProgressBar progress={progress} duration={duration} onSeek={seek} />
         </div>
       </section>
     </div>
