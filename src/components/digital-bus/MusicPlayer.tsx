@@ -1,4 +1,4 @@
-import { Disc3, RefreshCw, Volume2, VolumeX } from "lucide-react";
+import { Disc3, Radio, RefreshCw, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useState } from "react";
 import { playlist } from "@/data/playlist";
 import { useAudioPlayer } from "@/hooks/useAudioPlayer";
@@ -14,10 +14,12 @@ export function MusicPlayer() {
     nextTrackTitle,
     isPlaying,
     isLoading,
+    isMuted,
     progress,
     duration,
     error,
     isAmbientEnabled,
+    toggleMute,
     toggleAmbient,
     toggle,
     next,
@@ -96,6 +98,7 @@ export function MusicPlayer() {
                 <div className="mt-1.5 flex items-center gap-2">
                   <span className="text-[0.68rem] text-red-400 font-medium">Audio unavailable</span>
                   <button
+                    type="button"
                     onClick={retry}
                     className="flex items-center gap-1 rounded-full bg-white/10 px-2 py-0.5 text-[0.65rem] text-cream hover:bg-white/20 transition"
                   >
@@ -105,28 +108,41 @@ export function MusicPlayer() {
               ) : (
                 /* Small Spectrum directly under song info */
                 <div className="mt-2 sm:mt-2.5">
-                  <AudioWaveform active={isPlaying} loading={isLoading} />
+                  <AudioWaveform active={isPlaying && !isMuted} loading={isLoading} />
                 </div>
               )}
             </div>
           </div>
 
-          {/* Right: Controls & Ambient Sound Toggle */}
-          <div className="flex items-center justify-center sm:justify-end gap-2.5 shrink-0 pt-0.5 sm:pt-0">
-            {/* Ambient Sound Toggle Button */}
+          {/* Right: Mute & Ambient Sound Toggles + Controls */}
+          <div className="flex items-center justify-center sm:justify-end gap-1.5 shrink-0 pt-0.5 sm:pt-0">
+            {/* Ambient Engine Rumble Toggle */}
             <button
               type="button"
               onClick={toggleAmbient}
-              aria-label={isAmbientEnabled ? "Mute ambient bus sounds" : "Enable ambient bus sounds"}
+              aria-label={isAmbientEnabled ? "Turn off ambient bus road sounds" : "Turn on ambient bus road sounds"}
               title={isAmbientEnabled ? "Ambient Bus Sounds: ON" : "Ambient Bus Sounds: OFF"}
-              className={`grid h-8 w-8 place-items-center rounded-full text-cream/60 transition-all duration-200 hover:bg-white/10 hover:text-cream focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/40 ${
-                isAmbientEnabled ? "text-cream/90 bg-white/10" : ""
+              className={`grid h-8 w-8 place-items-center rounded-full text-cream/50 transition-all duration-200 hover:bg-white/10 hover:text-cream focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/40 ${
+                isAmbientEnabled ? "text-cream bg-white/15" : ""
               }`}
             >
-              {isAmbientEnabled ? (
-                <Volume2 className="h-4 w-4 text-cream/90" />
+              <Radio className="h-3.5 w-3.5" />
+            </button>
+
+            {/* Main Audio Mute / Unmute Button */}
+            <button
+              type="button"
+              onClick={toggleMute}
+              aria-label={isMuted ? "Unmute music" : "Mute music"}
+              title={isMuted ? "Unmute Music" : "Mute Music"}
+              className={`grid h-9 w-9 place-items-center rounded-full text-cream/70 transition-all duration-200 hover:bg-white/10 hover:text-cream active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/40 ${
+                isMuted ? "text-red-400 bg-red-950/30 border border-red-500/30" : ""
+              }`}
+            >
+              {isMuted ? (
+                <VolumeX className="h-4 w-4 text-red-400" />
               ) : (
-                <VolumeX className="h-4 w-4 text-cream/40" />
+                <Volume2 className="h-4 w-4 text-cream/80" />
               )}
             </button>
 
@@ -143,7 +159,7 @@ export function MusicPlayer() {
 
         {/* Next Song Preview Header */}
         <div className="mt-3 flex items-center justify-between text-[0.65rem] font-medium tracking-[0.06em] text-cream/45 sm:text-[0.68rem]">
-          <span className="truncate max-w-[75%]">
+          <span className="truncate max-w-[85%]">
             <span className="uppercase text-cream/35 tracking-widest font-semibold mr-1.5">Next</span>
             <span className="truncate italic text-cream/55">{nextTrackTitle}</span>
           </span>

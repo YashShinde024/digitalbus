@@ -15,6 +15,7 @@ function shuffleArray(size: number): number[] {
 const STORAGE_INDEX_KEY = "digital_bus_last_queue_index";
 const STORAGE_TIME_KEY = "digital_bus_last_time";
 const STORAGE_AMBIENT_KEY = "digital_bus_ambient_enabled";
+const STORAGE_MUTED_KEY = "digital_bus_is_muted";
 
 export function useAudioPlayer(playlist: Track[]) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -27,6 +28,7 @@ export function useAudioPlayer(playlist: Track[]) {
   // Playback states
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [error, setError] = useState(false);
@@ -35,12 +37,16 @@ export function useAudioPlayer(playlist: Track[]) {
   // ID3 Metadata
   const [id3Meta, setId3Meta] = useState<ID3Metadata | null>(null);
 
-  // Restore saved session index & ambient preference from localStorage
+  // Restore saved session index & preferences from localStorage
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // Ambient sound preference
+    // Mute & Ambient preferences
     try {
+      const savedMuted = localStorage.getItem(STORAGE_MUTED_KEY);
+      if (savedMuted === "true") {
+        setIsMuted(true);
+      }
       const savedAmbient = localStorage.getItem(STORAGE_AMBIENT_KEY);
       if (savedAmbient === "true") {
         setIsAmbientEnabled(true);
@@ -104,6 +110,16 @@ export function useAudioPlayer(playlist: Track[]) {
     audio.preload = "metadata";
     audioRef.current = audio;
 
+    // Apply saved mute state
+    try {
+      const savedMuted = localStorage.getItem(STORAGE_MUTED_KEY);
+      if (savedMuted === "true") {
+        audio.muted = true;
+      }
+    } catch {
+      // Ignore
+    }
+
     const onPlay = () => {
       setIsPlaying(true);
       setIsLoading(false);
@@ -133,7 +149,6 @@ export function useAudioPlayer(playlist: Track[]) {
       if (audio.duration && Number.isFinite(audio.duration)) {
         setDuration(audio.duration);
       }
-      // Save currentTime periodically
       if (Math.floor(audio.currentTime) % 5 === 0) {
         try {
           localStorage.setItem(STORAGE_TIME_KEY, String(audio.currentTime));
@@ -232,6 +247,22 @@ export function useAudioPlayer(playlist: Track[]) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queueIndex, currentTrack?.audio]);
+
+  // Main Audio Mute Toggle
+  const toggleMute = useCallback(() => {
+    setIsMuted((prev) => {
+      const nextState = !prev;
+      if (audioRef.current) {
+        audioRef.current.muted = nextState;
+      }
+      try {
+        localStorage.setItem(STORAGE_MUTED_KEY, String(nextState));
+      } catch {
+        // Ignore
+      }
+      return nextState;
+    });
+  }, []);
 
   // Ambient sound toggle handler
   const toggleAmbient = useCallback(() => {
@@ -342,10 +373,12 @@ export function useAudioPlayer(playlist: Track[]) {
     totalTracks: playlist.length,
     isPlaying,
     isLoading,
+    isMuted,
     progress,
     duration,
     error,
     isAmbientEnabled,
+    toggleMute,
     toggleAmbient,
     toggle,
     next: () => next(true),
