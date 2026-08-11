@@ -60,6 +60,13 @@ export function MusicPlayer() {
     };
   }, [displayCover]);
 
+  useEffect(() => {
+    if (!isMobileExpanded) return;
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = original; };
+  }, [isMobileExpanded]);
+
   // Close mobile expanded sheet on Escape key
   useEffect(() => {
     if (!isMobileExpanded) return;
@@ -114,13 +121,24 @@ export function MusicPlayer() {
     if (btn) btn.click();
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const w = window as unknown as { digitalBusOpenPlaylist?: () => void; digitalBusOpenTicket?: () => void };
+    w.digitalBusOpenPlaylist = () => setIsPlaylistOpen(true);
+    w.digitalBusOpenTicket = handleOpenShare;
+    return () => {
+      delete w.digitalBusOpenPlaylist;
+      delete w.digitalBusOpenTicket;
+    };
+  }, [handleOpenShare]);
+
   // Progress ratio for collapsed mini-bar line
   const progressPct = duration ? Math.min(100, (progress / duration) * 100) : 0;
 
   return (
     <div className="relative w-full">
       {/* Ticket Share Modal Component with current track metadata */}
-      <ShareTicket currentTrack={track} />
+      <ShareTicket currentTrack={track} hiddenOnMobile={isMobileExpanded} />
 
       {/* Ambient background blur halo */}
       <div
@@ -284,7 +302,7 @@ export function MusicPlayer() {
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") setIsMobileExpanded(true);
             }}
-            className="glass-panel fixed bottom-3 left-3 right-3 z-30 overflow-hidden rounded-[20px] border border-white/20 bg-ink/90 shadow-[0_12px_32px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-300 active:scale-[0.98]"
+            className="glass-panel fixed bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-3 right-3 z-30 overflow-hidden rounded-[20px] border border-white/20 bg-ink/90 shadow-[0_12px_32px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-300 active:scale-[0.98]"
           >
             {/* Thin progress indicator line at top (like Spotify mini-player) */}
             <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-white/10">
@@ -375,7 +393,7 @@ export function MusicPlayer() {
               onPointerMove={handleSheetPointerMove}
               onPointerUp={handleSheetPointerUp}
               onPointerCancel={handleSheetPointerUp}
-              className={`relative w-full rounded-t-[32px] border-t border-white/15 bg-[#13100b]/[0.97] px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3 shadow-[0_-20px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl touch-none ${
+              className={`relative max-h-[92svh] overflow-y-auto hide-scrollbar w-full rounded-t-[32px] border-t border-white/15 bg-[#13100b]/[0.97] px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3 shadow-[0_-20px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl touch-none ${
                 isDismissing ? "animate-slide-down" : "animate-slide-up"
               }`}
               style={{

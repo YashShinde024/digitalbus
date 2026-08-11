@@ -81,9 +81,9 @@ export function useAudioPlayer(playlist: Track[]) {
 
       let initialIdx = 0;
 
-      // Check URL query parameters for ?track=ID
+      // Check URL query parameters for ?song=ID; keep ?track=ID for older shared links
       const params = new URLSearchParams(window.location.search);
-      const trackParam = params.get("track");
+      const trackParam = params.get("song") ?? params.get("track");
       if (trackParam) {
         const foundIdx = playlist.findIndex((t) => String(t.id) === trackParam);
         if (foundIdx !== -1) {
@@ -220,6 +220,9 @@ export function useAudioPlayer(playlist: Track[]) {
       digitalBusToggleMute?: () => void;
       digitalBusNextTrack?: () => void;
       digitalBusPreviousTrack?: () => void;
+      digitalBusToggleShuffle?: () => void;
+      digitalBusOpenPlaylist?: () => void;
+      digitalBusOpenTicket?: () => void;
     };
 
     w.digitalBusToggleMute = () => {
@@ -239,13 +242,15 @@ export function useAudioPlayer(playlist: Track[]) {
 
     w.digitalBusNextTrack = () => next(true);
     w.digitalBusPreviousTrack = () => previous();
+    w.digitalBusToggleShuffle = () => toggleShuffle();
 
     return () => {
       delete w.digitalBusToggleMute;
       delete w.digitalBusNextTrack;
       delete w.digitalBusPreviousTrack;
+      delete w.digitalBusToggleShuffle;
     };
-  }, [next, previous]);
+  }, [next, previous, toggleShuffle]);
 
   // Initialize HTML5 Audio element & event listeners
   useEffect(() => {
@@ -498,7 +503,7 @@ export function useAudioPlayer(playlist: Track[]) {
 
   const displayTitle = id3Meta?.title || currentTrack?.title || "Digital Bus Track";
   const displayArtist = id3Meta?.artist || currentTrack?.artist || "Driver's Radio";
-  const displayCover = id3Meta?.coverUrl || currentTrack?.cover || "/bus-stop-bg.jpg";
+  const displayCover = id3Meta?.coverUrl || currentTrack?.cover || "/covers/song-01.jpg";
 
   let nextTrackIndex: number;
   if (isShuffleRef.current && shuffledQueueRef.current.length > 0) {
