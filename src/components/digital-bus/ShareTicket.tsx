@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Check, Copy, Share2, Ticket, X as XIcon, MoreHorizontal } from "lucide-react";
 import type { Track } from "@/data/playlist";
-import { externalLinks } from "@/data/playlist";
+import { FALLBACK_ARTWORK, externalLinks } from "@/data/playlist";
 
 type WindowWithToast = Window & {
   digitalBusTriggerToast?: (type: string, message?: string) => void;
@@ -9,6 +9,7 @@ type WindowWithToast = Window & {
 
 type Props = {
   currentTrack?: Track;
+  hiddenOnMobile?: boolean;
 };
 
 /* ──── Inline SVG Icons for Social & Music Platforms ──── */
@@ -69,7 +70,7 @@ function AppleMusicIcon() {
   );
 }
 
-export function ShareTicket({ currentTrack }: Props) {
+export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [canNativeShare, setCanNativeShare] = useState(false);
@@ -121,15 +122,15 @@ export function ShareTicket({ currentTrack }: Props) {
   const songTitle = currentTrack?.title || "Aapke Pyaar Mein Hum";
   const artistName = currentTrack?.artist || "Alka Yagnik";
   const albumName = currentTrack?.album || "Retro Bus Collection";
-  const coverUrl = currentTrack?.cover || "/bus-stop-bg.jpg";
+  const coverUrl = currentTrack?.cover || FALLBACK_ARTWORK;
   const trackId = currentTrack?.id ?? 1;
 
   const shareUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/?track=${trackId}`
-    : `https://digitalbus.me/?track=${trackId}`;
+    ? `${window.location.origin}/?song=${trackId}`
+    : `https://digitalbus.me/?song=${trackId}`;
 
   const shareTitle = `Digital Bus — ${songTitle}`;
-  const shareText = `Listening to "${songTitle}" by ${artistName} on Digital Bus 🎧`;
+  const shareText = `Now playing "${songTitle}" by ${artistName} on Digital Bus — a nostalgic Hindi bus journey playlist.`;
 
   const handleCopyLink = useCallback(async () => {
     try {
@@ -180,13 +181,13 @@ export function ShareTicket({ currentTrack }: Props) {
   return (
     <>
       {/* Physical Ticket Trigger Control */}
-      <div className="fixed right-3 top-[4.5rem] sm:right-6 sm:top-1/2 sm:-translate-y-1/2 z-[35]">
+      <div className={`fixed left-3 top-[calc(env(safe-area-inset-top)+8.25rem)] z-20 sm:left-auto sm:right-6 sm:top-1/2 sm:z-[35] sm:-translate-y-1/2 ${hiddenOnMobile ? "max-sm:hidden" : ""}`}>
         <button
           type="button"
           onClick={() => setIsOpen(true)}
           id="share-ticket-button"
           aria-label="Share Digital Bus ticket modal"
-          className="ticket-notch group relative overflow-visible rounded-xl border border-white/20 
+          className="ticket-notch group relative overflow-visible rounded-xl border border-white/20
             bg-ink/85 sm:bg-ink/90 backdrop-blur-md
             p-2.5 sm:px-4 sm:py-3.5
             text-cream shadow-2xl transition-all duration-300 ease-out
@@ -194,7 +195,7 @@ export function ShareTicket({ currentTrack }: Props) {
             active:scale-98
             focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/50"
         >
-          <div className="flex flex-col gap-1 w-[110px] sm:w-[145px] select-none text-left">
+          <div className="flex flex-col gap-1 w-[96px] sm:w-[145px] select-none text-left">
             <div className="flex items-center justify-between">
               <span className="text-[0.48rem] sm:text-[0.55rem] font-bold tracking-[0.2em] text-cream/40 uppercase flex items-center gap-1">
                 <Ticket className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-amber-300/80" /> TICKET
@@ -233,7 +234,7 @@ export function ShareTicket({ currentTrack }: Props) {
         >
           <div
             ref={modalRef}
-            className="relative w-full max-w-[420px] overflow-hidden rounded-[24px] 
+            className="relative w-full max-w-[420px] max-h-[min(92svh,720px)] overflow-y-auto hide-scrollbar rounded-[24px]
               border border-amber-500/25 bg-[#1a120c]/95 text-cream shadow-[0_25px_60px_rgba(0,0,0,0.85)]
               backdrop-blur-2xl transition-all duration-300 animate-scale-in"
           >
@@ -249,7 +250,7 @@ export function ShareTicket({ currentTrack }: Props) {
 
             {/* Retro Bus Ticket Body Container */}
             <div className="p-5 sm:p-6 flex flex-col gap-4 select-none">
-              
+
               {/* Ticket Top Header & Branding */}
               <div className="flex items-center justify-between border-b border-amber-500/20 pb-3">
                 <div className="flex flex-col">
@@ -275,6 +276,7 @@ export function ShareTicket({ currentTrack }: Props) {
                 <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-black/40 border border-white/15 shadow-md">
                   <img
                     src={coverUrl}
+                    onError={(e) => { e.currentTarget.src = FALLBACK_ARTWORK; }}
                     alt={`Artwork for ${songTitle}`}
                     className="h-full w-full object-cover"
                   />

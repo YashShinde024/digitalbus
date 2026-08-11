@@ -24,10 +24,18 @@ const jsonLdData = {
       name: "Digital Bus",
       alternateName: "डिजिटल बस",
       description:
-        "A cozy web-based music experience inspired by Indian bus journeys, travel, nature, nostalgia, lo-fi and indie music.",
+        "Digital Bus is a nostalgic Hindi and retro Bollywood listening experience for old Hindi songs, 90s Bollywood music, romantic classics, and Indian bus journey road-trip playlists.",
       publisher: {
         "@id": "https://digitalbus.me/#person",
       },
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://digitalbus.me/#webpage",
+      url: "https://digitalbus.me/",
+      name: "Digital Bus — Nostalgic Hindi Travel Playlist",
+      isPartOf: { "@id": "https://digitalbus.me/#website" },
+      about: "A cinematic Indian bus radio for old Hindi songs, retro Bollywood playlists, 90s Hindi songs, and nostalgic road trip music.",
     },
     {
       "@type": "WebApplication",
@@ -49,8 +57,24 @@ const jsonLdData = {
       "@type": "MusicPlaylist",
       "@id": "https://digitalbus.me/#playlist",
       name: "Nostalgic Hindi & Retro Bollywood Playlist — Digital Bus",
-      description: "A handpicked selection of classic old Hindi songs, 90s Bollywood hits, romantic retro music, and travel tracks to listen to online on the Digital Bus radio.",
+      description: "The Indian Bus Driver's Playlist: classic old Hindi songs, 90s Bollywood hits, retro romantic Hindi music, relaxing travel songs, and nostalgic bus journey music for long road trips and night travel.",
       numTracks: playlist.length,
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: playlist.map((track, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          item: {
+            "@type": "MusicRecording",
+            name: track.title,
+            byArtist: track.artist,
+            inAlbum: track.album,
+            datePublished: track.year ? String(track.year) : undefined,
+            url: `https://digitalbus.me/?song=${track.id}`,
+            image: `https://digitalbus.me${track.cover}`,
+          },
+        })),
+      },
       track: playlist.map((track, index) => ({
         "@type": "MusicRecording",
         name: track.title,
