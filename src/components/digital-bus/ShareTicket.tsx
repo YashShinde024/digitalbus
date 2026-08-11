@@ -125,9 +125,7 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
   const coverUrl = currentTrack?.cover || FALLBACK_ARTWORK;
   const trackId = currentTrack?.id ?? 1;
 
-  const shareUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/?song=${trackId}`
-    : `https://digitalbus.me/?song=${trackId}`;
+  const shareUrl = `https://digitalbus.me/?song=${trackId}`;
 
   const shareTitle = `Digital Bus — ${songTitle}`;
   const shareText = `Now playing "${songTitle}" by ${artistName} on Digital Bus — a nostalgic Hindi bus journey playlist.`;
