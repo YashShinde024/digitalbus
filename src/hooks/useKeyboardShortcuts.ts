@@ -19,6 +19,9 @@ type WindowWithDigitalBus = Window & {
   digitalBusToggleMute?: () => void;
   digitalBusNextTrack?: () => void;
   digitalBusPreviousTrack?: () => void;
+  digitalBusToggleShuffle?: () => void;
+  digitalBusOpenPlaylist?: () => void;
+  digitalBusOpenTicket?: () => void;
 };
 
 function isTypingTarget(el: EventTarget | null): boolean {
@@ -93,6 +96,30 @@ export function useKeyboardShortcuts() {
           if (e.repeat) return;
           e.preventDefault();
           w.digitalBusNextTrack?.();
+          break;
+        }
+
+        case "q":
+        case "Q": {
+          if (e.repeat) return;
+          e.preventDefault();
+          w.digitalBusOpenPlaylist?.();
+          break;
+        }
+
+        case "t":
+        case "T": {
+          if (e.repeat) return;
+          e.preventDefault();
+          w.digitalBusOpenTicket?.();
+          break;
+        }
+
+        case "s":
+        case "S": {
+          if (e.repeat) return;
+          e.preventDefault();
+          w.digitalBusToggleShuffle?.();
           break;
         }
 

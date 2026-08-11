@@ -19,7 +19,7 @@ const MESSAGES = [
  * Rotates every ~30 seconds with a calm crossfade. Respects prefers-reduced-motion.
  */
 export function JourneyTicker() {
-  const [index, setIndex] = useState(() => Math.floor(Math.random() * MESSAGES.length));
+  const [index, setIndex] = useState(0);
   const [fade, setFade] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(false);
 
