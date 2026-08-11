@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { playlist } from "../data/playlist";
 
 import appCss from "../styles.css?url";
 
@@ -41,6 +42,28 @@ const jsonLdData = {
       name: "Yash Shinde",
       url: "https://yashshinde.is-a.dev",
       sameAs: ["https://nyxen.in", "https://www.thankyouverymuch.co/yash"],
+    },
+    {
+      "@type": "MusicPlaylist",
+      "@id": "https://digitalbus.me/#playlist",
+      name: "Nostalgic Hindi & Retro Bollywood Playlist — Digital Bus",
+      description: "A handpicked selection of classic old Hindi songs, 90s Bollywood hits, romantic retro music, and travel tracks to listen to online on the Digital Bus radio.",
+      numTracks: playlist.length,
+      track: playlist.map((track, index) => ({
+        "@type": "MusicRecording",
+        name: track.title,
+        position: index + 1,
+        url: `https://digitalbus.me${track.audio}`,
+        image: `https://digitalbus.me${track.cover}`,
+        byArtist: {
+          "@type": "MusicGroup",
+          name: track.artist,
+        },
+        inAlbum: track.album ? {
+          "@type": "MusicAlbum",
+          name: track.album,
+        } : undefined,
+      })),
     },
   ],
 };
@@ -107,16 +130,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Digital Bus — Lo-Fi, Indie & Indian Music for the Journey" },
+      { title: "Digital Bus — Old Hindi & Bollywood Songs for the Long Way Home" },
       {
         name: "description",
         content:
-          "A cozy web-based music experience inspired by Indian bus journeys, travel, nature, nostalgia, lo-fi and indie music. Created by Yash Shinde.",
+          "Step inside the cozy cabin of Digital Bus. Stream nostalgic 90s & 2000s Bollywood songs, old Hindi romantic classics, and retro love melodies to make your drive beautiful.",
       },
       {
         name: "keywords",
         content:
-          "Digital Bus, Lo-Fi music, Indian music, indie music, travel radio, bus journey radio, cozy music, nostalgic Indian travel, relaxing music, Yash Shinde",
+          "old Hindi songs, old Bollywood songs, 90s Hindi songs, 90s Bollywood songs, 2000s Hindi songs, nostalgic Hindi songs, Hindi retro music, Bollywood nostalgia, romantic old Hindi songs, Kumar Sanu songs, Udit Narayan songs, Alka Yagnik songs, Sonu Nigam songs, 90s romantic songs, Hindi songs to listen to online, nostalgic music player, old Hindi music playlist, retro Bollywood playlist, Hindi love songs, relaxing Hindi songs, songs for long drives, nostalgic songs for travelling, rainy day Hindi songs, old Bollywood playlist, Digital Bus",
       },
       { name: "author", content: "Yash Shinde" },
       { name: "publisher", content: "Yash Shinde" },
@@ -124,12 +147,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "robots", content: "index, follow" },
       {
         property: "og:title",
-        content: "Digital Bus — Lo-Fi, Indie & Indian Music for the Journey",
+        content: "Digital Bus — Old Hindi & Bollywood Songs for the Long Way Home",
       },
       {
         property: "og:description",
         content:
-          "A cozy web-based music experience inspired by Indian bus journeys, travel, nature, nostalgia, lo-fi and indie music.",
+          "Step inside the cozy cabin of Digital Bus. Stream nostalgic 90s & 2000s Bollywood songs, old Hindi romantic classics, and retro love melodies to make your drive beautiful.",
       },
       { property: "og:url", content: "https://digitalbus.me/" },
       { property: "og:image", content: "https://digitalbus.me/og-image.png" },
@@ -138,12 +161,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
-        content: "Digital Bus — Lo-Fi, Indie & Indian Music for the Journey",
+        content: "Digital Bus — Old Hindi & Bollywood Songs for the Long Way Home",
       },
       {
         name: "twitter:description",
         content:
-          "A cozy web-based music experience inspired by Indian bus journeys, travel, nature, nostalgia, lo-fi and indie music.",
+          "Step inside the cozy cabin of Digital Bus. Stream nostalgic 90s & 2000s Bollywood songs, old Hindi romantic classics, and retro love melodies to make your drive beautiful.",
       },
       { name: "twitter:image", content: "https://digitalbus.me/og-image.png" },
     ],

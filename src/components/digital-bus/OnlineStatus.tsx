@@ -1,16 +1,56 @@
 import { useEffect, useState } from "react";
-import { getOnlineCount } from "@/lib/presence";
+import { pingPresence, disconnectPresence } from "@/lib/presence";
+
+// Fetch or generate a unique persistent client ID to prevent tab-inflation
+const getOrCreateClientId = (): string => {
+  if (typeof window === "undefined") return "";
+  let id = localStorage.getItem("digital_bus_user_id");
+  if (!id) {
+    id = Math.random().toString(36).substring(2) + Date.now().toString(36);
+    localStorage.setItem("digital_bus_user_id", id);
+  }
+  return id;
+};
 
 export function OnlineStatus() {
   const [count, setCount] = useState<number>(1);
 
   useEffect(() => {
-    setCount(getOnlineCount());
-    const interval = setInterval(() => {
-      setCount(getOnlineCount());
-    }, 8000);
+    const clientId = getOrCreateClientId();
+    if (!clientId) return;
 
-    return () => clearInterval(interval);
+    let isMounted = true;
+
+    const ping = async () => {
+      try {
+        const res = await pingPresence({ data: { clientId } });
+        if (isMounted && res && typeof res.onlineCount === "number") {
+          setCount(res.onlineCount);
+        }
+      } catch (err) {
+        // Gracefully ignore presence check errors to prevent breaking the core app/player
+        console.warn("Presence ping failed, using fallback:", err);
+      }
+    };
+
+    // Initial ping
+    ping();
+
+    // Poll every 10 seconds
+    const interval = setInterval(ping, 10000);
+
+    // Attempt clean disconnect on tab unload
+    const handleUnload = () => {
+      disconnectPresence({ data: { clientId } }).catch(() => {});
+    };
+
+    window.addEventListener("beforeunload", handleUnload);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+      window.removeEventListener("beforeunload", handleUnload);
+    };
   }, []);
 
   return (

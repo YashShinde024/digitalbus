@@ -1,37 +1,40 @@
-/**
- * Client-Side Presence Estimation
- * Uses BroadcastChannel to count active local tabs/sessions without requiring
- * external server function calls or triggering localhost connection errors.
- */
+import { createServerFn } from "@tanstack/react-start";
 
-let channel: BroadcastChannel | null = null;
-const sessionIds = new Set<string>();
+// In-memory presence map storing active session timestamps.
+// Note: In serverless environments (like Vercel), this Map is ephemeral and local
+// to each serverless function instance. For full multi-region accuracy in production,
+// a persistent database or KV store (like Vercel KV / Redis) is recommended.
+// This in-memory TTL implementation is the standard and safest solution supported
+// by the current project architecture.
+const activeSessions = new Map<string, number>();
+const TIMEOUT_MS = 25000; // 25 seconds inactivity threshold
 
-export function getOnlineCount(): number {
-  if (typeof window === "undefined") return 1;
-
-  try {
-    const myId =
-      sessionStorage.getItem("digital_bus_client_id") ||
-      Math.random().toString(36).substring(2) + Date.now().toString(36);
-    sessionStorage.setItem("digital_bus_client_id", myId);
-    sessionIds.add(myId);
-
-    if (!channel && typeof BroadcastChannel !== "undefined") {
-      channel = new BroadcastChannel("digital_bus_presence");
-      channel.onmessage = (event) => {
-        if (event.data?.type === "ping" && event.data?.id) {
-          sessionIds.add(event.data.id);
-          channel?.postMessage({ type: "pong", id: myId });
-        } else if (event.data?.type === "pong" && event.data?.id) {
-          sessionIds.add(event.data.id);
-        }
-      };
-      channel.postMessage({ type: "ping", id: myId });
+function cleanupExpired() {
+  const now = Date.now();
+  for (const [id, lastSeen] of activeSessions.entries()) {
+    if (now - lastSeen > TIMEOUT_MS) {
+      activeSessions.delete(id);
     }
-  } catch {
-    // Ignore channel errors
   }
-
-  return Math.max(1, sessionIds.size);
 }
+
+export const pingPresence = createServerFn({ method: "POST" })
+  .validator((data: { clientId: string }) => data)
+  .handler(async ({ data }) => {
+    cleanupExpired();
+    const clientId = data?.clientId;
+    if (clientId) {
+      activeSessions.set(clientId, Date.now());
+    }
+    return { onlineCount: Math.max(1, activeSessions.size) };
+  });
+
+export const disconnectPresence = createServerFn({ method: "POST" })
+  .validator((data: { clientId: string }) => data)
+  .handler(async ({ data }) => {
+    const clientId = data?.clientId;
+    if (clientId) {
+      activeSessions.delete(clientId);
+    }
+    return { success: true };
+  });

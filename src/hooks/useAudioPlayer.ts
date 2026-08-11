@@ -108,6 +108,9 @@ export function useAudioPlayer(playlist: Track[]) {
     const audio = new Audio();
     audio.preload = "metadata";
     audioRef.current = audio;
+    if (typeof window !== "undefined") {
+      (window as unknown as { digitalBusAudio?: HTMLAudioElement }).digitalBusAudio = audio;
+    }
 
     try {
       const savedMuted = localStorage.getItem(STORAGE_MUTED_KEY);
@@ -203,6 +206,9 @@ export function useAudioPlayer(playlist: Track[]) {
       audio.removeEventListener("error", onError);
       audio.pause();
       audio.src = "";
+      if (typeof window !== "undefined") {
+        delete (window as unknown as { digitalBusAudio?: HTMLAudioElement }).digitalBusAudio;
+      }
     };
   }, []);
 
