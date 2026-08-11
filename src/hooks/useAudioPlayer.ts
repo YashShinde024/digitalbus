@@ -24,6 +24,11 @@ export function useAudioPlayer(playlist: Track[]) {
 
   const autoPlayNextRef = useRef(false);
   const failedAttemptsRef = useRef(0);
+  const isDraggingRef = useRef(false);
+
+  const setDraggingState = useCallback((dragging: boolean) => {
+    isDraggingRef.current = dragging;
+  }, []);
 
   // Playback states
   const [isPlaying, setIsPlaying] = useState(false);
@@ -147,6 +152,7 @@ export function useAudioPlayer(playlist: Track[]) {
     };
 
     const onTimeUpdate = () => {
+      if (isDraggingRef.current) return;
       setProgress(audio.currentTime);
       if (audio.duration && Number.isFinite(audio.duration)) {
         setDuration(audio.duration);
@@ -396,6 +402,7 @@ export function useAudioPlayer(playlist: Track[]) {
     previous,
     retry,
     seek,
+    setDraggingState,
   };
 }
 

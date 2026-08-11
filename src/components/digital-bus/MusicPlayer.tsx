@@ -26,6 +26,7 @@ export function MusicPlayer() {
     previous,
     retry,
     seek,
+    setDraggingState,
   } = useAudioPlayer(playlist);
 
   const [coverOk, setCoverOk] = useState(false);
@@ -173,7 +174,13 @@ export function MusicPlayer() {
 
         {/* Straight Horizontal Seek Line */}
         <div className="mt-2.5">
-          <ProgressBar progress={progress} duration={duration} onSeek={seek} />
+          <ProgressBar
+            progress={progress}
+            duration={duration}
+            onSeek={seek}
+            onDragStart={() => setDraggingState(true)}
+            onDragEnd={() => setDraggingState(false)}
+          />
         </div>
       </section>
     </div>

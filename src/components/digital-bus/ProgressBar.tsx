@@ -1,51 +1,115 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import { formatTime } from "@/hooks/useAudioPlayer";
 
 type Props = {
   progress: number;
   duration: number;
   onSeek: (ratio: number) => void;
+  onDragStart?: () => void;
+  onDragEnd?: () => void;
 };
 
 /**
- * Primary straight horizontal playback progress line with interactive seek functionality.
+ * Primary horizontal playback progress bar with responsive pointer-captured seeking.
+ * Visual drag state updates smoothly at 60fps via requestAnimationFrame without triggering
+ * continuous audio seeking until pointer release.
  */
-export function ProgressBar({ progress, duration, onSeek }: Props) {
+export function ProgressBar({ progress, duration, onSeek, onDragStart, onDragEnd }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [dragging, setDragging] = useState(false);
+  const isDraggingRef = useRef(false);
+  const rafIdRef = useRef<number | null>(null);
+  const lastRatioRef = useRef<number>(0);
+
+  const [isDragging, setIsDragging] = useState(false);
   const [dragProgress, setDragProgress] = useState<number | null>(null);
 
-  const effectiveProgress = dragging && dragProgress !== null ? dragProgress : progress;
+  // Use local drag progress when seeking; fallback to playback progress
+  const effectiveProgress = isDragging && dragProgress !== null ? dragProgress : progress;
   const pct = duration ? Math.min(100, Math.max(0, (effectiveProgress / duration) * 100)) : 0;
 
-  const seekFromClientX = useCallback(
+  const calculateRatio = useCallback((clientX: number) => {
+    const el = containerRef.current;
+    if (!el) return 0;
+    const rect = el.getBoundingClientRect();
+    if (rect.width <= 0) return 0;
+    return Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
+  }, []);
+
+  const updateVisualPosition = useCallback(
     (clientX: number) => {
-      const el = containerRef.current;
-      if (!el || !duration) return;
-      const rect = el.getBoundingClientRect();
-      const ratio = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
-      setDragProgress(ratio * duration);
-      onSeek(ratio);
+      if (!duration) return;
+      const ratio = calculateRatio(clientX);
+      lastRatioRef.current = ratio;
+
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+
+      rafIdRef.current = requestAnimationFrame(() => {
+        setDragProgress(lastRatioRef.current * duration);
+      });
     },
-    [duration, onSeek],
+    [duration, calculateRatio],
   );
 
-  const startDrag = (e: React.PointerEvent) => {
-    e.currentTarget.setPointerCapture?.(e.pointerId);
-    setDragging(true);
-    seekFromClientX(e.clientX);
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!duration || e.button !== 0) return;
+    e.preventDefault();
 
-    const move = (ev: PointerEvent) => seekFromClientX(ev.clientX);
-    const up = () => {
-      setDragging(false);
-      setDragProgress(null);
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", up);
-    };
+    const target = e.currentTarget;
+    try {
+      target.setPointerCapture(e.pointerId);
+    } catch {
+      // Ignore
+    }
 
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", up);
+    isDraggingRef.current = true;
+    setIsDragging(true);
+    onDragStart?.();
+
+    updateVisualPosition(e.clientX);
   };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) return;
+    e.preventDefault();
+    updateVisualPosition(e.clientX);
+  };
+
+  const commitSeek = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) return;
+    e.preventDefault();
+
+    const target = e.currentTarget;
+    try {
+      if (target.hasPointerCapture(e.pointerId)) {
+        target.releasePointerCapture(e.pointerId);
+      }
+    } catch {
+      // Ignore
+    }
+
+    isDraggingRef.current = false;
+    setIsDragging(false);
+
+    if (rafIdRef.current) {
+      cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = null;
+    }
+
+    const finalRatio = calculateRatio(e.clientX);
+    setDragProgress(null);
+    onSeek(finalRatio);
+    onDragEnd?.();
+  };
+
+  useEffect(() => {
+    return () => {
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="w-full select-none">
@@ -59,32 +123,43 @@ export function ProgressBar({ progress, duration, onSeek }: Props) {
         aria-valuemax={Math.round(duration) || 0}
         aria-valuenow={Math.round(effectiveProgress)}
         aria-valuetext={`${formatTime(effectiveProgress)} of ${formatTime(duration)}`}
-        onPointerDown={startDrag}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={commitSeek}
+        onPointerCancel={commitSeek}
         onKeyDown={(e) => {
           if (!duration) return;
-          if (e.key === "ArrowRight") onSeek((progress + 5) / duration);
-          if (e.key === "ArrowLeft") onSeek((progress - 5) / duration);
+          if (e.key === "ArrowRight") {
+            const nextRatio = Math.min(1, (progress + 5) / duration);
+            onSeek(nextRatio);
+          }
+          if (e.key === "ArrowLeft") {
+            const prevRatio = Math.max(0, (progress - 5) / duration);
+            onSeek(prevRatio);
+          }
         }}
         className="group relative -my-2.5 cursor-pointer touch-none py-2.5 focus-visible:outline-none"
       >
         {/* Track Line Background */}
-        <div className="h-[3px] w-full overflow-hidden rounded-full bg-cream/20 transition-all duration-200 group-hover:h-[4px]">
+        <div className="h-[4px] w-full overflow-hidden rounded-full bg-cream/20 transition-all duration-200 group-hover:h-[5px]">
           {/* Active Played Fill */}
           <div
             className="h-full rounded-full bg-cream/90"
             style={{
               width: `${pct}%`,
-              transition: dragging ? "none" : "width 150ms linear",
+              transition: isDragging ? "none" : "width 100ms linear",
             }}
           />
         </div>
 
-        {/* Subtle Position Thumb Dot */}
+        {/* Position Thumb Dot */}
         <span
-          className="pointer-events-none absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cream shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-150 group-hover:scale-125"
+          className={`pointer-events-none absolute top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cream shadow-[0_0_10px_rgba(255,255,255,0.9)] transition-transform duration-100 ${
+            isDragging ? "scale-125" : "group-hover:scale-125"
+          }`}
           style={{
             left: `${pct}%`,
-            opacity: dragging || pct > 0 ? 1 : 0.6,
+            opacity: isDragging || pct > 0 ? 1 : 0.6,
           }}
           aria-hidden="true"
         />
