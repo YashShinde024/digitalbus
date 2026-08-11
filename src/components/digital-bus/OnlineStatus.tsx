@@ -4,12 +4,16 @@ import { pingPresence, disconnectPresence } from "@/lib/presence";
 // Fetch or generate a unique persistent client ID to prevent tab-inflation
 const getOrCreateClientId = (): string => {
   if (typeof window === "undefined") return "";
-  let id = localStorage.getItem("digital_bus_user_id");
-  if (!id) {
-    id = Math.random().toString(36).substring(2) + Date.now().toString(36);
-    localStorage.setItem("digital_bus_user_id", id);
+  try {
+    let id = localStorage.getItem("digital_bus_user_id");
+    if (!id) {
+      id = Math.random().toString(36).substring(2) + Date.now().toString(36);
+      localStorage.setItem("digital_bus_user_id", id);
+    }
+    return id;
+  } catch (e) {
+    return Math.random().toString(36).substring(2) + Date.now().toString(36);
   }
-  return id;
 };
 
 export function OnlineStatus() {

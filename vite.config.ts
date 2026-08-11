@@ -9,12 +9,8 @@ export default defineConfig({
   plugins: [
     tsconfigPaths(),
     tailwindcss(),
-    tanstackStart({
-      server: { entry: "server" },
-    }),
-    nitro({
-      preset: "vercel",
-    }),
+    tanstackStart(),
+    nitro(),
     viteReact(),
   ],
 });

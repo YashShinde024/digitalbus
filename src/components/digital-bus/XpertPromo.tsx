@@ -34,10 +34,14 @@ export function XpertPromo() {
           // Ignore
         }
 
-        // 60 minutes threshold (3600 seconds)
-        // Allows testing override via localStorage flag
-        const threshold =
-          localStorage.getItem("digital_bus_promo_test_mode") === "true" ? 5 : 3600;
+        let threshold = 3600;
+        try {
+          if (localStorage.getItem("digital_bus_promo_test_mode") === "true") {
+            threshold = 5;
+          }
+        } catch {
+          // Ignore
+        }
 
         if (activeListenTime >= threshold) {
           const isToastActive = (window as unknown as { isToastBannerActive?: boolean })
