@@ -13,6 +13,8 @@
   --animate-wave: wave 1.4s ease-in-out infinite;
   --animate-ping-slow: ping 2.6s cubic-bezier(0, 0, 0.2, 1) infinite;
   --animate-fade-in: fade-in 0.45s ease-out both;
+  --animate-slide-up: slide-up 0.35s cubic-bezier(0.32, 0.72, 0, 1) both;
+  --animate-slide-down: slide-down 0.28s cubic-bezier(0.32, 0.72, 0, 1) both;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -165,6 +167,35 @@
   }
 }
 
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+/* Soft warm glow behind cover artwork in expanded mobile player */
+@utility artwork-glow {
+  box-shadow:
+    0 8px 40px -8px rgba(180, 140, 80, 0.3),
+    0 0 80px -20px rgba(180, 140, 80, 0.15);
+}
+
 /* Tasteful, subtle scene veil — preserves artwork warmth while providing text readability */
 @utility scene-veil {
   background:
@@ -265,5 +296,35 @@
 
 @utility duration-600 {
   transition-duration: 600ms;
+}
+
+/* ──── Ticket Share Button Utilities ──── */
+
+@utility ticket-perforation {
+  border-top: 1.5px dashed rgba(255, 255, 255, 0.2);
+}
+
+@utility ticket-notch {
+  position: relative;
+}
+
+.ticket-notch::before,
+.ticket-notch::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: oklch(0.16 0.012 55); /* --ink */
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ticket-notch::before {
+  left: -6px;
+}
+
+.ticket-notch::after {
+  right: -6px;
 }
 

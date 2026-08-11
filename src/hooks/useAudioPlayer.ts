@@ -3,28 +3,35 @@ import type { Track } from "@/data/playlist";
 import { setAmbientVolume, startAmbientBus, stopAmbientBus } from "@/lib/audioEffects";
 import { extractID3Metadata, type ID3Metadata } from "@/lib/id3";
 
-function shuffleArray(size: number): number[] {
-  const array = Array.from({ length: size }, (_, i) => i);
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j]!, array[i]!];
-  }
-  return array;
-}
-
 const STORAGE_INDEX_KEY = "digital_bus_last_queue_index";
 const STORAGE_TIME_KEY = "digital_bus_last_time";
 const STORAGE_AMBIENT_KEY = "digital_bus_ambient_enabled";
 const STORAGE_MUTED_KEY = "digital_bus_is_muted";
+const STORAGE_SHUFFLE_KEY = "digital_bus_shuffle_enabled";
+
+/** Fisher-Yates shuffle helper function */
+function shuffleArray<T>(arr: T[]): T[] {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
 
 export function useAudioPlayer(playlist: Track[]) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const shuffleOrder = useRef<number[]>([]);
-  const [queueIndex, setQueueIndex] = useState(0);
+  const [trackIndex, setTrackIndex] = useState(0);
 
   const autoPlayNextRef = useRef(false);
   const failedAttemptsRef = useRef(0);
   const isDraggingRef = useRef(false);
+  const historyRef = useRef<number[]>([]);
+  const isShuffleRef = useRef(false);
+
+  // Shuffled Queue State
+  const shuffledQueueRef = useRef<number[]>([]);
+  const queuePointerRef = useRef(0);
 
   const setDraggingState = useCallback((dragging: boolean) => {
     isDraggingRef.current = dragging;
@@ -34,6 +41,7 @@ export function useAudioPlayer(playlist: Track[]) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [isShuffle, setIsShuffle] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [error, setError] = useState(false);
@@ -42,7 +50,17 @@ export function useAudioPlayer(playlist: Track[]) {
   // ID3 Metadata
   const [id3Meta, setId3Meta] = useState<ID3Metadata | null>(null);
 
-  // Restore saved session index & preferences from localStorage
+  /** Generate a shuffled queue starting with the current track */
+  const initShuffledQueue = useCallback((startIdx: number, total: number) => {
+    if (total <= 0) return;
+    const indices = Array.from({ length: total }, (_, i) => i);
+    const rest = indices.filter((i) => i !== startIdx);
+    const shuffledRest = shuffleArray(rest);
+    shuffledQueueRef.current = [startIdx, ...shuffledRest];
+    queuePointerRef.current = 0;
+  }, []);
+
+  // Restore saved session index & preferences from localStorage / URL search params
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -55,58 +73,179 @@ export function useAudioPlayer(playlist: Track[]) {
       if (savedAmbient === "true") {
         setIsAmbientEnabled(true);
       }
-    } catch {
-      // Ignore
-    }
+      const savedShuffle = localStorage.getItem(STORAGE_SHUFFLE_KEY);
+      if (savedShuffle === "true") {
+        setIsShuffle(true);
+        isShuffleRef.current = true;
+      }
 
-    if (playlist.length > 0 && shuffleOrder.current.length === 0) {
-      shuffleOrder.current = shuffleArray(playlist.length);
-      try {
+      let initialIdx = 0;
+
+      // Check URL query parameters for ?track=ID
+      const params = new URLSearchParams(window.location.search);
+      const trackParam = params.get("track");
+      if (trackParam) {
+        const foundIdx = playlist.findIndex((t) => String(t.id) === trackParam);
+        if (foundIdx !== -1) {
+          initialIdx = foundIdx;
+        }
+      } else {
         const savedIdx = localStorage.getItem(STORAGE_INDEX_KEY);
         if (savedIdx !== null) {
           const parsed = parseInt(savedIdx, 10);
           if (!isNaN(parsed) && parsed >= 0 && parsed < playlist.length) {
-            setQueueIndex(parsed);
+            initialIdx = parsed;
           }
         }
+      }
+
+      setTrackIndex(initialIdx);
+      initShuffledQueue(initialIdx, playlist.length);
+    } catch {
+      // Ignore
+    }
+  }, [playlist, initShuffledQueue]);
+
+  const currentTrackIndex = trackIndex < playlist.length ? trackIndex : 0;
+  const currentTrack = playlist[currentTrackIndex] ?? playlist[0];
+
+  const nextRef = useRef<() => void>(() => {});
+
+  const playTrack = useCallback(
+    (index: number, autoPlay = true) => {
+      if (index < 0 || index >= playlist.length) return;
+      autoPlayNextRef.current = autoPlay;
+      historyRef.current.push(currentTrackIndex);
+      setTrackIndex(index);
+
+      if (isShuffleRef.current) {
+        initShuffledQueue(index, playlist.length);
+      }
+
+      try {
+        localStorage.setItem(STORAGE_INDEX_KEY, String(index));
       } catch {
         // Ignore
       }
-    }
-  }, [playlist.length]);
-
-  const currentTrackIndex = shuffleOrder.current[queueIndex] ?? 0;
-  const currentTrack = playlist[currentTrackIndex] ?? playlist[0];
-
-  const nextTrackIndex = shuffleOrder.current[(queueIndex + 1) % playlist.length] ?? 0;
-  const nextTrack = playlist[nextTrackIndex];
-
-  const nextRef = useRef<() => void>(() => {});
+    },
+    [playlist.length, currentTrackIndex, initShuffledQueue],
+  );
 
   const next = useCallback(
     (autoPlay = true) => {
       autoPlayNextRef.current = autoPlay;
-      setQueueIndex((prev) => {
-        const nextIdx = prev + 1;
-        let targetIndex = nextIdx;
-        if (nextIdx >= shuffleOrder.current.length) {
-          shuffleOrder.current = shuffleArray(playlist.length);
-          targetIndex = 0;
+      setTrackIndex((prevIdx) => {
+        let nextIdx: number;
+
+        if (isShuffleRef.current) {
+          historyRef.current.push(prevIdx);
+
+          if (shuffledQueueRef.current.length !== playlist.length) {
+            initShuffledQueue(prevIdx, playlist.length);
+          }
+
+          queuePointerRef.current += 1;
+          if (queuePointerRef.current >= shuffledQueueRef.current.length) {
+            // Cycle exhausted — create a fresh shuffle cycle
+            initShuffledQueue(prevIdx, playlist.length);
+            queuePointerRef.current = Math.min(1, shuffledQueueRef.current.length - 1);
+          }
+
+          nextIdx = shuffledQueueRef.current[queuePointerRef.current] ?? 0;
+        } else {
+          nextIdx = (prevIdx + 1) % playlist.length;
         }
+
         try {
-          localStorage.setItem(STORAGE_INDEX_KEY, String(targetIndex));
+          localStorage.setItem(STORAGE_INDEX_KEY, String(nextIdx));
         } catch {
           // Ignore
         }
-        return targetIndex;
+        return nextIdx;
       });
     },
-    [playlist.length],
+    [playlist.length, initShuffledQueue],
   );
 
   useEffect(() => {
     nextRef.current = () => next(true);
   }, [next]);
+
+  const previous = useCallback(() => {
+    const audio = audioRef.current;
+    const wasPlaying = isPlaying || (audio ? !audio.paused : true);
+    autoPlayNextRef.current = wasPlaying;
+
+    setTrackIndex((prevIdx) => {
+      let targetIdx: number;
+
+      if (isShuffleRef.current && historyRef.current.length > 0) {
+        targetIdx = historyRef.current.pop()!;
+      } else {
+        targetIdx = prevIdx > 0 ? prevIdx - 1 : playlist.length - 1;
+      }
+
+      try {
+        localStorage.setItem(STORAGE_INDEX_KEY, String(targetIdx));
+      } catch {
+        // Ignore
+      }
+      return targetIdx;
+    });
+  }, [playlist.length, isPlaying]);
+
+  const toggleShuffle = useCallback(() => {
+    setIsShuffle((prev) => {
+      const nextState = !prev;
+      isShuffleRef.current = nextState;
+
+      if (nextState) {
+        initShuffledQueue(currentTrackIndex, playlist.length);
+      }
+
+      try {
+        localStorage.setItem(STORAGE_SHUFFLE_KEY, String(nextState));
+      } catch {
+        // Ignore
+      }
+      return nextState;
+    });
+  }, [currentTrackIndex, playlist.length, initShuffledQueue]);
+
+  // Expose global control methods on window for keyboard shortcuts
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const w = window as unknown as Window & {
+      digitalBusToggleMute?: () => void;
+      digitalBusNextTrack?: () => void;
+      digitalBusPreviousTrack?: () => void;
+    };
+
+    w.digitalBusToggleMute = () => {
+      setIsMuted((prev) => {
+        const nextState = !prev;
+        if (audioRef.current) {
+          audioRef.current.muted = nextState;
+        }
+        try {
+          localStorage.setItem(STORAGE_MUTED_KEY, String(nextState));
+        } catch {
+          // Ignore
+        }
+        return nextState;
+      });
+    };
+
+    w.digitalBusNextTrack = () => next(true);
+    w.digitalBusPreviousTrack = () => previous();
+
+    return () => {
+      delete w.digitalBusToggleMute;
+      delete w.digitalBusNextTrack;
+      delete w.digitalBusPreviousTrack;
+    };
+  }, [next, previous]);
 
   // Initialize HTML5 Audio element & event listeners
   useEffect(() => {
@@ -232,7 +371,6 @@ export function useAudioPlayer(playlist: Track[]) {
     setIsLoading(true);
     setId3Meta(null);
 
-    // Properly encode URI for filenames with spaces/special characters
     const encodedUrl = encodeURI(currentTrack.audio);
 
     audio.pause();
@@ -249,7 +387,6 @@ export function useAudioPlayer(playlist: Track[]) {
           }
         })
         .catch(() => {
-          // Autoplay policy prevented playback — keep player ready without throwing console error
           if (isSubscribed) {
             setIsPlaying(false);
             setIsLoading(false);
@@ -267,7 +404,7 @@ export function useAudioPlayer(playlist: Track[]) {
       isSubscribed = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queueIndex, currentTrack?.audio]);
+  }, [currentTrackIndex, currentTrack?.audio]);
 
   const toggleMute = useCallback(() => {
     setIsMuted((prev) => {
@@ -329,22 +466,6 @@ export function useAudioPlayer(playlist: Track[]) {
     }
   }, [isAmbientEnabled]);
 
-  const previous = useCallback(() => {
-    const audio = audioRef.current;
-    const wasPlaying = isPlaying || (audio ? !audio.paused : true);
-    autoPlayNextRef.current = wasPlaying;
-
-    setQueueIndex((prev) => {
-      const targetIndex = prev > 0 ? prev - 1 : shuffleOrder.current.length - 1;
-      try {
-        localStorage.setItem(STORAGE_INDEX_KEY, String(targetIndex));
-      } catch {
-        // Ignore
-      }
-      return targetIndex;
-    });
-  }, [isPlaying]);
-
   const retry = useCallback(() => {
     const audio = audioRef.current;
     if (!audio || !currentTrack) return;
@@ -378,28 +499,40 @@ export function useAudioPlayer(playlist: Track[]) {
   const displayTitle = id3Meta?.title || currentTrack?.title || "Digital Bus Track";
   const displayArtist = id3Meta?.artist || currentTrack?.artist || "Driver's Radio";
   const displayCover = id3Meta?.coverUrl || currentTrack?.cover || "/bus-stop-bg.jpg";
-  const nextTrackPreviewTitle = nextTrack?.title || "Next Song";
+
+  let nextTrackIndex: number;
+  if (isShuffleRef.current && shuffledQueueRef.current.length > 0) {
+    const nextPtr = (queuePointerRef.current + 1) % shuffledQueueRef.current.length;
+    nextTrackIndex = shuffledQueueRef.current[nextPtr] ?? (currentTrackIndex + 1) % playlist.length;
+  } else {
+    nextTrackIndex = (currentTrackIndex + 1) % playlist.length;
+  }
+
+  const nextTrackPreviewTitle = playlist[nextTrackIndex]?.title || "Next Song";
 
   return {
     track: currentTrack,
+    currentTrackIndex,
     nextTrackTitle: nextTrackPreviewTitle,
     displayTitle,
     displayArtist,
     displayCover,
-    queueIndex,
     totalTracks: playlist.length,
     isPlaying,
     isLoading,
     isMuted,
+    isShuffle,
     progress,
     duration,
     error,
     isAmbientEnabled,
     toggleMute,
     toggleAmbient,
+    toggleShuffle,
     toggle,
     next: () => next(true),
     previous,
+    playTrack,
     retry,
     seek,
     setDraggingState,

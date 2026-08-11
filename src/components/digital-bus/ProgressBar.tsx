@@ -49,17 +49,9 @@ export function ProgressBar({ progress, duration, onSeek, onDragStart, onDragEnd
 
       rafIdRef.current = requestAnimationFrame(() => {
         setDragProgress(lastRatioRef.current * duration);
-
-        // Throttled intermediate seeking: update audio every ~80ms during drag
-        // so the user hears the audio position change in real-time
-        const now = Date.now();
-        if (now - lastSeekTimeRef.current > 80) {
-          lastSeekTimeRef.current = now;
-          onSeek(lastRatioRef.current);
-        }
       });
     },
-    [duration, calculateRatio, onSeek],
+    [duration, calculateRatio],
   );
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {

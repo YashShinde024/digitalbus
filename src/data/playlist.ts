@@ -711,5 +711,6 @@ export const playlist: Track[] = [
 export const externalLinks = {
   spotify: "https://open.spotify.com/playlist/7uzeaedqlsiKkc4obVfgSt?si=dtUjcC9wRfOv8ByDrHrVqw",
   youtubeMusic: "https://music.youtube.com/playlist?list=PLYaI0MauTkP8",
+  appleMusic: "https://music.apple.com/in/playlist/indian-bus-drivers-playlist/pl.u-KVXBkPPFLamlYoa?ls",
   xpertMelody: "https://www.youtube.com/@XpertMelody",
 };

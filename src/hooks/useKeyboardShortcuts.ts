@@ -16,6 +16,9 @@ type WindowWithDigitalBus = Window & {
   digitalBusAudio?: HTMLAudioElement;
   digitalBusTriggerToast?: (type: string, message?: string) => void;
   digitalBusToggleToast?: (type: string, message?: string) => void;
+  digitalBusToggleMute?: () => void;
+  digitalBusNextTrack?: () => void;
+  digitalBusPreviousTrack?: () => void;
 };
 
 function isTypingTarget(el: EventTarget | null): boolean {
@@ -52,6 +55,44 @@ export function useKeyboardShortcuts() {
           } else {
             audio.pause();
           }
+          break;
+        }
+
+        case "m":
+        case "M": {
+          // M: YouTube-style Mute/Unmute
+          if (e.repeat) return;
+          e.preventDefault();
+          if (w.digitalBusToggleMute) {
+            w.digitalBusToggleMute();
+          } else if (w.digitalBusAudio) {
+            const audio = w.digitalBusAudio;
+            audio.muted = !audio.muted;
+            w.digitalBusTriggerToast?.(
+              "custom_banner",
+              audio.muted ? "Audio Muted 🔇" : "Audio Unmuted 🔊",
+            );
+          }
+          break;
+        }
+
+        case "p":
+        case "P":
+        case "[": {
+          // P or [: Previous Track
+          if (e.repeat) return;
+          e.preventDefault();
+          w.digitalBusPreviousTrack?.();
+          break;
+        }
+
+        case "n":
+        case "N":
+        case "]": {
+          // N or ]: Next Track
+          if (e.repeat) return;
+          e.preventDefault();
+          w.digitalBusNextTrack?.();
           break;
         }
 

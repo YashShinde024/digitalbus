@@ -1,13 +1,17 @@
-import { Disc3, Radio, RefreshCw, Volume2, VolumeX } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ChevronDown, Disc3, Loader2, Pause, Play, Radio, RefreshCw, Share2, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { playlist } from "@/data/playlist";
 import { useAudioPlayer } from "@/hooks/useAudioPlayer";
 import { AudioWaveform } from "./AudioWaveform";
 import { PlayerControls } from "./PlayerControls";
+import { PlaylistPanel } from "./PlaylistPanel";
 import { ProgressBar } from "./ProgressBar";
+import { ShareTicket } from "./ShareTicket";
 
 export function MusicPlayer() {
   const {
+    track,
+    currentTrackIndex,
     displayTitle,
     displayArtist,
     displayCover,
@@ -15,21 +19,32 @@ export function MusicPlayer() {
     isPlaying,
     isLoading,
     isMuted,
+    isShuffle,
     progress,
     duration,
     error,
     isAmbientEnabled,
     toggleMute,
     toggleAmbient,
+    toggleShuffle,
     toggle,
     next,
     previous,
+    playTrack,
     retry,
     seek,
     setDraggingState,
   } = useAudioPlayer(playlist);
 
   const [coverOk, setCoverOk] = useState(false);
+  const [isPlaylistOpen, setIsPlaylistOpen] = useState(false);
+  const [isMobileExpanded, setIsMobileExpanded] = useState(false);
+
+  // Swipe-to-dismiss state
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const dragStartYRef = useRef<number | null>(null);
+  const [sheetTranslateY, setSheetTranslateY] = useState(0);
+  const [isDismissing, setIsDismissing] = useState(false);
 
   // Validate image URL loading before displaying artwork
   useEffect(() => {
@@ -45,25 +60,95 @@ export function MusicPlayer() {
     };
   }, [displayCover]);
 
+  // Close mobile expanded sheet on Escape key
+  useEffect(() => {
+    if (!isMobileExpanded) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsMobileExpanded(false);
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [isMobileExpanded]);
+
+  // Swipe-to-dismiss handlers for mobile sheet
+  const handleSheetPointerDown = useCallback((e: React.PointerEvent) => {
+    // Only track vertical drags from the top drag-handle area (first 60px of the sheet)
+    const rect = sheetRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const relativeY = e.clientY - rect.top;
+    if (relativeY > 60) return; // Only allow drag from the handle area
+
+    dragStartYRef.current = e.clientY;
+    setSheetTranslateY(0);
+  }, []);
+
+  const handleSheetPointerMove = useCallback((e: React.PointerEvent) => {
+    if (dragStartYRef.current === null) return;
+    const delta = e.clientY - dragStartYRef.current;
+    if (delta > 0) {
+      setSheetTranslateY(delta);
+    }
+  }, []);
+
+  const handleSheetPointerUp = useCallback(() => {
+    if (dragStartYRef.current === null) return;
+
+    if (sheetTranslateY > 100) {
+      // Dismiss threshold reached
+      setIsDismissing(true);
+      setTimeout(() => {
+        setIsMobileExpanded(false);
+        setIsDismissing(false);
+        setSheetTranslateY(0);
+      }, 280);
+    } else {
+      // Snap back
+      setSheetTranslateY(0);
+    }
+    dragStartYRef.current = null;
+  }, [sheetTranslateY]);
+
+  // Open the share ticket modal (via the existing fixed trigger)
+  const handleOpenShare = useCallback(() => {
+    const btn = document.getElementById("share-ticket-button");
+    if (btn) btn.click();
+  }, []);
+
+  // Progress ratio for collapsed mini-bar line
+  const progressPct = duration ? Math.min(100, (progress / duration) * 100) : 0;
+
   return (
     <div className="relative w-full">
+      {/* Ticket Share Modal Component with current track metadata */}
+      <ShareTicket currentTrack={track} />
+
       {/* Ambient background blur halo */}
       <div
         className="player-halo pointer-events-none absolute -inset-4 -z-10 rounded-[32px]"
         aria-hidden="true"
       />
 
-      {/* Main Apple-Inspired Translucent Glass Surface */}
+      {/* Playlist / Queue Panel Drawer */}
+      <PlaylistPanel
+        isOpen={isPlaylistOpen}
+        onClose={() => setIsPlaylistOpen(false)}
+        playlist={playlist}
+        currentTrackIndex={currentTrackIndex}
+        isPlaying={isPlaying}
+        onSelectTrack={(idx) => playTrack(idx, true)}
+      />
+
+      {/* ════════════ DESKTOP PLAYER EXPERIENCE (sm:block) ════════════ */}
       <section
         aria-label="Digital Bus radio player"
-        className="glass-panel group/player relative w-full overflow-hidden rounded-[26px] p-4 sm:p-5"
+        className="glass-panel group/player relative hidden sm:block w-full overflow-hidden rounded-[26px] p-4 sm:p-5"
       >
         {/* Upper Track Details & Controls Section */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3.5 sm:flex-row sm:items-center sm:justify-between">
           {/* Left: Album Art & Track Meta */}
-          <div className="flex items-center gap-3.5 sm:gap-4 min-w-0 flex-1">
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
             {/* Album Artwork */}
-            <div className="relative h-[56px] w-[56px] shrink-0 overflow-hidden rounded-[14px] bg-black/30 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.5),inset_0_0_0_1px_rgba(255,255,255,0.15)] sm:h-[60px] sm:w-[60px]">
+            <div className="relative h-[52px] w-[52px] shrink-0 overflow-hidden rounded-[14px] bg-black/30 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.5),inset_0_0_0_1px_rgba(255,255,255,0.15)] sm:h-[60px] sm:w-[60px]">
               {coverOk ? (
                 <img
                   key={displayCover}
@@ -107,7 +192,6 @@ export function MusicPlayer() {
                   </button>
                 </div>
               ) : (
-                /* Small Spectrum directly under song info */
                 <div className="mt-1.5 w-28 shrink-0">
                   <AudioWaveform active={isPlaying && !isMuted} loading={isLoading} />
                 </div>
@@ -115,55 +199,59 @@ export function MusicPlayer() {
             </div>
           </div>
 
-          {/* Right: Mute & Ambient Sound Toggles + Controls (Coherent horizontal grid) */}
-          <div className="flex items-center justify-center sm:justify-end gap-2 shrink-0 pt-1 sm:pt-0">
-            {/* Ambient Engine Rumble Toggle */}
-            <button
-              type="button"
-              onClick={toggleAmbient}
-              aria-label={
-                isAmbientEnabled
-                  ? "Turn off ambient bus road sounds"
-                  : "Turn on ambient bus road sounds"
-              }
-              title={isAmbientEnabled ? "Ambient Bus Sounds: ON" : "Ambient Bus Sounds: OFF"}
-              className={`grid h-9 w-9 place-items-center rounded-full text-cream/50 transition-all duration-200 hover:bg-white/10 hover:text-cream focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/40 ${
-                isAmbientEnabled ? "text-cream bg-white/15" : ""
-              }`}
-            >
-              <Radio className="h-4 w-4" />
-            </button>
+          {/* Right: Audio Toggles & Main Playback Controls */}
+          <div className="flex items-center justify-between sm:justify-end gap-1.5 sm:gap-2 shrink-0 pt-1 sm:pt-0 border-t border-white/5 sm:border-0">
+            {/* Audio Toggles */}
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={toggleAmbient}
+                aria-label={
+                  isAmbientEnabled
+                    ? "Turn off ambient bus road sounds"
+                    : "Turn on ambient bus road sounds"
+                }
+                title={isAmbientEnabled ? "Ambient Bus Sounds: ON" : "Ambient Bus Sounds: OFF"}
+                className={`grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-full text-cream/50 transition-all duration-200 hover:bg-white/10 hover:text-cream focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/40 ${
+                  isAmbientEnabled ? "text-cream bg-white/15" : ""
+                }`}
+              >
+                <Radio className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              </button>
 
-            {/* Main Audio Mute / Unmute Button */}
-            <button
-              type="button"
-              onClick={toggleMute}
-              aria-label={isMuted ? "Unmute music" : "Mute music"}
-              title={isMuted ? "Unmute Music" : "Mute Music"}
-              className={`grid h-9 w-9 place-items-center rounded-full text-cream/70 transition-all duration-200 hover:bg-white/10 hover:text-cream active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/40 ${
-                isMuted ? "text-red-400 bg-red-950/30 border border-red-500/20" : ""
-              }`}
-            >
-              {isMuted ? (
-                <VolumeX className="h-4.5 w-4.5 text-red-400" />
-              ) : (
-                <Volume2 className="h-4.5 w-4.5 text-cream/80" />
-              )}
-            </button>
+              <button
+                type="button"
+                onClick={toggleMute}
+                aria-label={isMuted ? "Unmute music" : "Mute music"}
+                title={isMuted ? "Unmute Music (Key M)" : "Mute Music (Key M)"}
+                className={`grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-full text-cream/70 transition-all duration-200 hover:bg-white/10 hover:text-cream active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/40 ${
+                  isMuted ? "text-red-400 bg-red-950/30 border border-red-500/20" : ""
+                }`}
+              >
+                {isMuted ? (
+                  <VolumeX className="h-4 w-4 text-red-400" />
+                ) : (
+                  <Volume2 className="h-4 w-4 text-cream/80" />
+                )}
+              </button>
+            </div>
 
-            {/* Main Playback Controls */}
             <PlayerControls
               isPlaying={isPlaying}
               isLoading={isLoading}
+              isShuffle={isShuffle}
+              isPlaylistOpen={isPlaylistOpen}
               onToggle={toggle}
               onPrevious={previous}
               onNext={next}
+              onToggleShuffle={toggleShuffle}
+              onTogglePlaylist={() => setIsPlaylistOpen((prev) => !prev)}
             />
           </div>
         </div>
 
         {/* Next Song Preview Header */}
-        <div className="mt-4 flex items-center justify-between text-[0.62rem] font-medium tracking-[0.06em] text-cream/40 sm:text-[0.65rem] border-t border-white/5 pt-2.5">
+        <div className="mt-3 sm:mt-4 flex items-center justify-between text-[0.62rem] font-medium tracking-[0.06em] text-cream/40 sm:text-[0.65rem] border-t border-white/5 pt-2 sm:pt-2.5">
           <span className="truncate max-w-full flex items-center gap-1.5">
             <span className="uppercase text-cream/30 tracking-widest font-semibold text-[0.55rem]">
               Next
@@ -172,8 +260,8 @@ export function MusicPlayer() {
           </span>
         </div>
 
-        {/* Straight Horizontal Seek Line */}
-        <div className="mt-2.5">
+        {/* Horizontal Seek Bar */}
+        <div className="mt-2">
           <ProgressBar
             progress={progress}
             duration={duration}
@@ -183,6 +271,232 @@ export function MusicPlayer() {
           />
         </div>
       </section>
+
+      {/* ════════════ MOBILE COMPACT NOW PLAYING PLAYER (sm:hidden) ════════════ */}
+      <div className="block sm:hidden w-full">
+        {/* COLLAPSED STATE: Compact Now Playing Bar with Progress Line */}
+        {!isMobileExpanded && (
+          <div
+            onClick={() => setIsMobileExpanded(true)}
+            role="button"
+            tabIndex={0}
+            aria-label="Expand mobile music player"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") setIsMobileExpanded(true);
+            }}
+            className="glass-panel fixed bottom-3 left-3 right-3 z-30 overflow-hidden rounded-[20px] border border-white/20 bg-ink/90 shadow-[0_12px_32px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-300 active:scale-[0.98]"
+          >
+            {/* Thin progress indicator line at top (like Spotify mini-player) */}
+            <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-white/10">
+              <div
+                className="h-full bg-amber-300/80 rounded-r-full"
+                style={{
+                  width: `${progressPct}%`,
+                  transition: "width 200ms linear",
+                }}
+              />
+            </div>
+
+            <div className="flex items-center justify-between gap-3 p-2.5 pt-3">
+              {/* Left: Thumbnail Artwork & Metadata */}
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-black/40 border border-white/15">
+                  {coverOk ? (
+                    <img
+                      src={displayCover}
+                      alt={displayTitle}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <span className="grid h-full w-full place-items-center text-cream/40">
+                      <Disc3 className="h-5 w-5 animate-spin-slow" />
+                    </span>
+                  )}
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[0.8rem] font-bold text-cream tracking-tight">
+                    {displayTitle}
+                  </p>
+                  <p className="truncate text-[0.68rem] text-cream/55 mt-0.5">
+                    {isLoading ? "Loading next track..." : displayArtist}
+                  </p>
+                </div>
+              </div>
+
+              {/* Right: Quick Play/Pause & Next Button */}
+              <div className="flex items-center gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
+                <button
+                  type="button"
+                  aria-label={isPlaying ? "Pause" : "Play"}
+                  onClick={toggle}
+                  className="grid h-10 w-10 place-items-center rounded-full bg-cream text-ink shadow-md active:scale-95"
+                >
+                  {isLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin text-ink" />
+                  ) : isPlaying ? (
+                    <Pause className="h-4 w-4 fill-current text-ink" />
+                  ) : (
+                    <Play className="ml-0.5 h-4 w-4 fill-current text-ink" />
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  aria-label="Next track"
+                  onClick={next}
+                  className="grid h-9 w-9 place-items-center rounded-full text-cream/70 hover:bg-white/10 active:scale-95"
+                >
+                  <SkipForward className="h-4 w-4 fill-current" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* EXPANDED STATE: Full Mobile Sheet / Modal Player */}
+        {isMobileExpanded && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Expanded Music Player"
+            className="fixed inset-0 z-[50] flex flex-col justify-end bg-black/70 backdrop-blur-sm animate-fade-in"
+          >
+            {/* Backdrop Dismiss Area */}
+            <div
+              className="flex-1 w-full"
+              onClick={() => setIsMobileExpanded(false)}
+            />
+
+            {/* Expanded Sheet Card */}
+            <div
+              ref={sheetRef}
+              onPointerDown={handleSheetPointerDown}
+              onPointerMove={handleSheetPointerMove}
+              onPointerUp={handleSheetPointerUp}
+              onPointerCancel={handleSheetPointerUp}
+              className={`relative w-full rounded-t-[32px] border-t border-white/15 bg-[#13100b]/[0.97] px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3 shadow-[0_-20px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl touch-none ${
+                isDismissing ? "animate-slide-down" : "animate-slide-up"
+              }`}
+              style={{
+                transform: sheetTranslateY > 0 ? `translateY(${sheetTranslateY}px)` : undefined,
+                transition: sheetTranslateY > 0 ? "none" : undefined,
+              }}
+            >
+              {/* Pill drag handle indicator */}
+              <div className="flex justify-center pb-4 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setIsMobileExpanded(false)}
+                  aria-label="Collapse mobile player"
+                  className="flex flex-col items-center gap-2 group"
+                >
+                  <span className="block h-[5px] w-10 rounded-full bg-white/25 group-hover:bg-white/40 transition-colors" />
+                  <ChevronDown className="h-4 w-4 text-cream/30 group-hover:text-cream/60 transition-colors" />
+                </button>
+              </div>
+
+              {/* Large Cover Artwork with warm glow */}
+              <div className="mx-auto w-[min(65vw,260px)] aspect-square overflow-hidden rounded-[22px] bg-black/40 border border-white/15 artwork-glow">
+                {coverOk ? (
+                  <img
+                    src={displayCover}
+                    alt={displayTitle}
+                    className="h-full w-full object-cover animate-fade-in"
+                  />
+                ) : (
+                  <span className="grid h-full w-full place-items-center text-cream/40">
+                    <Disc3 className="h-12 w-12 animate-spin-slow" />
+                  </span>
+                )}
+              </div>
+
+              {/* Song Title, Artist, Album & Year context */}
+              <div className="text-center mt-5 mb-1 px-2">
+                <h3 className="truncate text-[1.1rem] font-bold text-cream tracking-tight">
+                  {displayTitle}
+                </h3>
+                <p className="truncate text-[0.8rem] font-medium text-cream/55 mt-1">
+                  {displayArtist}
+                </p>
+                {/* Album & year context */}
+                {(track?.album || track?.year) && (
+                  <p className="truncate text-[0.68rem] text-cream/35 mt-1 italic">
+                    {track.album}{track.album && track.year ? " · " : ""}{track.year || ""}
+                  </p>
+                )}
+                <div className="mt-2.5 flex justify-center">
+                  <AudioWaveform active={isPlaying && !isMuted} loading={isLoading} />
+                </div>
+              </div>
+
+              {/* Progress Seek Bar */}
+              <div className="mt-4 mb-2 px-1">
+                <ProgressBar
+                  progress={progress}
+                  duration={duration}
+                  onSeek={seek}
+                  onDragStart={() => setDraggingState(true)}
+                  onDragEnd={() => setDraggingState(false)}
+                />
+              </div>
+
+              {/* Full Playback Controls Row */}
+              <div className="my-2">
+                <PlayerControls
+                  isPlaying={isPlaying}
+                  isLoading={isLoading}
+                  isShuffle={isShuffle}
+                  isPlaylistOpen={isPlaylistOpen}
+                  onToggle={toggle}
+                  onPrevious={previous}
+                  onNext={next}
+                  onToggleShuffle={toggleShuffle}
+                  onTogglePlaylist={() => setIsPlaylistOpen((prev) => !prev)}
+                />
+              </div>
+
+              {/* Extra Controls Row: Share, Ambient, Mute */}
+              <div className="flex items-center justify-center gap-3 border-t border-white/8 pt-4 mt-3">
+                <button
+                  type="button"
+                  onClick={handleOpenShare}
+                  className="flex items-center gap-2 rounded-full border border-white/15 px-3.5 py-1.5 text-xs text-cream/70 transition-all hover:bg-white/10 active:scale-95"
+                >
+                  <Share2 className="h-3.5 w-3.5" />
+                  <span>Share</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={toggleAmbient}
+                  className={`flex items-center gap-2 rounded-full border border-white/15 px-3.5 py-1.5 text-xs text-cream/70 transition-all active:scale-95 ${
+                    isAmbientEnabled ? "bg-amber-400/20 border-amber-400/40 text-amber-200" : ""
+                  }`}
+                >
+                  <Radio className="h-3.5 w-3.5" />
+                  <span>Ambient</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={toggleMute}
+                  className={`flex items-center gap-2 rounded-full border border-white/15 px-3.5 py-1.5 text-xs text-cream/70 transition-all active:scale-95 ${
+                    isMuted ? "bg-red-950/40 border-red-500/30 text-red-300" : ""
+                  }`}
+                >
+                  {isMuted ? (
+                    <VolumeX className="h-3.5 w-3.5 text-red-400" />
+                  ) : (
+                    <Volume2 className="h-3.5 w-3.5 text-cream/80" />
+                  )}
+                  <span>{isMuted ? "Muted" : "Mute"}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -6,9 +6,6 @@ import { defineConfig } from "vite";
 import { nitro } from "nitro/vite";
 
 export default defineConfig({
-  ssr: {
-    noExternal: true,
-  },
   plugins: [
     tsconfigPaths(),
     tailwindcss(),
