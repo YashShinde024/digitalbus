@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { AtmosphereOverlay } from "./AtmosphereOverlay";
 import { BrandTitle } from "./BrandTitle";
 import { Clock } from "./Clock";
@@ -11,6 +12,7 @@ import { RainEffect } from "./RainEffect";
 import { ToastSystem } from "./ToastSystem";
 
 export function DigitalBus() {
+  useKeyboardShortcuts();
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
 
   // Subtle Mouse Parallax on Desktop

@@ -230,3 +230,40 @@
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ──── Mobile Responsive Fine-Tuning (320–414px) ──── */
+
+@media (max-width: 414px) {
+  /* Ensure no horizontal overflow at any narrow width */
+  body {
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 374px) {
+  /* Very narrow devices (320px, 360px) — reduce brand title sizes */
+  .brand-mark span:first-child {
+    font-size: 2.2rem !important;
+  }
+  .brand-mark span:last-child {
+    font-size: 2.4rem !important;
+  }
+}
+
+/* ──── Scrollbar Hiding (preserves all scroll methods) ──── */
+
+@utility hide-scrollbar {
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
+}
+
+/* ──── Custom transition duration ──── */
+
+@utility duration-600 {
+  transition-duration: 600ms;
+}
+

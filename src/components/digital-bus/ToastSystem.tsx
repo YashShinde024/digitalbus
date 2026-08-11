@@ -114,38 +114,30 @@ export function ToastSystem() {
     return () => clearInterval(interval);
   }, [triggerToast]);
 
-  // Keyboard shortcut listeners & global helper binding
+  // Expose toast triggers on window for centralized keyboard shortcuts & external callers
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        target &&
-        (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)
-      ) {
-        return;
-      }
-
-      if (e.repeat) return;
-
-      if (e.key === "b" || e.key === "B") {
-        triggerToast("b_key", "Shhhhh... enjoy the music 🎧");
-      } else if (e.key === "x" || e.key === "X") {
-        toggleToast("xpert_promo");
-      }
+    const w = window as unknown as {
+      triggerToastBanner?: (msg?: string) => void;
+      digitalBusTriggerToast?: (type: string, message?: string) => void;
+      digitalBusToggleToast?: (type: string, message?: string) => void;
     };
 
-    (window as unknown as { triggerToastBanner?: (msg?: string) => void }).triggerToastBanner = (
-      msg,
-    ) => {
+    w.triggerToastBanner = (msg) => {
       triggerToast("custom_banner", msg || "Shhhhh... enjoy the music 🎧");
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    w.digitalBusTriggerToast = (type: string, message?: string) => {
+      triggerToast(type as ToastType, message);
+    };
+
+    w.digitalBusToggleToast = (type: string, message?: string) => {
+      toggleToast(type as ToastType, message);
+    };
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      delete (window as unknown as { triggerToastBanner?: (msg?: string) => void })
-        .triggerToastBanner;
+      delete w.triggerToastBanner;
+      delete w.digitalBusTriggerToast;
+      delete w.digitalBusToggleToast;
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
