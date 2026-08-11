@@ -9,6 +9,8 @@ import {
 } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { playlist } from "../data/playlist";
+import { RainEffect } from "../components/digital-bus/RainEffect";
+import { AtmosphereOverlay } from "../components/digital-bus/AtmosphereOverlay";
 
 import appCss from "../styles.css?url";
 
@@ -70,23 +72,72 @@ const jsonLdData = {
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
+    <main className="relative min-h-[100svh] w-full overflow-hidden bg-ink select-none flex items-center justify-center p-4">
+      {/* 1. Background artwork */}
+      <img
+        src="/bus-stop-bg.jpg"
+        alt="A vintage Indian bus parked by a river next to a bus stop sign at sunset"
+        className="absolute inset-0 h-full w-full object-cover object-[center_45%] z-0 scale-105"
+        fetchPriority="high"
+        decoding="async"
+      />
+
+      {/* 2. Background Rain Atmosphere (Strictly behind UI) */}
+      <div className="absolute inset-0 z-[1] pointer-events-none">
+        <RainEffect />
+      </div>
+
+      {/* 3. Automatic Day/Night Time Atmosphere & Scene Veil */}
+      <AtmosphereOverlay />
+      <div className="scene-veil absolute inset-0 z-[3] pointer-events-none" aria-hidden="true" />
+      <div
+        className="grain-overlay absolute inset-0 z-[4] pointer-events-none"
+        aria-hidden="true"
+      />
+
+      {/* 4. Glass Card Container */}
+      <div className="relative z-10 w-full max-w-[28rem] text-center">
+        <div className="glass-panel relative flex flex-col items-center gap-6 rounded-[26px] border border-white/20 bg-ink/80 p-8 shadow-2xl backdrop-blur-md">
+          {/* Header */}
+          <div className="flex flex-col items-center gap-1.5">
+            <span className="text-[0.6rem] font-bold tracking-[0.2em] text-cream/40 uppercase">
+              DIGITAL BUS
+            </span>
+            <h1 className="font-display text-[3.6rem] sm:text-[4.5rem] tracking-wide text-cream leading-none">
+              404
+            </h1>
+          </div>
+
+          {/* Description */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[1.05rem] font-semibold text-cream leading-tight">
+              "Looks like this ride took a wrong turn."
+            </h2>
+            <p className="text-[0.78rem] text-cream/55 leading-relaxed">
+              The stop you're looking for doesn't exist.
+            </p>
+          </div>
+
+          {/* Actions */}
+          <div className="flex flex-col w-full gap-3 mt-2">
+            <Link
+              to="/"
+              className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 py-2.5 text-[0.8rem] font-semibold text-cream transition-all duration-200 hover:border-white/35 hover:bg-white/12 active:scale-98 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/50"
+            >
+              Back to Digital Bus
+            </Link>
+            <a
+              href="https://nyxen.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-1 text-[0.7rem] font-medium text-cream/55 hover:text-cream transition-colors py-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/50"
+            >
+              Take me somewhere beautiful ↗
+            </a>
+          </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 
