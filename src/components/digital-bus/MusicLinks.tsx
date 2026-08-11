@@ -17,22 +17,23 @@ function YouTubeMusicIcon() {
 }
 
 const linkClass =
-  "group inline-flex items-center gap-1.5 rounded-full px-1.5 py-1 text-[0.68rem] font-medium tracking-wide text-cream/55 transition-colors duration-300 hover:text-cream focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/40";
+  "group inline-flex items-center justify-center rounded-full p-2 sm:px-2.5 sm:py-1 text-[0.68rem] font-medium tracking-wide text-cream/65 bg-white/5 sm:bg-transparent border border-white/10 sm:border-transparent transition-all duration-200 hover:text-cream hover:bg-white/15 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/40";
 
 export function MusicLinks() {
   return (
-    <nav aria-label="Playlists elsewhere" className="flex items-center gap-2 sm:gap-4">
+    <nav aria-label="Playlists elsewhere" className="flex items-center gap-2 sm:gap-3">
       <a
         href={externalLinks.spotify}
         target="_blank"
         rel="noreferrer noopener"
         className={linkClass}
         aria-label="Open the playlist on Spotify"
+        title="Spotify"
       >
-        <span className="text-cream/75 transition-colors duration-300 group-hover:text-cream">
+        <span className="text-cream/80 transition-colors duration-300 group-hover:text-cream">
           <SpotifyIcon />
         </span>
-        <span className="hidden sm:inline">Spotify</span>
+        <span className="hidden sm:inline ml-1.5">Spotify</span>
       </a>
       <a
         href={externalLinks.youtubeMusic}
@@ -40,11 +41,12 @@ export function MusicLinks() {
         rel="noreferrer noopener"
         className={linkClass}
         aria-label="Open the playlist on YouTube Music"
+        title="YouTube Music"
       >
-        <span className="text-cream/75 transition-colors duration-300 group-hover:text-cream">
+        <span className="text-cream/80 transition-colors duration-300 group-hover:text-cream">
           <YouTubeMusicIcon />
         </span>
-        <span className="hidden sm:inline">YouTube Music</span>
+        <span className="hidden sm:inline ml-1.5">YouTube Music</span>
       </a>
     </nav>
   );

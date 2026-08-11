@@ -8,8 +8,7 @@ import { MusicLinks } from "./MusicLinks";
 import { MusicPlayer } from "./MusicPlayer";
 import { OnlineStatus } from "./OnlineStatus";
 import { RainEffect } from "./RainEffect";
-import { ToastBanner } from "./ToastBanner";
-import { XpertPromo } from "./XpertPromo";
+import { ToastSystem } from "./ToastSystem";
 
 export function DigitalBus() {
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
@@ -36,9 +35,8 @@ export function DigitalBus() {
 
   return (
     <main className="relative min-h-[100svh] w-full overflow-hidden bg-ink select-none">
-      {/* Top Sliding Toast Banner for B-key shortcut */}
-      <ToastBanner />
-      <XpertPromo />
+      {/* Unified Floating Toast Notification Manager */}
+      <ToastSystem />
 
       {/* 1. Background artwork with subtle desktop mouse parallax */}
       <img

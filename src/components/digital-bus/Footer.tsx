@@ -1,17 +1,28 @@
 import { Heart } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 export function Footer() {
   return (
-    <div className="flex w-full flex-col gap-3.5">
-      {/* Subtle AEO/SEO context section, styled to match the cozy glassmorphism */}
-      <div className="w-full text-center text-[0.62rem] sm:text-[0.68rem] leading-relaxed text-cream/30 border-t border-white/5 pt-3.5">
-        <p className="max-w-xl mx-auto">
-          <strong>Digital Bus</strong> is an immersive web-based listening experience playing a nostalgic collection of old Hindi and retro Bollywood songs. Specially curated for lovers of 90s Bollywood music, romantic old songs, and relaxing travel tracks for long drives or rainy days. Plug in, relax, and enjoy the music.
+    <div className="flex w-full flex-col gap-2.5 sm:gap-3.5">
+      {/* Subtle AEO/SEO context section */}
+      <div className="w-full text-center text-[0.62rem] sm:text-[0.68rem] leading-relaxed text-cream/35 border-t border-white/5 pt-2.5 sm:pt-3.5">
+        <p className="max-w-xl mx-auto hidden sm:block">
+          <strong>Digital Bus</strong> is an immersive web-based listening experience playing a nostalgic collection of old Hindi and retro Bollywood songs. Specially curated for lovers of 90s Bollywood music, romantic old songs, and relaxing travel tracks.
+        </p>
+        <p className="max-w-xl mx-auto sm:hidden flex items-center justify-center gap-1.5 text-[0.62rem] text-cream/45">
+          <span>Digital Bus — Nostalgic Hindi Radio</span>
+          <span>•</span>
+          <Link
+            to="/about"
+            className="text-cream/75 underline decoration-cream/30 hover:text-cream hover:decoration-cream"
+          >
+            About this ride ↗
+          </Link>
         </p>
       </div>
 
-      <footer className="flex w-full flex-col items-center justify-between gap-3 text-[0.68rem] font-medium tracking-[0.06em] text-cream/50 sm:flex-row sm:text-[0.72rem]">
-        {/* BOTTOM LEFT: Creator Attribution */}
+      <footer className="flex w-full flex-col items-center justify-between gap-2.5 text-[0.68rem] font-medium tracking-[0.06em] text-cream/50 sm:flex-row sm:text-[0.72rem]">
+        {/* Creator Attribution */}
         <p className="flex items-center gap-1.5 text-center sm:text-left">
           <span>Crafted for the long way home by</span>
           <a
@@ -25,8 +36,15 @@ export function Footer() {
           <span aria-label="love">❤️</span>
         </p>
 
-        {/* BOTTOM CENTER/RIGHT: Support & Nyxen links */}
-        <div className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-5">
+        {/* Links */}
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-[0.68rem]">
+          <Link
+            to="/about"
+            className="hidden sm:inline-block rounded text-cream/65 transition-colors duration-200 hover:text-cream focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/50"
+          >
+            About
+          </Link>
+
           <a
             href="https://www.thankyouverymuch.co/yash"
             target="_blank"
