@@ -96,7 +96,10 @@ export function PlaylistPanel({
   if (!isOpen) return null;
 
   const trackList = (
-    <div className="flex flex-col gap-0.5 overflow-y-auto hide-scrollbar overscroll-contain">
+    <div
+      className="h-full min-h-0 touch-pan-y flex flex-col gap-0.5 overflow-y-auto overscroll-contain scroll-smooth pr-1"
+      onPointerDown={(e) => e.stopPropagation()}
+    >
       {playlist.map((track, idx) => {
         const isActive = idx === currentTrackIndex;
         const hasCover = coverStates[idx] === true;
@@ -189,13 +192,13 @@ export function PlaylistPanel({
         aria-label="Playlist queue"
         aria-modal="true"
         className="glass-panel absolute bottom-[calc(100%+0.75rem)] left-0 right-0 z-[40]
-          mx-auto max-h-[380px] w-full max-w-[34rem] overflow-hidden
+          mx-auto max-h-[min(70vh,520px)] w-full max-w-[34rem] overflow-hidden
           rounded-[24px] border border-white/20 bg-ink/95 p-3.5 sm:p-4
           shadow-[0_20px_50px_rgba(0,0,0,0.7)] backdrop-blur-xl animate-fade-in
-          hidden sm:block"
+          hidden sm:flex sm:flex-col"
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-2.5 px-1">
+        <div className="sticky top-0 z-10 flex shrink-0 items-center justify-between border-b border-white/10 bg-ink/95 pb-2.5 px-1 backdrop-blur-xl">
           <div className="flex items-center gap-2">
             <Music2 className="h-4 w-4 text-amber-300" />
             <span className="text-xs font-semibold tracking-wider text-cream uppercase">
@@ -217,7 +220,7 @@ export function PlaylistPanel({
         </div>
 
         {/* Scrollable Track List */}
-        <div className="mt-2 max-h-[300px] pr-1">
+        <div className="mt-2 min-h-0 flex-1">
           {trackList}
         </div>
       </div>
@@ -228,7 +231,7 @@ export function PlaylistPanel({
         <div className="flex-1 w-full" onClick={onClose} />
 
         {/* Sheet */}
-        <div className="relative w-full max-h-[85vh] rounded-t-[28px] border-t border-white/15 bg-[#13100b]/[0.97] backdrop-blur-2xl shadow-[0_-16px_50px_rgba(0,0,0,0.7)] animate-slide-up flex flex-col">
+        <div className="relative w-full max-h-[85svh] rounded-t-[28px] border-t border-white/15 bg-[#13100b]/[0.97] backdrop-blur-2xl shadow-[0_-16px_50px_rgba(0,0,0,0.7)] animate-slide-up flex flex-col">
           {/* Drag handle */}
           <div className="flex justify-center pt-3 pb-2 shrink-0">
             <span className="block h-[5px] w-10 rounded-full bg-white/25" aria-hidden="true" />

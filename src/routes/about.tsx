@@ -196,6 +196,9 @@ function AboutPage() {
               The playlist is built around nostalgic Hindi and Bollywood music — the kind of songs you might hear on a long drive, a rainy evening, or a quiet moment when you're thinking about someone. Old romantic songs, classic melodies from the '90s and 2000s, and voices that carry a whole generation of memories.
             </p>
             <p className="text-[0.8rem] leading-[1.75] text-cream/60">
+              You can ride inside this web player or continue the Indian Bus Driver's Playlist on Spotify, YouTube Music, and Apple Music — three first-class stops for anyone searching for an old Hindi songs playlist, a 90s Bollywood travel playlist, or relaxing Hindi songs for night travel.
+            </p>
+            <p className="text-[0.8rem] leading-[1.75] text-cream/60">
               The current library has <strong className="text-cream/80">{playlist.length} tracks</strong>, and they're shuffled uniquely for each listener — so every time you visit, the ride feels a little different.
             </p>
           </section>
@@ -219,7 +222,7 @@ function AboutPage() {
                 "Embedded album artwork & metadata",
                 "Responsive glassmorphism player",
                 "Atmospheric monsoon rain",
-                "Keyboard controls (Space, B, X, ←→)",
+                "Keyboard controls (Space, Q, T, S, N, P, ←→)",
                 "Mobile-first design",
                 "Real-time online presence",
                 "Day/night atmosphere",
