@@ -123,14 +123,17 @@ export function MusicPlayer() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const w = window as unknown as { digitalBusOpenPlaylist?: () => void; digitalBusOpenTicket?: () => void };
+    const w = window as unknown as { digitalBusOpenPlaylist?: () => void; digitalBusOpenTicket?: () => void; digitalBusPlayerExpanded?: boolean };
     w.digitalBusOpenPlaylist = () => setIsPlaylistOpen(true);
     w.digitalBusOpenTicket = handleOpenShare;
+    w.digitalBusPlayerExpanded = isMobileExpanded;
+    window.dispatchEvent(new CustomEvent("digitalbus:playerexpand", { detail: { expanded: isMobileExpanded } }));
     return () => {
       delete w.digitalBusOpenPlaylist;
       delete w.digitalBusOpenTicket;
+      delete w.digitalBusPlayerExpanded;
     };
-  }, [handleOpenShare]);
+  }, [handleOpenShare, isMobileExpanded]);
 
   // Progress ratio for collapsed mini-bar line
   const progressPct = duration ? Math.min(100, (progress / duration) * 100) : 0;
@@ -292,7 +295,7 @@ export function MusicPlayer() {
 
       {/* ════════════ MOBILE COMPACT NOW PLAYING PLAYER (sm:hidden) ════════════ */}
       <div className="block sm:hidden w-full">
-        {/* COLLAPSED STATE: Compact Now Playing Bar with Progress Line */}
+        {/* COLLAPSED STATE: Compact Now Playing Bar with Top Progress Indicator */}
         {!isMobileExpanded && (
           <div
             onClick={() => setIsMobileExpanded(true)}
@@ -302,12 +305,12 @@ export function MusicPlayer() {
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") setIsMobileExpanded(true);
             }}
-            className="glass-panel fixed bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-3 right-3 z-30 overflow-hidden rounded-[20px] border border-white/20 bg-ink/90 shadow-[0_12px_32px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-300 active:scale-[0.98]"
+            className="glass-panel fixed bottom-[max(0.85rem,env(safe-area-inset-bottom))] left-3 right-3 z-30 overflow-hidden rounded-[24px] border border-white/20 bg-black/75 shadow-[0_16px_45px_rgba(0,0,0,0.85)] backdrop-blur-2xl transition-all duration-300 active:scale-[0.98]"
           >
-            {/* Thin progress indicator line at top (like Spotify mini-player) */}
+            {/* Top progress indicator line */}
             <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-white/10">
               <div
-                className="h-full bg-amber-300/80 rounded-r-full"
+                className="h-full bg-cream/90 rounded-r-full"
                 style={{
                   width: `${progressPct}%`,
                   transition: "width 200ms linear",
@@ -318,7 +321,7 @@ export function MusicPlayer() {
             <div className="flex items-center justify-between gap-3 p-2.5 pt-3">
               {/* Left: Thumbnail Artwork & Metadata */}
               <div className="flex items-center gap-3 min-w-0 flex-1">
-                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-black/40 border border-white/15">
+                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-2xl bg-black/50 border border-white/20 shadow-md">
                   {coverOk ? (
                     <img
                       src={displayCover}
@@ -330,25 +333,39 @@ export function MusicPlayer() {
                       <Disc3 className="h-5 w-5 animate-spin-slow" />
                     </span>
                   )}
+                  {isPlaying && (
+                    <span className="absolute inset-0 grid place-items-center bg-black/30 backdrop-blur-[1px]">
+                      <Volume2 className="h-4 w-4 text-cream animate-pulse" />
+                    </span>
+                  )}
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[0.8rem] font-bold text-cream tracking-tight">
+                  <p className="truncate text-[0.84rem] font-bold text-cream tracking-tight">
                     {displayTitle}
                   </p>
-                  <p className="truncate text-[0.68rem] text-cream/55 mt-0.5">
+                  <p className="truncate text-[0.7rem] text-cream/60 mt-0.5 font-medium">
                     {isLoading ? "Loading next track..." : displayArtist}
                   </p>
                 </div>
               </div>
 
-              {/* Right: Quick Play/Pause & Next Button */}
-              <div className="flex items-center gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
+              {/* Right: Quick Queue, Play/Pause & Next Button */}
+              <div className="flex items-center gap-1.5 shrink-0" onClick={(e) => e.stopPropagation()}>
+                <button
+                  type="button"
+                  aria-label="Open playlist queue"
+                  onClick={() => setIsPlaylistOpen(true)}
+                  className="grid h-9 w-9 place-items-center rounded-full text-cream/60 hover:bg-white/10 hover:text-cream active:scale-95 transition-colors"
+                >
+                  <Disc3 className="h-4 w-4" />
+                </button>
+
                 <button
                   type="button"
                   aria-label={isPlaying ? "Pause" : "Play"}
                   onClick={toggle}
-                  className="grid h-10 w-10 place-items-center rounded-full bg-cream text-ink shadow-md active:scale-95"
+                  className="grid h-10 w-10 place-items-center rounded-full bg-cream text-ink shadow-lg active:scale-95 transition-transform"
                 >
                   {isLoading ? (
                     <Loader2 className="h-4 w-4 animate-spin text-ink" />
@@ -363,7 +380,7 @@ export function MusicPlayer() {
                   type="button"
                   aria-label="Next track"
                   onClick={next}
-                  className="grid h-9 w-9 place-items-center rounded-full text-cream/70 hover:bg-white/10 active:scale-95"
+                  className="grid h-9 w-9 place-items-center rounded-full text-cream/70 hover:bg-white/10 active:scale-95 transition-colors"
                 >
                   <SkipForward className="h-4 w-4 fill-current" />
                 </button>
@@ -378,7 +395,7 @@ export function MusicPlayer() {
             role="dialog"
             aria-modal="true"
             aria-label="Expanded Music Player"
-            className="fixed inset-0 z-[50] flex flex-col justify-end bg-black/70 backdrop-blur-sm animate-fade-in"
+            className="fixed inset-0 z-[50] flex flex-col justify-end bg-black/80 backdrop-blur-md animate-fade-in"
           >
             {/* Backdrop Dismiss Area */}
             <div
@@ -393,7 +410,7 @@ export function MusicPlayer() {
               onPointerMove={handleSheetPointerMove}
               onPointerUp={handleSheetPointerUp}
               onPointerCancel={handleSheetPointerUp}
-              className={`relative max-h-[92svh] overflow-y-auto hide-scrollbar w-full rounded-t-[32px] border-t border-white/15 bg-[#13100b]/[0.97] px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3 shadow-[0_-20px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl touch-none ${
+              className={`relative max-h-[92svh] overflow-y-auto hide-scrollbar w-full rounded-t-[34px] border-t border-white/20 bg-black/85 px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-3 shadow-[0_-24px_70px_rgba(0,0,0,0.9)] backdrop-blur-3xl touch-none ${
                 isDismissing ? "animate-slide-down" : "animate-slide-up"
               }`}
               style={{
@@ -407,15 +424,15 @@ export function MusicPlayer() {
                   type="button"
                   onClick={() => setIsMobileExpanded(false)}
                   aria-label="Collapse mobile player"
-                  className="flex flex-col items-center gap-2 group"
+                  className="flex flex-col items-center gap-1.5 group"
                 >
-                  <span className="block h-[5px] w-10 rounded-full bg-white/25 group-hover:bg-white/40 transition-colors" />
-                  <ChevronDown className="h-4 w-4 text-cream/30 group-hover:text-cream/60 transition-colors" />
+                  <span className="block h-[5px] w-12 rounded-full bg-white/30 group-hover:bg-white/50 transition-colors" />
+                  <ChevronDown className="h-4 w-4 text-cream/40 group-hover:text-cream/70 transition-colors" />
                 </button>
               </div>
 
-              {/* Large Cover Artwork with warm glow */}
-              <div className="mx-auto w-[min(65vw,260px)] aspect-square overflow-hidden rounded-[22px] bg-black/40 border border-white/15 artwork-glow">
+              {/* Large Cover Artwork with ambient glow */}
+              <div className="mx-auto w-[min(68vw,270px)] aspect-square overflow-hidden rounded-[26px] bg-black/50 border border-white/20 shadow-2xl artwork-glow">
                 {coverOk ? (
                   <img
                     src={displayCover}
@@ -431,19 +448,18 @@ export function MusicPlayer() {
 
               {/* Song Title, Artist, Album & Year context */}
               <div className="text-center mt-5 mb-1 px-2">
-                <h3 className="truncate text-[1.1rem] font-bold text-cream tracking-tight">
+                <h3 className="truncate text-[1.15rem] font-bold text-cream tracking-tight">
                   {displayTitle}
                 </h3>
-                <p className="truncate text-[0.8rem] font-medium text-cream/55 mt-1">
+                <p className="truncate text-[0.84rem] font-medium text-cream/60 mt-1">
                   {displayArtist}
                 </p>
-                {/* Album & year context */}
                 {(track?.album || track?.year) && (
-                  <p className="truncate text-[0.68rem] text-cream/35 mt-1 italic">
+                  <p className="truncate text-[0.7rem] text-cream/40 mt-1 italic">
                     {track.album}{track.album && track.year ? " · " : ""}{track.year || ""}
                   </p>
                 )}
-                <div className="mt-2.5 flex justify-center">
+                <div className="mt-3 flex justify-center">
                   <AudioWaveform active={isPlaying && !isMuted} loading={isLoading} />
                 </div>
               </div>
@@ -474,22 +490,22 @@ export function MusicPlayer() {
                 />
               </div>
 
-              {/* Extra Controls Row: Share, Ambient, Mute */}
-              <div className="flex items-center justify-center gap-3 border-t border-white/8 pt-4 mt-3">
+              {/* Extra Action Controls Row: Share, Ambient, Mute */}
+              <div className="flex items-center justify-center gap-3 border-t border-white/10 pt-4 mt-3">
                 <button
                   type="button"
                   onClick={handleOpenShare}
-                  className="flex items-center gap-2 rounded-full border border-white/15 px-3.5 py-1.5 text-xs text-cream/70 transition-all hover:bg-white/10 active:scale-95"
+                  className="flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-xs font-medium text-cream/80 transition-all hover:bg-white/15 active:scale-95"
                 >
                   <Share2 className="h-3.5 w-3.5" />
-                  <span>Share</span>
+                  <span>Ticket</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={toggleAmbient}
-                  className={`flex items-center gap-2 rounded-full border border-white/15 px-3.5 py-1.5 text-xs text-cream/70 transition-all active:scale-95 ${
-                    isAmbientEnabled ? "bg-amber-400/20 border-amber-400/40 text-amber-200" : ""
+                  className={`flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-xs font-medium text-cream/80 transition-all active:scale-95 ${
+                    isAmbientEnabled ? "bg-white/20 border-white/40 text-cream" : "bg-white/5"
                   }`}
                 >
                   <Radio className="h-3.5 w-3.5" />
@@ -499,8 +515,8 @@ export function MusicPlayer() {
                 <button
                   type="button"
                   onClick={toggleMute}
-                  className={`flex items-center gap-2 rounded-full border border-white/15 px-3.5 py-1.5 text-xs text-cream/70 transition-all active:scale-95 ${
-                    isMuted ? "bg-red-950/40 border-red-500/30 text-red-300" : ""
+                  className={`flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-xs font-medium text-cream/80 transition-all active:scale-95 ${
+                    isMuted ? "bg-red-950/40 border-red-500/30 text-red-300" : "bg-white/5"
                   }`}
                 >
                   {isMuted ? (

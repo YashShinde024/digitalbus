@@ -15,7 +15,7 @@ function getTimeMode(): TimeMode {
  * Responds to the visitor's local hour (morning, day, golden evening, cinematic night)
  * using smooth CSS gradient overlays without modifying the original artwork file.
  */
-export function AtmosphereOverlay() {
+export function AtmosphereOverlay({ fixed = false }: { fixed?: boolean } = {}) {
   const [mode, setMode] = useState<TimeMode>("evening");
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export function AtmosphereOverlay() {
 
   return (
     <div
-      className={`pointer-events-none absolute inset-0 z-[2] transition-colors duration-1000 ${getOverlayStyle()}`}
+      className={`pointer-events-none ${fixed ? "fixed" : "absolute"} inset-0 z-[2] transition-colors duration-1000 ${getOverlayStyle()}`}
       aria-hidden="true"
     />
   );

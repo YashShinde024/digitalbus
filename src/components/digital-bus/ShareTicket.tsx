@@ -179,42 +179,47 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
   return (
     <>
       {/* Physical Ticket Trigger Control */}
-      <div className={`fixed left-3 top-[calc(env(safe-area-inset-top)+8.25rem)] z-20 sm:left-auto sm:right-6 sm:top-1/2 sm:z-[35] sm:-translate-y-1/2 ${hiddenOnMobile ? "max-sm:hidden" : ""}`}>
+      <div className={`fixed right-3.5 top-[24%] -translate-y-1/2 z-20 sm:right-6 sm:top-1/2 sm:z-[35] ${hiddenOnMobile ? "max-sm:hidden" : ""}`}>
         <button
           type="button"
           onClick={() => setIsOpen(true)}
           id="share-ticket-button"
-          aria-label="Share Digital Bus ticket modal"
-          className="ticket-notch group relative overflow-visible rounded-xl border border-white/20
-            bg-ink/85 sm:bg-ink/90 backdrop-blur-md
-            p-2.5 sm:px-4 sm:py-3.5
-            text-cream shadow-2xl transition-all duration-300 ease-out
-            hover:border-white/40 hover:bg-ink/95 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(0,0,0,0.6)]
-            active:scale-98
-            focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/50"
+          aria-label="Share Digital Bus ticket"
+          title="Share Digital Bus Ticket (Key T)"
+          className="group relative focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/50 active:scale-95 transition-transform"
         >
-          <div className="flex flex-col gap-1 w-[96px] sm:w-[145px] select-none text-left">
+          {/* Mobile / Little Screens: Compact Round Frosted Glass Ticket Icon Button */}
+          <div className="flex sm:hidden items-center justify-center h-11 w-11 rounded-full border border-white/25 bg-black/65 backdrop-blur-2xl text-cream shadow-[0_8px_24px_rgba(0,0,0,0.6)] hover:bg-white/20 hover:border-white/40 transition-all">
+            <Ticket className="h-5 w-5 text-cream transition-transform group-hover:scale-110" />
+          </div>
+
+          {/* Desktop (≥640px): Full Physical Ticket Card */}
+          <div className="ticket-notch hidden sm:flex flex-col gap-1 w-[145px] overflow-visible rounded-xl border border-white/20
+            bg-ink/90 backdrop-blur-md px-4 py-3.5
+            text-cream shadow-2xl transition-all duration-300 ease-out select-none text-left
+            hover:border-white/40 hover:bg-ink/95 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(0,0,0,0.6)]"
+          >
             <div className="flex items-center justify-between">
-              <span className="text-[0.48rem] sm:text-[0.55rem] font-bold tracking-[0.2em] text-cream/40 uppercase flex items-center gap-1">
-                <Ticket className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-amber-300/80" /> TICKET
+              <span className="text-[0.55rem] font-bold tracking-[0.2em] text-cream/50 uppercase flex items-center gap-1">
+                <Ticket className="h-3 w-3 text-cream/70" /> TICKET
               </span>
-              <span className="text-[0.45rem] sm:text-[0.52rem] font-semibold text-amber-300/80 tracking-wider uppercase">
+              <span className="text-[0.52rem] font-semibold text-cream/70 tracking-wider uppercase">
                 ONE WAY
               </span>
             </div>
 
             <div className="flex items-center justify-between gap-1.5 pt-0.5">
-              <span className="text-[0.68rem] sm:text-[0.78rem] font-bold tracking-wide text-cream group-hover:text-amber-200 transition-colors">
+              <span className="text-[0.78rem] font-bold tracking-wide text-cream group-hover:text-white transition-colors">
                 SHARE RIDE
               </span>
-              <Share2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-cream/60 group-hover:text-cream group-hover:scale-110 transition-all" />
+              <Share2 className="h-3.5 w-3.5 text-cream/60 group-hover:text-cream group-hover:scale-110 transition-all" />
             </div>
 
             <div className="ticket-perforation mt-1 pt-1 flex items-center justify-between">
-              <span className="text-[0.42rem] sm:text-[0.5rem] tracking-[0.2em] text-cream/35 uppercase font-semibold">
+              <span className="text-[0.5rem] tracking-[0.2em] text-cream/35 uppercase font-semibold">
                 DIGITAL BUS
               </span>
-              <span className="text-[0.48rem] sm:text-[0.55rem] font-bold text-cream/50 group-hover:translate-x-0.5 transition-transform">
+              <span className="text-[0.55rem] font-bold text-cream/50 group-hover:translate-x-0.5 transition-transform">
                 ↗
               </span>
             </div>
@@ -228,12 +233,12 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
           role="dialog"
           aria-modal="true"
           aria-label="Digital Bus Ticket Share Modal"
-          className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-md animate-fade-in"
+          className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-fade-in"
         >
           <div
             ref={modalRef}
-            className="relative w-full max-w-[420px] max-h-[min(92svh,720px)] overflow-y-auto hide-scrollbar rounded-[24px]
-              border border-amber-500/25 bg-[#1a120c]/95 text-cream shadow-[0_25px_60px_rgba(0,0,0,0.85)]
+            className="glass-panel relative w-full max-w-[420px] max-h-[min(92svh,720px)] overflow-y-auto hide-scrollbar rounded-[26px]
+              border border-white/25 bg-ink/90 text-cream shadow-[0_25px_60px_rgba(0,0,0,0.85)]
               backdrop-blur-2xl transition-all duration-300 animate-scale-in"
           >
             {/* Close Button */}
@@ -246,21 +251,21 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
               <XIcon className="h-4 w-4" />
             </button>
 
-            {/* Retro Bus Ticket Body Container */}
+            {/* Glass Bus Ticket Body Container */}
             <div className="p-5 sm:p-6 flex flex-col gap-4 select-none">
 
               {/* Ticket Top Header & Branding */}
-              <div className="flex items-center justify-between border-b border-amber-500/20 pb-3">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex flex-col">
-                  <span className="text-[0.55rem] font-bold tracking-[0.25em] text-amber-400/80 uppercase">
+                  <span className="text-[0.55rem] font-bold tracking-[0.25em] text-cream/50 uppercase">
                     INDIAN STATE TRANSPORT • PASS
                   </span>
                   <h3 className="font-display text-[1.4rem] tracking-wide text-cream leading-tight">
-                    डिजिटल बस <span className="text-xs font-sans font-normal text-cream/50">#90s</span>
+                    डिजिटल बस <span className="text-xs font-sans font-normal text-cream/40">#90s</span>
                   </h3>
                 </div>
                 <div className="text-right">
-                  <span className="inline-block rounded-md border border-amber-400/30 bg-amber-400/10 px-2 py-0.5 text-[0.58rem] font-semibold tracking-wider text-amber-300 uppercase">
+                  <span className="inline-block rounded-md border border-white/20 bg-white/10 px-2 py-0.5 text-[0.58rem] font-semibold tracking-wider text-cream uppercase backdrop-blur-sm">
                     TICKET #DB-1990
                   </span>
                   <p className="mt-0.5 text-[0.52rem] text-cream/40 uppercase tracking-widest font-mono">
@@ -270,8 +275,8 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
               </div>
 
               {/* Main Ticket Artwork & Song Details */}
-              <div className="flex items-center gap-3.5 rounded-xl border border-white/10 bg-white/5 p-3.5">
-                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-black/40 border border-white/15 shadow-md">
+              <div className="flex items-center gap-3.5 rounded-2xl border border-white/15 bg-white/5 p-3.5 backdrop-blur-md shadow-inner">
+                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-black/40 border border-white/20 shadow-md">
                   <img
                     src={coverUrl}
                     onError={(e) => { e.currentTarget.src = FALLBACK_ARTWORK; }}
@@ -281,13 +286,13 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <span className="text-[0.52rem] font-semibold tracking-[0.18em] text-amber-300/80 uppercase">
+                  <span className="text-[0.52rem] font-semibold tracking-[0.18em] text-cream/60 uppercase">
                     NOW PLAYING ON BOARD
                   </span>
                   <h4 className="truncate text-[0.95rem] font-bold text-cream tracking-tight mt-0.5">
                     {songTitle}
                   </h4>
-                  <p className="truncate text-[0.72rem] font-medium text-cream/65 mt-0.5">
+                  <p className="truncate text-[0.72rem] font-medium text-cream/70 mt-0.5">
                     {artistName}
                   </p>
                   <p className="truncate text-[0.62rem] text-cream/40 italic">
@@ -296,27 +301,27 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
                 </div>
               </div>
 
-              {/* Perforation Divider Line */}
+              {/* Perforation Divider Line with Glass Notches */}
               <div className="relative flex items-center justify-between border-t border-dashed border-white/20 pt-3">
-                <div className="absolute -left-7 h-5 w-5 rounded-full bg-black/80" />
-                <div className="absolute -right-7 h-5 w-5 rounded-full bg-black/80" />
-                <p className="mx-auto text-[0.65rem] italic text-amber-200/70 font-display tracking-wide text-center">
+                <div className="absolute -left-8 h-6 w-6 rounded-full bg-ink border border-white/15 shadow-inner" />
+                <div className="absolute -right-8 h-6 w-6 rounded-full bg-ink border border-white/15 shadow-inner" />
+                <p className="mx-auto text-[0.68rem] italic text-cream/60 font-display tracking-wide text-center">
                   "A ride through old memories..."
                 </p>
               </div>
 
               {/* Ticket Details Stub */}
-              <div className="grid grid-cols-3 gap-2 rounded-lg bg-black/30 p-2.5 text-center border border-white/5 font-mono text-[0.6rem]">
+              <div className="grid grid-cols-3 gap-2 rounded-xl bg-white/[0.04] p-2.5 text-center border border-white/10 font-mono text-[0.6rem] backdrop-blur-sm">
                 <div>
-                  <span className="block text-[0.5rem] text-cream/35 uppercase">SEAT</span>
+                  <span className="block text-[0.5rem] text-cream/40 uppercase">SEAT</span>
                   <span className="font-semibold text-cream/80">WINDOW</span>
                 </div>
                 <div className="border-x border-white/10">
-                  <span className="block text-[0.5rem] text-cream/35 uppercase">FARE</span>
-                  <span className="font-semibold text-amber-300">MEMORIES</span>
+                  <span className="block text-[0.5rem] text-cream/40 uppercase">FARE</span>
+                  <span className="font-semibold text-cream">MEMORIES</span>
                 </div>
                 <div>
-                  <span className="block text-[0.5rem] text-cream/35 uppercase">DESTINATION</span>
+                  <span className="block text-[0.5rem] text-cream/40 uppercase">DESTINATION</span>
                   <span className="font-semibold text-cream/80">NOSTALGIA</span>
                 </div>
               </div>
@@ -333,7 +338,7 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
                     href={whatsappShareUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex flex-col items-center justify-center gap-1 rounded-xl border border-white/10 bg-white/5 p-2 text-cream/80 transition-all hover:bg-emerald-600/20 hover:border-emerald-500/40 hover:text-emerald-300 active:scale-95"
+                    className="flex flex-col items-center justify-center gap-1 rounded-xl border border-white/10 bg-white/5 p-2 text-cream/80 transition-all hover:bg-emerald-500/20 hover:border-emerald-400/40 hover:text-emerald-300 active:scale-95 backdrop-blur-sm"
                     title="Share on WhatsApp"
                   >
                     <WhatsAppIcon />
@@ -345,7 +350,7 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
                     href={xShareUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex flex-col items-center justify-center gap-1 rounded-xl border border-white/10 bg-white/5 p-2 text-cream/80 transition-all hover:bg-white/15 hover:border-white/30 hover:text-cream active:scale-95"
+                    className="flex flex-col items-center justify-center gap-1 rounded-xl border border-white/10 bg-white/5 p-2 text-cream/80 transition-all hover:bg-white/15 hover:border-white/30 hover:text-cream active:scale-95 backdrop-blur-sm"
                     title="Share on X"
                   >
                     <XTwitterIcon />
@@ -357,7 +362,7 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
                     href={facebookShareUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex flex-col items-center justify-center gap-1 rounded-xl border border-white/10 bg-white/5 p-2 text-cream/80 transition-all hover:bg-blue-600/20 hover:border-blue-500/40 hover:text-blue-300 active:scale-95"
+                    className="flex flex-col items-center justify-center gap-1 rounded-xl border border-white/10 bg-white/5 p-2 text-cream/80 transition-all hover:bg-blue-500/20 hover:border-blue-400/40 hover:text-blue-300 active:scale-95 backdrop-blur-sm"
                     title="Share on Facebook"
                   >
                     <FacebookIcon />
@@ -369,7 +374,7 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
                     href={telegramShareUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex flex-col items-center justify-center gap-1 rounded-xl border border-white/10 bg-white/5 p-2 text-cream/80 transition-all hover:bg-sky-500/20 hover:border-sky-400/40 hover:text-sky-300 active:scale-95"
+                    className="flex flex-col items-center justify-center gap-1 rounded-xl border border-white/10 bg-white/5 p-2 text-cream/80 transition-all hover:bg-sky-500/20 hover:border-sky-400/40 hover:text-sky-300 active:scale-95 backdrop-blur-sm"
                     title="Share on Telegram"
                   >
                     <TelegramIcon />
@@ -383,7 +388,7 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
                     href={externalLinks.spotify}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-2 px-2.5 text-cream/80 transition-all hover:bg-emerald-500/15 hover:border-emerald-500/30 hover:text-emerald-300 active:scale-95 text-[0.65rem] font-medium"
+                    className="flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-2 px-2.5 text-cream/80 transition-all hover:bg-emerald-500/15 hover:border-emerald-500/30 hover:text-emerald-300 active:scale-95 text-[0.65rem] font-medium backdrop-blur-sm"
                     title="Open playlist on Spotify"
                   >
                     <SpotifyIcon />
@@ -394,7 +399,7 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
                     href={externalLinks.youtubeMusic}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-2 px-2.5 text-cream/80 transition-all hover:bg-red-500/15 hover:border-red-500/30 hover:text-red-300 active:scale-95 text-[0.65rem] font-medium"
+                    className="flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-2 px-2.5 text-cream/80 transition-all hover:bg-red-500/15 hover:border-red-500/30 hover:text-red-300 active:scale-95 text-[0.65rem] font-medium backdrop-blur-sm"
                     title="Open playlist on YouTube Music"
                   >
                     <YouTubeMusicIcon />
@@ -405,7 +410,7 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
                     href={externalLinks.appleMusic}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-2 px-2.5 text-cream/80 transition-all hover:bg-pink-500/15 hover:border-pink-500/30 hover:text-pink-300 active:scale-95 text-[0.65rem] font-medium"
+                    className="flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-2 px-2.5 text-cream/80 transition-all hover:bg-pink-500/15 hover:border-pink-500/30 hover:text-pink-300 active:scale-95 text-[0.65rem] font-medium backdrop-blur-sm"
                     title="Open playlist on Apple Music"
                   >
                     <AppleMusicIcon />
@@ -418,7 +423,7 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
                   <button
                     type="button"
                     onClick={handleCopyLink}
-                    className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 py-2.5 px-3 text-xs font-semibold text-cream transition-all hover:bg-white/20 hover:border-white/35 active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/50"
+                    className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 py-2.5 px-3 text-xs font-semibold text-cream transition-all hover:bg-white/20 hover:border-white/35 active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/50 backdrop-blur-sm"
                   >
                     {copied ? (
                       <>
@@ -436,7 +441,7 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
                   <button
                     type="button"
                     onClick={handleNativeShare}
-                    className="flex items-center justify-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-400/15 py-2.5 px-3.5 text-xs font-semibold text-amber-200 transition-all hover:bg-amber-400/25 hover:border-amber-400/50 active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-300/50"
+                    className="flex items-center justify-center gap-1.5 rounded-xl border border-white/20 bg-white/10 py-2.5 px-3.5 text-xs font-semibold text-cream transition-all hover:bg-white/20 hover:border-white/35 active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/50 backdrop-blur-sm"
                     title="More Share Options"
                   >
                     <MoreHorizontal className="h-4 w-4" />

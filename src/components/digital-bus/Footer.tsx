@@ -55,15 +55,6 @@ export function Footer() {
             <Heart className="h-3 w-3 text-red-400 fill-red-400/40 transition-transform duration-200 group-hover:scale-110" />
             <span>Support the journey</span>
           </a>
-
-          <a
-            href="https://nyxen.in"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded text-cream/65 transition-colors duration-200 hover:text-cream focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cream/50"
-          >
-            nyxen.in <span aria-hidden="true">↗</span>
-          </a>
         </div>
       </footer>
     </div>

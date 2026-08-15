@@ -16,22 +16,19 @@ Instead of being another music player with a playlist, Digital Bus turns listeni
 
 ## Features
 
-- 🚌 Immersive Digital Bus experience
+- 🚌 Authentic Maharashtra ST (*महाराष्ट्र राज्य मार्ग परिवहन महामंडळ*) scenic background crossfade (Khandala, Bhor, Koyna Lake, Satara)
 - 🎵 Nostalgic Hindi & Bollywood music library
-- 🎶 77-track curated collection
-- 🔀 Per-user randomized playback
-- ▶️ Automatic next-track playback
-- 🖼️ Album artwork and embedded metadata via ID3 parsing
-- 🪟 Glassmorphic music player with translucent glass UI
-- 📱 Responsive UI across desktop, tablet, and mobile
-- 🌧️ Ambient monsoon rain (HTML5 Canvas, 60fps)
-- 🟢 Real-time online presence counter
-- ⌨️ Keyboard controls (Space, B, X, ←, →)
-- 🎧 Xpert Melody integration
-- ❤️ Support integration
-- 🔍 SEO / Open Graph / structured data optimization
-- 🚫 Custom 404 page
-- 📖 Dedicated About page
+- 🎶 77-track curated collection with embedded high-resolution artwork
+- 🔀 Shuffled unique queue with automatic next-track transitions
+- 🪟 Premium glassmorphic music player with frosted glass styling
+- 📱 Responsive mobile experience: floating mini player capsule, direct queue access, and swipeable expanded player sheet
+- 🎟️ Interactive glassmorphic Bus Ticket sharing modal with compact mobile trigger
+- 🟢 Real-time online passenger presence tracking
+- ⌨️ Centralized keyboard shortcuts (`Space`, `N`, `P`, `Q`, `T`, `S`, `M`, `←`, `→`, `B`)
+- 📻 Ambient bus road sound synthesizer toggle
+- 🌄 Time-of-day adaptive lighting atmosphere
+- 📖 Dedicated About page with fixed static scenic backgrounds and rich creator / studio story
+- 🚫 Zero telemetry, tracking, or account friction
 
 ---
 
@@ -40,10 +37,13 @@ Instead of being another music player with a playlist, Digital Bus turns listeni
 | Key | Action |
 |-----|--------|
 | `Space` | Play / Pause current song |
-| `B` | "Shhhhh... enjoy the music 🎧" |
-| `X` | Toggle Xpert Melody notification |
-| `←` | Seek backward ~5 seconds |
-| `→` | Seek forward ~5 seconds |
+| `N` / `P` | Next / Previous track |
+| `Q` | Open / Close Playlist Queue |
+| `T` | Open / Close Share Ticket Modal |
+| `S` | Toggle Shuffle mode |
+| `M` | Mute / Unmute music |
+| `←` / `→` | Seek backward / forward 5 seconds |
+| `B` | "अरे! बस रोक क्यों दी? 🚌" (Easter egg horn toast) |
 
 Shortcuts are disabled when typing in input fields. Space does not scroll the page when used as a player shortcut.
 
@@ -58,7 +58,7 @@ Shortcuts are disabled when typing in input fields. Space does not scroll the pa
 | Language | [TypeScript](https://www.typescriptlang.org/) |
 | Bundler | [Vite 8](https://vite.dev/) |
 | Styling | [Tailwind CSS v4](https://tailwindcss.com/) |
-| Audio | HTML5 Audio API + Web Audio API (synthesized horn & ambient engine) |
+| Audio | HTML5 Audio API + Web Audio API (ambient engine) |
 | Server | [Nitro](https://nitro.build/) (serverless functions for presence) |
 | Icons | [Lucide React](https://lucide.dev/) |
 | Routing | [TanStack Router](https://tanstack.com/router) (file-based) |
@@ -142,9 +142,9 @@ npm run preview
 ```
 digital-bus/
 ├── public/
-│   ├── Songs/                    # MP3 audio files
-│   ├── covers/                   # Album cover images
-│   ├── bus-stop-bg.jpg           # Main background artwork
+│   ├── Songs/                    # 77 MP3 audio files
+│   ├── covers/                   # 77 extracted real album artwork images
+│   ├── backgrounds/              # 4 Maharashtra ST scenic background artworks
 │   ├── og-image.png              # Open Graph share image
 │   ├── favicon.svg               # Site favicon
 │   ├── manifest.json             # PWA manifest
@@ -153,39 +153,39 @@ digital-bus/
 ├── src/
 │   ├── components/
 │   │   └── digital-bus/
-│   │       ├── DigitalBus.tsx     # Main homepage component
-│   │       ├── MusicPlayer.tsx    # Glass music player
-│   │       ├── PlayerControls.tsx # Play/Pause/Skip buttons
-│   │       ├── ProgressBar.tsx    # Seek bar with pointer capture
-│   │       ├── BrandTitle.tsx     # डिजिटल बस title
-│   │       ├── JourneyTicker.tsx  # Rotating atmospheric text
-│   │       ├── ToastSystem.tsx    # Single-toast notification system
-│   │       ├── RainEffect.tsx     # Canvas rain animation
-│   │       ├── AtmosphereOverlay.tsx # Day/night gradient overlay
-│   │       ├── AudioWaveform.tsx  # Mini spectrum bars
-│   │       ├── Clock.tsx          # Live time display
-│   │       ├── OnlineStatus.tsx   # Real-time presence counter
-│   │       ├── MusicLinks.tsx     # Spotify/YouTube Music links
-│   │       └── Footer.tsx         # Footer with credits & links
+│   │       ├── DigitalBus.tsx     # Main homepage orchestrator
+│   │       ├── BackgroundScene.tsx # 4-scene rotating crossfade background
+│   │       ├── MusicPlayer.tsx    # Glassmorphic desktop & mobile music player
+│   │       ├── PlaylistPanel.tsx  # Track queue drawer (desktop popover & mobile sheet)
+│   │       ├── ShareTicket.tsx    # Interactive digital bus ticket sharing modal
+│   │       ├── PlayerControls.tsx # Play/Pause/Skip/Shuffle/Queue buttons
+│   │       ├── ProgressBar.tsx    # Responsive seek bar with pointer capture
+│   │       ├── BrandTitle.tsx     # Devanagari brand title (डिजिटल बस)
+│   │       ├── JourneyTicker.tsx  # Rotating atmospheric ticker quotes
+│   │       ├── ToastSystem.tsx    # Single-toast notification manager
+│   │       ├── AtmosphereOverlay.tsx # Adaptive day/night lighting atmosphere
+│   │       ├── AudioWaveform.tsx  # Dynamic mini audio visualizer bars
+│   │       ├── Clock.tsx          # Live time & date display
+│   │       ├── OnlineStatus.tsx   # Real-time passenger presence counter
+│   │       ├── MusicLinks.tsx     # Spotify, YouTube Music, Apple Music streaming links
+│   │       └── Footer.tsx         # Attributions & external links
 │   ├── hooks/
-│   │   ├── useAudioPlayer.ts     # Core audio engine
-│   │   ├── useKeyboardShortcuts.ts # Centralized keyboard handler
-│   │   ├── useClock.ts           # Time/date formatting
-│   │   └── use-mobile.tsx        # Mobile detection
+│   │   ├── useAudioPlayer.ts     # Core persistent audio engine
+│   │   ├── useKeyboardShortcuts.ts # Centralized keyboard shortcut handler
+│   │   └── useClock.ts           # Time & date ticker hook
 │   ├── lib/
-│   │   ├── audioEffects.ts       # Web Audio API (horn, ambient)
-│   │   ├── id3.ts                # ID3v2 metadata parser
-│   │   ├── presence.ts           # Server-side presence tracking
-│   │   └── utils.ts              # Utilities
+│   │   ├── audioEffects.ts       # Web Audio API ambient synthesizer
+│   │   ├── id3.ts                # ID3v2 metadata & artwork parser
+│   │   └── presence.ts           # Serverless passenger presence tracking
 │   ├── data/
-│   │   └── playlist.ts           # Track definitions & external links
+│   │   └── playlist.ts           # 77 curated tracks & streaming URLs
 │   ├── routes/
-│   │   ├── __root.tsx            # Root layout, 404, error boundary
+│   │   ├── __root.tsx            # Root layout, head metadata, 404
 │   │   ├── index.tsx             # Homepage route
-│   │   └── about.tsx             # About page route
-│   ├── styles.css                # Global styles & Tailwind config
-│   ├── router.tsx                # TanStack Router setup
-│   └── start.ts                  # TanStack Start entry
+│   │   └── about.tsx             # Dedicated about route
+│   ├── styles.css                # Tailwind CSS v4 & custom glassmorphism utilities
+│   ├── router.tsx                # TanStack Router configuration
+│   └── start.ts                  # TanStack Start entry point
 ├── package.json
 ├── vite.config.ts
 ├── tsconfig.json

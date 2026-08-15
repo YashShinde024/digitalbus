@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { AtmosphereOverlay } from "./AtmosphereOverlay";
+import { BackgroundScene } from "./BackgroundScene";
 import { BrandTitle } from "./BrandTitle";
 import { Clock } from "./Clock";
 import { Footer } from "./Footer";
@@ -8,12 +9,23 @@ import { JourneyTicker } from "./JourneyTicker";
 import { MusicLinks } from "./MusicLinks";
 import { MusicPlayer } from "./MusicPlayer";
 import { OnlineStatus } from "./OnlineStatus";
-import { RainEffect } from "./RainEffect";
 import { ToastSystem } from "./ToastSystem";
 
 export function DigitalBus() {
   useKeyboardShortcuts();
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
+  const [playerExpanded, setPlayerExpanded] = useState(false);
+
+  // Listen for mobile player expansion state changes
+  const handlePlayerExpand = useCallback((e: Event) => {
+    const detail = (e as CustomEvent<{ expanded: boolean }>).detail;
+    setPlayerExpanded(detail.expanded);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("digitalbus:playerexpand", handlePlayerExpand);
+    return () => window.removeEventListener("digitalbus:playerexpand", handlePlayerExpand);
+  }, [handlePlayerExpand]);
 
   // Subtle Mouse Parallax on Desktop
   useEffect(() => {
@@ -35,29 +47,20 @@ export function DigitalBus() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
+  // Transition classes for content that fades when mobile player expands
+  const mobileContentFade = playerExpanded
+    ? "max-sm:opacity-0 max-sm:translate-y-2 max-sm:pointer-events-none"
+    : "max-sm:opacity-100 max-sm:translate-y-0";
+
   return (
     <main className="relative min-h-[100svh] w-full overflow-hidden bg-ink select-none">
       {/* Unified Floating Toast Notification Manager */}
       <ToastSystem />
 
-      {/* 1. Background artwork with subtle desktop mouse parallax */}
-      <img
-        src="/bus-stop-bg.jpg"
-        alt="A vintage Indian bus parked by a river next to a bus stop sign at sunset"
-        className="absolute inset-0 h-full w-full object-cover object-[center_45%] z-0 transition-transform duration-300 ease-out scale-105"
-        style={{
-          transform: `translate3d(${parallax.x}px, ${parallax.y}px, 0) scale(1.05)`,
-        }}
-        fetchPriority="high"
-        decoding="async"
-      />
+      {/* 1. Background artwork rotating with smooth crossfade & desktop mouse parallax */}
+      <BackgroundScene parallax={parallax} />
 
-      {/* 2. Background Rain Atmosphere (Strictly behind UI) */}
-      <div className="absolute inset-0 z-[1] pointer-events-none">
-        <RainEffect />
-      </div>
-
-      {/* 3. Automatic Day/Night Time Atmosphere & Scene Veil */}
+      {/* 2. Automatic Day/Night Time Atmosphere & Scene Veil */}
       <AtmosphereOverlay />
       <div className="scene-veil absolute inset-0 z-[3] pointer-events-none" aria-hidden="true" />
       <div
@@ -65,39 +68,48 @@ export function DigitalBus() {
         aria-hidden="true"
       />
 
-      {/* 4. Main Interactive UI Layer */}
-      <div className="relative z-10 flex min-h-[100svh] flex-col justify-between px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] sm:px-9 sm:pb-6 sm:pt-6">
-        {/* Header - Viewport Centered Stacked Brand Title */}
+      {/* 3. Main Interactive UI Layer */}
+      <div className="relative z-10 flex min-h-[100svh] flex-col justify-between px-3.5 pb-[max(5.5rem,calc(env(safe-area-inset-bottom)+5.5rem))] pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-9 sm:pb-6 sm:pt-6">
+        {/* Header */}
         <header className="relative w-full">
-          <div className="grid grid-cols-2 items-start gap-3 sm:grid-cols-[1fr_auto_1fr] sm:gap-6">
-            <Clock />
+          {/* Desktop Center Focal Hero Wordmark — Anchored to exact viewport 50% center */}
+          <div className="hidden sm:flex absolute left-1/2 -translate-x-1/2 top-0 flex-col items-center gap-1.5 text-center pointer-events-auto z-10">
+            <BrandTitle />
+            <OnlineStatus />
+          </div>
 
-            {/* Desktop Center Focal Hero Wordmark */}
-            <div className="hidden sm:flex flex-col items-center gap-1.5 text-center">
-              <BrandTitle />
-              <OnlineStatus />
+          <div className="flex items-start justify-between gap-3 w-full">
+            {/* Top Left Corner: Time, Day, Date */}
+            <div className="shrink-0 text-left">
+              <Clock />
             </div>
 
-            <div className="flex justify-end">
+            {/* Top Right Corner: Spotify, YouTube Music, Apple Music */}
+            <div className="shrink-0 flex justify-end items-start">
               <MusicLinks />
             </div>
           </div>
 
-          {/* Mobile Header Title */}
-          <div className="mt-1 flex flex-col items-center gap-1.5 text-center sm:hidden">
+          {/* Mobile Center Brand Title */}
+          <div className="mt-3 flex flex-col items-center gap-1 text-center sm:hidden">
             <BrandTitle />
             <OnlineStatus />
           </div>
         </header>
 
+        {/* Mobile: flexible spacer to reveal scenic bus view */}
+        <div className="flex-1 sm:hidden min-h-[40px]" aria-hidden="true" />
+
         {/* Lower-Center Floating Glass Music Player Container */}
-        <div className="mx-auto w-full max-w-[34rem] py-2 sm:py-3 mt-auto mb-2 sm:mb-3 flex flex-col gap-1.5">
-          <JourneyTicker />
+        <div className="mx-auto w-full max-w-[36rem] py-2 sm:py-3 mt-auto mb-1.5 sm:mb-3 flex flex-col gap-1.5">
+          <div className={mobileContentFade}>
+            <JourneyTicker />
+          </div>
           <MusicPlayer />
         </div>
 
         {/* Footer System */}
-        <div className="w-full pt-1">
+        <div className={`w-full pt-1 transition-all duration-300 ${mobileContentFade}`}>
           <Footer />
         </div>
       </div>
