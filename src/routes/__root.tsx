@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { playlist } from "../data/playlist";
-import { RainEffect } from "../components/digital-bus/RainEffect";
+import { BackgroundScene } from "../components/digital-bus/BackgroundScene";
 import { AtmosphereOverlay } from "../components/digital-bus/AtmosphereOverlay";
 
 import appCss from "../styles.css?url";
@@ -97,21 +97,10 @@ const jsonLdData = {
 function NotFoundComponent() {
   return (
     <main className="relative min-h-[100svh] w-full overflow-hidden bg-ink select-none flex items-center justify-center p-4">
-      {/* 1. Background artwork */}
-      <img
-        src="/bus-stop-bg.jpg"
-        alt="A vintage Indian bus parked by a river next to a bus stop sign at sunset"
-        className="absolute inset-0 h-full w-full object-cover object-[center_45%] z-0 scale-105"
-        fetchPriority="high"
-        decoding="async"
-      />
+      {/* 1. Background artwork with crossfade */}
+      <BackgroundScene />
 
-      {/* 2. Background Rain Atmosphere (Strictly behind UI) */}
-      <div className="absolute inset-0 z-[1] pointer-events-none">
-        <RainEffect />
-      </div>
-
-      {/* 3. Automatic Day/Night Time Atmosphere & Scene Veil */}
+      {/* 2. Automatic Day/Night Time Atmosphere & Scene Veil */}
       <AtmosphereOverlay />
       <div className="scene-veil absolute inset-0 z-[3] pointer-events-none" aria-hidden="true" />
       <div
