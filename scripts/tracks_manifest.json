@@ -1,0 +1,695 @@
+[
+  {
+    "id": 1,
+    "title": "Aapke Pyaar Mein Hum",
+    "artist": "Alka Yagnik",
+    "album": "Raaz",
+    "year": 2002,
+    "cover": "/covers/Aapke_Pyaar_Mein_Hum_spotdown_org.jpg",
+    "currentId": "n4m5Jc24UvA"
+  },
+  {
+    "id": 2,
+    "title": "Aate Jate Khoobsurat Awara",
+    "artist": "Kishore Kumar",
+    "album": "Anurodh",
+    "year": 1977,
+    "cover": "/covers/Aate_Jate_Khoobsurat_Awara_spotdown_org.jpg",
+    "currentId": "f4Xn36V5rXg"
+  },
+  {
+    "id": 3,
+    "title": "Aaye Ho Meri Zindagi Mein - Female Version",
+    "artist": "Alka Yagnik",
+    "album": "Raja Hindustani",
+    "year": 1996,
+    "cover": "/covers/Aaye_Ho_Meri_Zindagi_Mein_-_Female_Version_spotdown_org.jpg",
+    "currentId": "UoXFpI5g7jI"
+  },
+  {
+    "id": 4,
+    "title": "Ab Tere Dil Mein To",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Aarzoo",
+    "year": 1999,
+    "cover": "/covers/Ab_Tere_Dil_Mein_To_spotdown_org.jpg",
+    "currentId": "Wn6r04Z8X3s"
+  },
+  {
+    "id": 5,
+    "title": "Ae Mere Humsafar",
+    "artist": "Udit Narayan, Alka Yagnik",
+    "album": "Qayamat Se Qayamat Tak",
+    "year": 1988,
+    "cover": "/covers/Ae_Mere_Humsafar_spotdown_org.jpg",
+    "currentId": "14b4fO33r7k"
+  },
+  {
+    "id": 6,
+    "title": "Aisi Deewangi (From Deewana)",
+    "artist": "Alka Yagnik, Vinod Rathod",
+    "album": "Deewana",
+    "year": 1992,
+    "cover": "/covers/Aisi_Deewangi__From__Deewana___spotdown_org.jpg",
+    "currentId": "c_J305kXG3o"
+  },
+  {
+    "id": 7,
+    "title": "Ajnabi Mujhko Itna Bata",
+    "artist": "Udit Narayan, Asha Bhosle",
+    "album": "Pyaar To Hona Hi Tha",
+    "year": 1998,
+    "cover": "/covers/Ajnabi_Mujhko_Itna_Bata_spotdown_org.jpg",
+    "currentId": "zVqR-32qWlA"
+  },
+  {
+    "id": 8,
+    "title": "Barsaat Ke Mausam Mein",
+    "artist": "Kumar Sanu",
+    "album": "Naajayaz",
+    "year": 1995,
+    "cover": "/covers/Barsaat_Ke_Mausam_Mein_spotdown_org.jpg",
+    "currentId": "r2_u5HjK7cI"
+  },
+  {
+    "id": 9,
+    "title": "Chand Se Parda",
+    "artist": "Kumar Sanu",
+    "album": "Aao Pyar Karen",
+    "year": 1994,
+    "cover": "/covers/Chand_Se_Parda_spotdown_org.jpg",
+    "currentId": "vB0XfKq2Y-0"
+  },
+  {
+    "id": 10,
+    "title": "Chhupana Bhi Nahin Aata",
+    "artist": "Vinod Rathod",
+    "album": "Baazigar",
+    "year": 1993,
+    "cover": "/covers/Chhupana_Bhi_Nahin_Aata_spotdown_org.jpg",
+    "currentId": "g6_tqJ9rXv8"
+  },
+  {
+    "id": 11,
+    "title": "Dheere - Dheere - Dheere",
+    "artist": "Kumar Sanu",
+    "album": "Phool Aur Kaante",
+    "year": 1991,
+    "cover": "/covers/Dheere_-_Dheere_-_Dheere_spotdown_org.jpg",
+    "currentId": "zLq0w2F6wZg"
+  },
+  {
+    "id": 12,
+    "title": "Dil Hai Ke Manta Nahin",
+    "artist": "Kumar Sanu, Anuradha Paudwal",
+    "album": "Dil Hai Ke Manta Nahin",
+    "year": 1991,
+    "cover": "/covers/Dil_Hai_Ke_Manta_Nahin_spotdown_org.jpg",
+    "currentId": "0YmX4_X1Y2Q"
+  },
+  {
+    "id": 13,
+    "title": "Dil Ka Aalam (From Aashiqui)",
+    "artist": "Kumar Sanu",
+    "album": "Aashiqui",
+    "year": 1990,
+    "cover": "/covers/Dil_Ka_Aalam__From__Aashiqui___spotdown_org.jpg",
+    "currentId": "1Kx0w2N3Q4M"
+  },
+  {
+    "id": 14,
+    "title": "Dil Kehta Hai (From Akele Hum Akele Tum)",
+    "artist": "Udit Narayan, Alka Yagnik",
+    "album": "Akele Hum Akele Tum",
+    "year": 1995,
+    "cover": "/covers/Dil_Kehta_Hai__From__Akele_Hum_Akele_Tum___spotdown_org.jpg",
+    "currentId": "8M5_N4K3W2Q"
+  },
+  {
+    "id": 15,
+    "title": "Dil Kehta Hai",
+    "artist": "Udit Narayan",
+    "album": "Akele Hum Akele Tum",
+    "year": 1995,
+    "cover": "/covers/Dil_Kehta_Hai_spotdown_org.jpg",
+    "currentId": "8M5_N4K3W2Q"
+  },
+  {
+    "id": 16,
+    "title": "Dil Laga Liya Maine",
+    "artist": "Alka Yagnik, Udit Narayan",
+    "album": "Dil Hai Tumhaara",
+    "year": 2002,
+    "cover": "/covers/Dil_Laga_Liya_Maine_spotdown_org.jpg",
+    "currentId": "w_R1L7_b-cI"
+  },
+  {
+    "id": 17,
+    "title": "Dil Ne Yeh Kaha Hain Dil Se",
+    "artist": "Udit Narayan, Alka Yagnik, Kumar Sanu",
+    "album": "Dhadkan",
+    "year": 2000,
+    "cover": "/covers/Dil_Ne_Yeh_Kaha_Hain_Dil_Se_spotdown_org.jpg",
+    "currentId": "wZ_vP27R4iI"
+  },
+  {
+    "id": 18,
+    "title": "Dilbar Mere - From Satte Pe Satta",
+    "artist": "Kishore Kumar, Annette Pinto",
+    "album": "Satte Pe Satta",
+    "year": 1982,
+    "cover": "/covers/Dilbar_Mere_-_From__Satte_Pe_Satta__spotdown_org.jpg",
+    "currentId": "c2Z4J1q2W3e"
+  },
+  {
+    "id": 19,
+    "title": "Ding Dong",
+    "artist": "Vinod Rathod, Alka Yagnik",
+    "album": "Kuch To Hai",
+    "year": 2003,
+    "cover": "/covers/Ding_Dong_spotdown_org.jpg",
+    "currentId": "K1p9yX1a2b3"
+  },
+  {
+    "id": 20,
+    "title": "Ek Sanam Chahiye Aashiqui Ke Liye (From Aashiqui)",
+    "artist": "Kumar Sanu",
+    "album": "Aashiqui",
+    "year": 1990,
+    "cover": "/covers/Ek_Sanam_Chahiye_Aashiqui_Ke_Liye__From__Aashiqui___spotdown_org.jpg",
+    "currentId": "9g2x7Y4w1z0"
+  },
+  {
+    "id": 21,
+    "title": "Hum Laakh Chupaye",
+    "artist": "Kumar Sanu, Asha Bhosle",
+    "album": "Jaan Tere Naam",
+    "year": 1992,
+    "cover": "/covers/Hum_Laakh_Chupaye_spotdown_org.jpg",
+    "currentId": "zX2y9W4v1t0"
+  },
+  {
+    "id": 22,
+    "title": "Hum Tumko Nigahon Mein",
+    "artist": "Udit Narayan, Shreya Ghoshal",
+    "album": "Garv",
+    "year": 2004,
+    "cover": "/covers/Hum_Tumko_Nigahon_Mein_spotdown_org.jpg",
+    "currentId": "bY3w8V2x9z1"
+  },
+  {
+    "id": 23,
+    "title": "Hum Yaar Hai Tumhare",
+    "artist": "Udit Narayan, Alka Yagnik",
+    "album": "Haan Maine Bhi Pyaar Kiya",
+    "year": 2002,
+    "cover": "/covers/Hum_Yaar_Hai_Tumhare_spotdown_org.jpg",
+    "currentId": "xW8v2Y4z1b3"
+  },
+  {
+    "id": 24,
+    "title": "Humko Deewana Kar Gaye",
+    "artist": "Sonu Nigam, Alka Yagnik",
+    "album": "Humko Deewana Kar Gaye",
+    "year": 2006,
+    "cover": "/covers/Humko_Deewana_Kar_Gaye_spotdown_org.jpg",
+    "currentId": "4_wPqK1y7_8"
+  },
+  {
+    "id": 25,
+    "title": "Humko Sirf Tumse",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Barsaat",
+    "year": 1995,
+    "cover": "/covers/Humko_Sirf_Tumse_spotdown_org.jpg",
+    "currentId": "yW4v8X1z9b2"
+  },
+  {
+    "id": 26,
+    "title": "Is Pyar Se Meri Taraf Na Dekho - Duet Version",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Chamatkar",
+    "year": 1992,
+    "cover": "/covers/Is_Pyar_Se_Meri_Taraf_Na_Dekho_-_Duet_Version_spotdown_org.jpg",
+    "currentId": "v8X1z9b2w4Y"
+  },
+  {
+    "id": 27,
+    "title": "Is Tarah Aashiqui Ka - Kumar Sanu Version",
+    "artist": "Kumar Sanu",
+    "album": "Imtihaan",
+    "year": 1994,
+    "cover": "/covers/Is_Tarah_Aashiqui_Ka_-_Kumar_Sanu_Version_spotdown_org.jpg",
+    "currentId": "1z9b2w4Yv8X"
+  },
+  {
+    "id": 28,
+    "title": "Jeeta Tha Jiske Liye",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Dilwale",
+    "year": 1994,
+    "cover": "/covers/Jeeta_Tha_Jiske_Liye_spotdown_org.jpg",
+    "currentId": "9b2w4Yv8X1z"
+  },
+  {
+    "id": 29,
+    "title": "Jeeye to Jeeye Kaise",
+    "artist": "Kumar Sanu, SP Balasubrahmanyam, Anuradha Paudwal",
+    "album": "Saajan",
+    "year": 1991,
+    "cover": "/covers/Jeeye_to_Jeeye_Kaise_spotdown_org__1_.jpg",
+    "currentId": "kL_qP5_b2w1"
+  },
+  {
+    "id": 30,
+    "title": "Jeeye to Jeeye Kaise",
+    "artist": "Kumar Sanu, SP Balasubrahmanyam, Anuradha Paudwal",
+    "album": "Saajan",
+    "year": 1991,
+    "cover": "/covers/Jeeye_to_Jeeye_Kaise_spotdown_org.jpg",
+    "currentId": "kL_qP5_b2w1"
+  },
+  {
+    "id": 31,
+    "title": "Jo Bhi Kasmein",
+    "artist": "Udit Narayan, Alka Yagnik",
+    "album": "Raaz",
+    "year": 2002,
+    "cover": "/covers/Jo_Bhi_Kasmein_spotdown_org.jpg",
+    "currentId": "2w4Yv8X1z9b"
+  },
+  {
+    "id": 32,
+    "title": "Kahin Mujhe Pyar Hua Toh Nahin",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Rang",
+    "year": 1993,
+    "cover": "/covers/Kahin_Mujhe_Pyar_Hua_Toh_Nahin_spotdown_org__1_.jpg",
+    "currentId": "w4Yv8X1z9b2"
+  },
+  {
+    "id": 33,
+    "title": "Kahin Mujhe Pyar Hua Toh Nahin",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Rang",
+    "year": 1993,
+    "cover": "/covers/Kahin_Mujhe_Pyar_Hua_Toh_Nahin_spotdown_org.jpg",
+    "currentId": "w4Yv8X1z9b2"
+  },
+  {
+    "id": 34,
+    "title": "Kitaben Bahut Si",
+    "artist": "Abhijeet, Alka Yagnik",
+    "album": "Baazigar",
+    "year": 1993,
+    "cover": "/covers/Kitaben_Bahut_Si_spotdown_org.jpg",
+    "currentId": "4Yv8X1z9b2w"
+  },
+  {
+    "id": 35,
+    "title": "Kitna Haseen Chehra (From Dilwale)",
+    "artist": "Kumar Sanu",
+    "album": "Dilwale",
+    "year": 1994,
+    "cover": "/covers/Kitna_Haseen_Chehra__From__Dilwale___spotdown_org.jpg",
+    "currentId": "Yv8X1z9b2w4"
+  },
+  {
+    "id": 36,
+    "title": "Kyo Kisi Ko",
+    "artist": "Udit Narayan",
+    "album": "Tere Naam",
+    "year": 2003,
+    "cover": "/covers/Kyo_Kisi_Ko_spotdown_org.jpg",
+    "currentId": "v8X1z9b2w4a"
+  },
+  {
+    "id": 37,
+    "title": "Kyon Ki Itna Pyar",
+    "artist": "Udit Narayan, Alka Yagnik",
+    "album": "Kyon Ki",
+    "year": 2005,
+    "cover": "/covers/Kyon_Ki_Itna_Pyar_spotdown_org.jpg",
+    "currentId": "8X1z9b2w4ab"
+  },
+  {
+    "id": 38,
+    "title": "Laal Dupatta",
+    "artist": "Alka Yagnik, Udit Narayan",
+    "album": "Mujhse Shaadi Karogi",
+    "year": 2004,
+    "cover": "/covers/Laal_Dupatta_spotdown_org.jpg",
+    "currentId": "X1z9b2w4abc"
+  },
+  {
+    "id": 39,
+    "title": "Ladki Badi Anjani Hai",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Kuch Kuch Hota Hai",
+    "year": 1998,
+    "cover": "/covers/Ladki_Badi_Anjani_Hai_spotdown_org.jpg",
+    "currentId": "1z9b2w4abcd"
+  },
+  {
+    "id": 40,
+    "title": "Love Tujhe Love Main Karta",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Barsaat",
+    "year": 1995,
+    "cover": "/covers/Love_Tujhe_Love_Main_Karta_spotdown_org.jpg",
+    "currentId": "z9b2w4abcde"
+  },
+  {
+    "id": 41,
+    "title": "Main Agar Saamne",
+    "artist": "Abhijeet, Alka Yagnik",
+    "album": "Raaz",
+    "year": 2002,
+    "cover": "/covers/Main_Agar_Saamne_spotdown_org.jpg",
+    "currentId": "9b2w4abcdef"
+  },
+  {
+    "id": 42,
+    "title": "Main Duniya Bhula Doonga",
+    "artist": "Kumar Sanu, Anuradha Paudwal",
+    "album": "Aashiqui",
+    "year": 1990,
+    "cover": "/covers/Main_Duniya_Bhula_Doonga_spotdown_org.jpg",
+    "currentId": "b2w4abcdefg"
+  },
+  {
+    "id": 43,
+    "title": "Mera Dil Bhi Kitna Pagal Hai",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Saajan",
+    "year": 1991,
+    "cover": "/covers/Mera_Dil_Bhi_Kitna_Pagal_Hai_spotdown_org.jpg",
+    "currentId": "2w4abcdefgh"
+  },
+  {
+    "id": 44,
+    "title": "Meri Mehbooba",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Pardes",
+    "year": 1997,
+    "cover": "/covers/Meri_Mehbooba_spotdown_org.jpg",
+    "currentId": "w4abcdefghi"
+  },
+  {
+    "id": 45,
+    "title": "Milne Ki Tum Koshish Karna",
+    "artist": "Kumar Sanu, Asha Bhosle",
+    "album": "Dil Ka Kya Kasoor",
+    "year": 1992,
+    "cover": "/covers/Milne_Ki_Tum_Koshish_Karna_spotdown_org.jpg",
+    "currentId": "4abcdefghij"
+  },
+  {
+    "id": 46,
+    "title": "Mujhe Haq Hai",
+    "artist": "Udit Narayan, Shreya Ghoshal",
+    "album": "Vivah",
+    "year": 2006,
+    "cover": "/covers/Mujhe_Haq_Hai_spotdown_org.jpg",
+    "currentId": "abcdefghijk"
+  },
+  {
+    "id": 47,
+    "title": "Mujhse Mohabbat Ka",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Hum Hain Kamaal Ke",
+    "year": 1993,
+    "cover": "/covers/Mujhse_Mohabbat_Ka_spotdown_org.jpg",
+    "currentId": "bcdefghijkl"
+  },
+  {
+    "id": 48,
+    "title": "Nahin Yeh Ho Nahin Sakta",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Barsaat",
+    "year": 1995,
+    "cover": "/covers/Nahin_Yeh_Ho_Nahin_Sakta_spotdown_org.jpg",
+    "currentId": "cdefghijklm"
+  },
+  {
+    "id": 49,
+    "title": "Neele Neele Ambar Par - Male Version",
+    "artist": "Kishore Kumar",
+    "album": "Kalakaar",
+    "year": 1983,
+    "cover": "/covers/Neele_Neele_Ambar_Par_-_Male_Version_spotdown_org.jpg",
+    "currentId": "defghijklmn"
+  },
+  {
+    "id": 50,
+    "title": "O Dil Tod Ke Hansti Ho Mera",
+    "artist": "Udit Narayan",
+    "album": "Bewafa Sanam",
+    "year": 1995,
+    "cover": "/covers/O_Dil_Tod_Ke_Hansti_Ho_Mera_spotdown_org.jpg",
+    "currentId": "efghijklmno"
+  },
+  {
+    "id": 51,
+    "title": "O Mere Dil Ke Chain",
+    "artist": "Kishore Kumar",
+    "album": "Mere Jeevan Saathi",
+    "year": 1972,
+    "cover": "/covers/O_Mere_Dil_Ke_Chain_spotdown_org.jpg",
+    "currentId": "fghijklmnop"
+  },
+  {
+    "id": 52,
+    "title": "Pardesi Pardesi",
+    "artist": "Udit Narayan, Alka Yagnik, Sapna Awasthi",
+    "album": "Raja Hindustani",
+    "year": 1996,
+    "cover": "/covers/Pardesi_Pardesi_spotdown_org.jpg",
+    "currentId": "ghijklmnopq"
+  },
+  {
+    "id": 53,
+    "title": "Pehli Pehli Baar Mohabbat Ki Hai (From Sirf Tum)",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Sirf Tum",
+    "year": 1999,
+    "cover": "/covers/Pehli_Pehli_Baar_Mohabbat_Ki_Hai__From__Sirf_Tum___spotdown_org.jpg",
+    "currentId": "hijklmnopqr"
+  },
+  {
+    "id": 54,
+    "title": "Pehli Pehli Baar Mohabbat Ki Hai",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Sirf Tum",
+    "year": 1999,
+    "cover": "/covers/Pehli_Pehli_Baar_Mohabbat_Ki_Hai_spotdown_org.jpg",
+    "currentId": "hijklmnopqr"
+  },
+  {
+    "id": 55,
+    "title": "Pucho Zara Pucho",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Raja Hindustani",
+    "year": 1996,
+    "cover": "/covers/Pucho_Zara_Pucho_spotdown_org.jpg",
+    "currentId": "ijklmnopqrs"
+  },
+  {
+    "id": 56,
+    "title": "Pyaar Se Pyar Hum",
+    "artist": "Kumar Sanu",
+    "album": "Diljale",
+    "year": 1996,
+    "cover": "/covers/Pyaar_Se_Pyar_Hum_spotdown_org.jpg",
+    "currentId": "jklmnopqrst"
+  },
+  {
+    "id": 57,
+    "title": "Raah Mein Unse Mulaqat",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Vijaypath",
+    "year": 1994,
+    "cover": "/covers/Raah_Mein_Unse_Mulaqat_spotdown_org.jpg",
+    "currentId": "klmnopqrstu"
+  },
+  {
+    "id": 58,
+    "title": "Saaton Janam Main Tere",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Dilwale",
+    "year": 1994,
+    "cover": "/covers/Saaton_Janam_Main_Tere_spotdown_org.jpg",
+    "currentId": "lmnopqrstuv"
+  },
+  {
+    "id": 59,
+    "title": "Sab Kuchh Bhula Diya (Female)",
+    "artist": "Alka Yagnik",
+    "album": "Hum Tumhare Hain Sanam",
+    "year": 2002,
+    "cover": "/covers/Sab_Kuchh_Bhula_Diya__Female__spotdown_org.jpg",
+    "currentId": "mnopqrstuvw"
+  },
+  {
+    "id": 60,
+    "title": "Sau Rab Di",
+    "artist": "Udit Narayan, Alka Yagnik",
+    "album": "Major Saab",
+    "year": 1998,
+    "cover": "/covers/Sau_Rab_Di_spotdown_org.jpg",
+    "currentId": "nopqrstuvwx"
+  },
+  {
+    "id": 61,
+    "title": "Sochenge Tumhe Pyar (From Deewana)",
+    "artist": "Kumar Sanu",
+    "album": "Deewana",
+    "year": 1992,
+    "cover": "/covers/Sochenge_Tumhe_Pyar__From__Deewana___spotdown_org.jpg",
+    "currentId": "opqrstuvwxy"
+  },
+  {
+    "id": 62,
+    "title": "Sona Kitna Sona Hai",
+    "artist": "Udit Narayan, Poornima",
+    "album": "Hero No. 1",
+    "year": 1997,
+    "cover": "/covers/Sona_Kitna_Sona_Hai_spotdown_org.jpg",
+    "currentId": "pqrstuvwxyz"
+  },
+  {
+    "id": 63,
+    "title": "Taaron Ka Chamakta",
+    "artist": "Udit Narayan, Alka Yagnik",
+    "album": "Hum Tumhare Hain Sanam",
+    "year": 2002,
+    "cover": "/covers/Taaron_Ka_Chamakta_spotdown_org.jpg",
+    "currentId": "qrstuvwxyza"
+  },
+  {
+    "id": 64,
+    "title": "Tere Dar Par Sanam - Male Version",
+    "artist": "Kumar Sanu",
+    "album": "Phool Aur Kaante",
+    "year": 1991,
+    "cover": "/covers/Tere_Dar_Par_Sanam_-_Male_Version_spotdown_org__1_.jpg",
+    "currentId": "rstuvwxyzab"
+  },
+  {
+    "id": 65,
+    "title": "Tere Dar Par Sanam - Male Version",
+    "artist": "Kumar Sanu",
+    "album": "Phool Aur Kaante",
+    "year": 1991,
+    "cover": "/covers/Tere_Dar_Par_Sanam_-_Male_Version_spotdown_org.jpg",
+    "currentId": "rstuvwxyzab"
+  },
+  {
+    "id": 66,
+    "title": "Tu Jo Hans Hans Ke - From Raja Bhaiya",
+    "artist": "Udit Narayan, Alka Yagnik",
+    "album": "Raja Bhaiya",
+    "year": 2003,
+    "cover": "/covers/Tu_Jo_Hans_Hans_Ke_-_From__Raja_Bhaiya__spotdown_org.jpg",
+    "currentId": "stuvwxyzabc"
+  },
+  {
+    "id": 67,
+    "title": "Tu Meri Zindagi Hai (From Aashiqui)",
+    "artist": "Kumar Sanu, Anuradha Paudwal",
+    "album": "Aashiqui",
+    "year": 1990,
+    "cover": "/covers/Tu_Meri_Zindagi_Hai__From__Aashiqui___spotdown_org.jpg",
+    "currentId": "tuvwxyzabcd"
+  },
+  {
+    "id": 68,
+    "title": "Tum Dil Ki Dhadkan Mein (From Dhadkan)",
+    "artist": "Abhijeet, Alka Yagnik",
+    "album": "Dhadkan",
+    "year": 2000,
+    "cover": "/covers/Tum_Dil_Ki_Dhadkan_Mein__From__Dhadkan___spotdown_org.jpg",
+    "currentId": "uvwxyzabcde"
+  },
+  {
+    "id": 69,
+    "title": "Tum Dil Ki Dhadkan Mein",
+    "artist": "Kumar Sanu",
+    "album": "Dhadkan",
+    "year": 2000,
+    "cover": "/covers/Tum_Dil_Ki_Dhadkan_Mein_spotdown_org.jpg",
+    "currentId": "uvwxyzabcde"
+  },
+  {
+    "id": 70,
+    "title": "Tumhein Apna Banane Ki Kasam Khai Hai",
+    "artist": "Kumar Sanu, Anuradha Paudwal",
+    "album": "Sadak",
+    "year": 1991,
+    "cover": "/covers/Tumhein_Apna_Banane_Ki_Kasam_Khai_Hai_spotdown_org.jpg",
+    "currentId": "vwxyzabcdef"
+  },
+  {
+    "id": 71,
+    "title": "Tumhein Dekhen Meri Aankhen",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Rang",
+    "year": 1993,
+    "cover": "/covers/Tumhein_Dekhen_Meri_Aankhen_spotdown_org.jpg",
+    "currentId": "wxyzabcdefg"
+  },
+  {
+    "id": 72,
+    "title": "Tumsa Koi Pyaara",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Khuddar",
+    "year": 1994,
+    "cover": "/covers/Tumsa_Koi_Pyaara_spotdown_org.jpg",
+    "currentId": "xyzabcdefgh"
+  },
+  {
+    "id": 73,
+    "title": "Tumse Milna",
+    "artist": "Udit Narayan, Alka Yagnik",
+    "album": "Tere Naam",
+    "year": 2003,
+    "cover": "/covers/Tumse_Milna_spotdown_org.jpg",
+    "currentId": "yzabcdefghi"
+  },
+  {
+    "id": 74,
+    "title": "Tumse Milne Ki Tamanna Hai",
+    "artist": "Kumar Sanu",
+    "album": "Saajan",
+    "year": 1991,
+    "cover": "/covers/Tumse_Milne_Ki_Tamanna_Hai_spotdown_org.jpg",
+    "currentId": "zabcdefghij"
+  },
+  {
+    "id": 75,
+    "title": "Tumse Milne Ko Dil",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Phool Aur Kaante",
+    "year": 1991,
+    "cover": "/covers/Tumse_Milne_Ko_Dil_spotdown_org.jpg",
+    "currentId": "abcdefghijk"
+  },
+  {
+    "id": 76,
+    "title": "Woh Ladki Bahut Yaad Aati",
+    "artist": "Kumar Sanu, Alka Yagnik",
+    "album": "Qayamat",
+    "year": 2003,
+    "cover": "/covers/Woh_Ladki_Bahut_Yaad_Aati_spotdown_org.jpg",
+    "currentId": "bcdefghijkl"
+  },
+  {
+    "id": 77,
+    "title": "Zindagi Ban Gaye Ho Tum",
+    "artist": "Udit Narayan, Alka Yagnik",
+    "album": "Kasoor",
+    "year": 2001,
+    "cover": "/covers/Zindagi_Ban_Gaye_Ho_Tum_spotdown_org.jpg",
+    "currentId": "cdefghijklm"
+  }
+]
