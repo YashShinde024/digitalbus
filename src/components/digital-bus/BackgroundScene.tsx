@@ -53,7 +53,9 @@ export function BackgroundScene({
   }, []);
 
   return (
-    <div className={`${fixed ? "fixed" : "absolute"} inset-0 z-0 overflow-hidden select-none pointer-events-none bg-black`}>
+    <div
+      className={`${fixed ? "fixed" : "absolute"} inset-0 z-0 overflow-hidden select-none pointer-events-none bg-black`}
+    >
       {BACKGROUNDS.map((bg, idx) => {
         const isActive = idx === currentIndex;
         return (

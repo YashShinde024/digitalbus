@@ -35,7 +35,8 @@ const jsonLdData = {
       url: "https://digitalbus.me/",
       name: "Digital Bus — Nostalgic Hindi Travel Playlist",
       isPartOf: { "@id": "https://digitalbus.me/#website" },
-      about: "A cinematic Indian bus radio for old Hindi songs, retro Bollywood playlists, 90s Hindi songs, and nostalgic road trip music.",
+      about:
+        "A cinematic Indian bus radio for old Hindi songs, retro Bollywood playlists, 90s Hindi songs, and nostalgic road trip music.",
     },
     {
       "@type": "WebApplication",
@@ -57,7 +58,8 @@ const jsonLdData = {
       "@type": "MusicPlaylist",
       "@id": "https://digitalbus.me/#playlist",
       name: "Nostalgic Hindi & Retro Bollywood Playlist — Digital Bus",
-      description: "The Indian Bus Driver's Playlist: classic old Hindi songs, 90s Bollywood hits, retro romantic Hindi music, relaxing travel songs, and nostalgic bus journey music for long road trips and night travel.",
+      description:
+        "The Indian Bus Driver's Playlist: classic old Hindi songs, 90s Bollywood hits, retro romantic Hindi music, relaxing travel songs, and nostalgic bus journey music for long road trips and night travel.",
       numTracks: playlist.length,
       mainEntity: {
         "@type": "ItemList",
@@ -79,16 +81,18 @@ const jsonLdData = {
         "@type": "MusicRecording",
         name: track.title,
         position: index + 1,
-        url: `https://digitalbus.me${track.audio}`,
+        url: `https://digitalbus.me/?song=${track.id}`,
         image: `https://digitalbus.me${track.cover}`,
         byArtist: {
           "@type": "MusicGroup",
           name: track.artist,
         },
-        inAlbum: track.album ? {
-          "@type": "MusicAlbum",
-          name: track.album,
-        } : undefined,
+        inAlbum: track.album
+          ? {
+              "@type": "MusicAlbum",
+              name: track.album,
+            }
+          : undefined,
       })),
     },
   ],

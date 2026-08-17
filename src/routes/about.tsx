@@ -181,7 +181,6 @@ function AboutPage() {
 
         {/* Content Glass Cards Container */}
         <div className="my-8 flex flex-col gap-6">
-
           {/* ════════ HERO SECTION ════════ */}
           <section className="glass-panel relative flex flex-col items-center gap-4 rounded-[26px] border border-white/20 bg-black/60 p-6 text-center shadow-2xl backdrop-blur-2xl sm:p-8">
             <h1 className="brand-mark font-display text-cream drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)] flex flex-col items-center leading-[0.85]">
@@ -194,11 +193,13 @@ function AboutPage() {
             </p>
 
             <blockquote className="my-1 border-y border-white/10 py-3.5 font-display text-[1.15rem] italic tracking-wide text-cream/90 sm:text-[1.35rem] max-w-md">
-              "More than a playlist.<br />A little ride through memories."
+              "More than a playlist.
+              <br />A little ride through memories."
             </blockquote>
 
             <p className="text-[0.82rem] leading-relaxed text-cream/70 sm:text-[0.88rem] max-w-md">
-              Put on your headphones, watch the rain trickle down the window, and let timeless melodies take you on the long way home.
+              Put on your headphones, watch the rain trickle down the window, and let timeless
+              melodies take you on the long way home.
             </p>
           </section>
 
@@ -213,13 +214,21 @@ function AboutPage() {
               </h2>
             </div>
             <p className="text-[0.82rem] leading-[1.75] text-cream/70">
-              Digital Bus started as a creative experiment: <strong className="text-cream font-medium">what if a music player didn't just play audio files, but created an immersive atmosphere?</strong>
+              Digital Bus started as a creative experiment:{" "}
+              <strong className="text-cream font-medium">
+                what if a music player didn't just play audio files, but created an immersive
+                atmosphere?
+              </strong>
             </p>
             <p className="text-[0.82rem] leading-[1.75] text-cream/65">
-              Instead of an endless algorithmic queue or flat list, everything here is designed around the tactile feeling of an Indian bus journey — raindrops sliding down glass, streetlights casting warm glows in the dark, and unforgettable Hindi melodies playing quietly in your ears.
+              Instead of an endless algorithmic queue or flat list, everything here is designed
+              around the tactile feeling of an Indian bus journey — raindrops sliding down glass,
+              streetlights casting warm glows in the dark, and unforgettable Hindi melodies playing
+              quietly in your ears.
             </p>
             <p className="text-[0.82rem] leading-[1.75] text-cream/60">
-              It captures that quiet, cherished feeling of claiming the window seat on a night bus, watching the world drift by outside while you drift somewhere far in memory.
+              It captures that quiet, cherished feeling of claiming the window seat on a night bus,
+              watching the world drift by outside while you drift somewhere far in memory.
             </p>
           </section>
 
@@ -234,10 +243,19 @@ function AboutPage() {
               </h2>
             </div>
             <p className="text-[0.82rem] leading-[1.75] text-cream/70">
-              The soundtrack is built from the golden era of Hindi and retro Bollywood cinema — romantic ballads, rainy melodies, and travel anthems from legendary voices like <span className="text-cream font-medium">Kumar Sanu, Alka Yagnik, Udit Narayan, Sonu Nigam, Kishore Kumar, and Lata Mangeshkar</span>.
+              The soundtrack is built from the golden era of Hindi and retro Bollywood cinema —
+              romantic ballads, rainy melodies, and travel anthems from legendary voices like{" "}
+              <span className="text-cream font-medium">
+                Kumar Sanu, Alka Yagnik, Udit Narayan, Sonu Nigam, Kishore Kumar, and Lata
+                Mangeshkar
+              </span>
+              .
             </p>
             <p className="text-[0.82rem] leading-[1.75] text-cream/65">
-              Currently featuring <strong className="text-cream font-semibold">{playlist.length} curated tracks</strong> with embedded high-resolution artwork. Every listening session is shuffled uniquely, ensuring that no two journeys on Digital Bus feel quite the same.
+              Currently featuring{" "}
+              <strong className="text-cream font-semibold">{playlist.length} curated tracks</strong>{" "}
+              with embedded high-resolution artwork. Every listening session is shuffled uniquely,
+              ensuring that no two journeys on Digital Bus feel quite the same.
             </p>
 
             {/* Streaming Links Row */}
@@ -281,7 +299,8 @@ function AboutPage() {
               </h2>
             </div>
             <p className="text-[0.82rem] leading-[1.75] text-cream/70">
-              Built with React 19, Vite, TanStack Start, and custom glassmorphism styling designed for effortless listening on both mobile and desktop.
+              Built with React 19, Vite, TanStack Start, and custom glassmorphism styling designed
+              for effortless listening on both mobile and desktop.
             </p>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-[0.78rem] text-cream/70 mt-1">
               {[
@@ -311,35 +330,51 @@ function AboutPage() {
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[0.7rem]">
                 <div className="flex items-center gap-1.5">
-                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">Space</kbd>
+                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">
+                    Space
+                  </kbd>
                   <span className="text-cream/50">Play/Pause</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">N / P</kbd>
+                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">
+                    N / P
+                  </kbd>
                   <span className="text-cream/50">Next/Prev</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">Q</kbd>
+                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">
+                    Q
+                  </kbd>
                   <span className="text-cream/50">Queue</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">T</kbd>
+                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">
+                    T
+                  </kbd>
                   <span className="text-cream/50">Ticket</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">M</kbd>
+                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">
+                    M
+                  </kbd>
                   <span className="text-cream/50">Mute</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">S</kbd>
+                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">
+                    S
+                  </kbd>
                   <span className="text-cream/50">Shuffle</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">← / →</kbd>
+                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">
+                    ← / →
+                  </kbd>
                   <span className="text-cream/50">Seek 5s</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">B</kbd>
+                  <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[0.62rem] font-mono text-cream">
+                    B
+                  </kbd>
                   <span className="text-cream/50">Secret</span>
                 </div>
               </div>
@@ -371,7 +406,11 @@ function AboutPage() {
             </h3>
 
             <p className="max-w-md text-[0.82rem] leading-[1.75] text-cream/65">
-              Yash is a Python Developer and Full-Stack Web Engineer specializing in Django, FastAPI, React, and TypeScript. He is the founder of <strong className="text-cream font-medium">Nyxen</strong>, focused on engineering scalable backend systems, AI-powered products, and thoughtful web applications designed with deep aesthetic care.
+              Yash is a Python Developer and Full-Stack Web Engineer specializing in Django,
+              FastAPI, React, and TypeScript. He is the founder of{" "}
+              <strong className="text-cream font-medium">Nyxen</strong>, focused on engineering
+              scalable backend systems, AI-powered products, and thoughtful web applications
+              designed with deep aesthetic care.
             </p>
 
             {/* Social & Portfolio Badges */}
@@ -430,7 +469,11 @@ function AboutPage() {
             </div>
 
             <p className="text-[0.82rem] leading-[1.75] text-cream/70">
-              <strong className="text-cream font-semibold">Nyxen</strong> is an independent digital product studio founded by Yash Shinde with the motto <em className="text-cream">"Innovate. Build. Empower."</em> Nyxen creates consumer-focused technology, AI utilities, and software that people love using every day — free from corporate bloat, VC overhead, and telemetry tracking.
+              <strong className="text-cream font-semibold">Nyxen</strong> is an independent digital
+              product studio founded by Yash Shinde with the motto{" "}
+              <em className="text-cream">"Innovate. Build. Empower."</em> Nyxen creates
+              consumer-focused technology, AI utilities, and software that people love using every
+              day — free from corporate bloat, VC overhead, and telemetry tracking.
             </p>
 
             {/* Sister Products Grid */}
@@ -444,14 +487,17 @@ function AboutPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-purple-300" />
-                    <h4 className="text-[0.88rem] font-bold text-cream group-hover:text-white">Venz AI</h4>
+                    <h4 className="text-[0.88rem] font-bold text-cream group-hover:text-white">
+                      Venz AI
+                    </h4>
                   </div>
                   <span className="rounded-full bg-white/10 border border-white/20 px-2 py-0.2 text-[0.55rem] font-semibold text-cream/90 uppercase">
                     Live
                   </span>
                 </div>
                 <p className="text-[0.72rem] text-cream/60 leading-relaxed">
-                  AI workspace focused on prompt optimization, deterministic workflows, and multi-model playgrounds.
+                  AI workspace focused on prompt optimization, deterministic workflows, and
+                  multi-model playgrounds.
                 </p>
                 <span className="text-[0.65rem] font-medium text-cream/40 group-hover:text-cream/80 mt-auto pt-1 flex items-center gap-1">
                   venzai.tech ↗
@@ -467,14 +513,17 @@ function AboutPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <ShieldCheck className="h-4 w-4 text-emerald-300" />
-                    <h4 className="text-[0.88rem] font-bold text-cream group-hover:text-white">NyChat</h4>
+                    <h4 className="text-[0.88rem] font-bold text-cream group-hover:text-white">
+                      NyChat
+                    </h4>
                   </div>
                   <span className="rounded-full bg-white/10 border border-white/20 px-2 py-0.2 text-[0.55rem] font-semibold text-cream/90 uppercase">
                     Live
                   </span>
                 </div>
                 <p className="text-[0.72rem] text-cream/60 leading-relaxed">
-                  Login-free encrypted anonymous conversational platform with instant ephemeral messaging tunnels.
+                  Login-free encrypted anonymous conversational platform with instant ephemeral
+                  messaging tunnels.
                 </p>
                 <span className="text-[0.65rem] font-medium text-cream/40 group-hover:text-cream/80 mt-auto pt-1 flex items-center gap-1">
                   nychat.app ↗
@@ -484,9 +533,15 @@ function AboutPage() {
 
             {/* Studio Ethos Badges */}
             <div className="flex flex-wrap gap-2 pt-2 border-t border-white/8 text-[0.68rem] text-cream/55 font-light">
-              <span className="rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5">✦ 100% Independent</span>
-              <span className="rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5">✦ Zero Tracking Mandate</span>
-              <span className="rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5">✦ Built in Public</span>
+              <span className="rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5">
+                ✦ 100% Independent
+              </span>
+              <span className="rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5">
+                ✦ Zero Tracking Mandate
+              </span>
+              <span className="rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5">
+                ✦ Built in Public
+              </span>
             </div>
           </section>
 
@@ -498,10 +553,13 @@ function AboutPage() {
               <span className="text-[0.58rem] font-bold tracking-[0.2em] text-cream/45 uppercase flex items-center gap-1.5">
                 <Sparkles className="h-3 w-3 text-cream/80" /> THE NEXT STOP
               </span>
-              <h3 className="font-display text-[1.25rem] text-cream">Looking for more musical journeys?</h3>
+              <h3 className="font-display text-[1.25rem] text-cream">
+                Looking for more musical journeys?
+              </h3>
             </div>
             <p className="text-[0.8rem] text-cream/65 max-w-sm leading-relaxed">
-              Explore Xpert Melody for more nostalgic Hindi songs, retro remixes, and musical collections.
+              Explore Xpert Melody for more nostalgic Hindi songs, retro remixes, and musical
+              collections.
             </p>
             <a
               href={externalLinks.xpertMelody}

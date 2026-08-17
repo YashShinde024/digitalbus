@@ -141,9 +141,7 @@ export function PlaylistPanel({
               Playing
             </span>
           ) : track.year ? (
-            <span className="text-[0.62rem] font-medium text-cream/35">
-              {track.year}
-            </span>
+            <span className="text-[0.62rem] font-medium text-cream/35">{track.year}</span>
           ) : null}
         </div>
       </button>
@@ -208,9 +206,7 @@ export function PlaylistPanel({
           <div className="flex items-center justify-between px-5 pb-3 border-b border-white/10 shrink-0">
             <div className="flex items-center gap-2">
               <Music2 className="h-4 w-4 text-cream/80" />
-              <span className="text-sm font-semibold tracking-wide text-cream">
-                Playlist
-              </span>
+              <span className="text-sm font-semibold tracking-wide text-cream">Playlist</span>
               <span className="rounded-full bg-white/10 px-2 py-0.5 text-[0.6rem] font-medium text-cream/60">
                 {playlist.length}
               </span>

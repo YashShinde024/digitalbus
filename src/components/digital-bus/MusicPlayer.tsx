@@ -1,4 +1,17 @@
-import { ChevronDown, Disc3, Loader2, Pause, Play, Radio, RefreshCw, Share2, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
+import {
+  ChevronDown,
+  Disc3,
+  Loader2,
+  Pause,
+  Play,
+  Radio,
+  RefreshCw,
+  Share2,
+  SkipBack,
+  SkipForward,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { playlist } from "@/data/playlist";
 import { useAudioPlayer } from "@/hooks/useAudioPlayer";
@@ -64,7 +77,9 @@ export function MusicPlayer() {
     if (!isMobileExpanded) return;
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = original; };
+    return () => {
+      document.body.style.overflow = original;
+    };
   }, [isMobileExpanded]);
 
   // Close mobile expanded sheet on Escape key
@@ -123,11 +138,17 @@ export function MusicPlayer() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const w = window as unknown as { digitalBusOpenPlaylist?: () => void; digitalBusOpenTicket?: () => void; digitalBusPlayerExpanded?: boolean };
+    const w = window as unknown as {
+      digitalBusOpenPlaylist?: () => void;
+      digitalBusOpenTicket?: () => void;
+      digitalBusPlayerExpanded?: boolean;
+    };
     w.digitalBusOpenPlaylist = () => setIsPlaylistOpen(true);
     w.digitalBusOpenTicket = handleOpenShare;
     w.digitalBusPlayerExpanded = isMobileExpanded;
-    window.dispatchEvent(new CustomEvent("digitalbus:playerexpand", { detail: { expanded: isMobileExpanded } }));
+    window.dispatchEvent(
+      new CustomEvent("digitalbus:playerexpand", { detail: { expanded: isMobileExpanded } }),
+    );
     return () => {
       delete w.digitalBusOpenPlaylist;
       delete w.digitalBusOpenTicket;
@@ -351,7 +372,10 @@ export function MusicPlayer() {
               </div>
 
               {/* Right: Quick Queue, Play/Pause & Next Button */}
-              <div className="flex items-center gap-1.5 shrink-0" onClick={(e) => e.stopPropagation()}>
+              <div
+                className="flex items-center gap-1.5 shrink-0"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <button
                   type="button"
                   aria-label="Open playlist queue"
@@ -398,10 +422,7 @@ export function MusicPlayer() {
             className="fixed inset-0 z-[50] flex flex-col justify-end bg-black/80 backdrop-blur-md animate-fade-in"
           >
             {/* Backdrop Dismiss Area */}
-            <div
-              className="flex-1 w-full"
-              onClick={() => setIsMobileExpanded(false)}
-            />
+            <div className="flex-1 w-full" onClick={() => setIsMobileExpanded(false)} />
 
             {/* Expanded Sheet Card */}
             <div
@@ -456,7 +477,9 @@ export function MusicPlayer() {
                 </p>
                 {(track?.album || track?.year) && (
                   <p className="truncate text-[0.7rem] text-cream/40 mt-1 italic">
-                    {track.album}{track.album && track.year ? " · " : ""}{track.year || ""}
+                    {track.album}
+                    {track.album && track.year ? " · " : ""}
+                    {track.year || ""}
                   </p>
                 )}
                 <div className="mt-3 flex justify-center">

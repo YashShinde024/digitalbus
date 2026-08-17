@@ -7,7 +7,9 @@ export function Footer() {
       {/* Subtle AEO/SEO context section */}
       <div className="w-full text-center text-[0.62rem] sm:text-[0.68rem] leading-relaxed text-cream/35 border-t border-white/5 pt-2.5 sm:pt-3.5">
         <p className="max-w-xl mx-auto hidden sm:block">
-          <strong>Digital Bus</strong> is an immersive web-based listening experience playing a nostalgic collection of old Hindi and retro Bollywood songs. Specially curated for lovers of 90s Bollywood music, romantic old songs, and relaxing travel tracks.
+          <strong>Digital Bus</strong> is an immersive web-based listening experience playing a
+          nostalgic collection of old Hindi and retro Bollywood songs. Specially curated for lovers
+          of 90s Bollywood music, romantic old songs, and relaxing travel tracks.
         </p>
         <p className="max-w-xl mx-auto sm:hidden flex items-center justify-center gap-1.5 text-[0.62rem] text-cream/45">
           <span>Digital Bus — Nostalgic Hindi Radio</span>

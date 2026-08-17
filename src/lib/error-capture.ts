@@ -64,9 +64,7 @@ console.error = (...args: unknown[]) => {
 
 if (typeof window !== "undefined" && typeof window.addEventListener === "function") {
   window.addEventListener("error", (event) => record(event.error ?? event));
-  window.addEventListener("unhandledrejection", (event) =>
-    record(event.reason),
-  );
+  window.addEventListener("unhandledrejection", (event) => record(event.reason));
 }
 
 export function consumeLastCapturedError(): unknown {

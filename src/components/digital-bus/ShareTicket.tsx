@@ -179,7 +179,9 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
   return (
     <>
       {/* Physical Ticket Trigger Control */}
-      <div className={`fixed right-3.5 top-[24%] -translate-y-1/2 z-20 sm:right-6 sm:top-1/2 sm:z-[35] ${hiddenOnMobile ? "max-sm:hidden" : ""}`}>
+      <div
+        className={`fixed right-3.5 top-[24%] -translate-y-1/2 z-20 sm:right-6 sm:top-1/2 sm:z-[35] ${hiddenOnMobile ? "max-sm:hidden" : ""}`}
+      >
         <button
           type="button"
           onClick={() => setIsOpen(true)}
@@ -194,7 +196,8 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
           </div>
 
           {/* Desktop (≥640px): Full Physical Ticket Card */}
-          <div className="ticket-notch hidden sm:flex flex-col gap-1 w-[145px] overflow-visible rounded-xl border border-white/20
+          <div
+            className="ticket-notch hidden sm:flex flex-col gap-1 w-[145px] overflow-visible rounded-xl border border-white/20
             bg-ink/90 backdrop-blur-md px-4 py-3.5
             text-cream shadow-2xl transition-all duration-300 ease-out select-none text-left
             hover:border-white/40 hover:bg-ink/95 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(0,0,0,0.6)]"
@@ -253,7 +256,6 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
 
             {/* Glass Bus Ticket Body Container */}
             <div className="p-5 sm:p-6 flex flex-col gap-4 select-none">
-
               {/* Ticket Top Header & Branding */}
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex flex-col">
@@ -261,7 +263,8 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
                     INDIAN STATE TRANSPORT • PASS
                   </span>
                   <h3 className="font-display text-[1.4rem] tracking-wide text-cream leading-tight">
-                    डिजिटल बस <span className="text-xs font-sans font-normal text-cream/40">#90s</span>
+                    डिजिटल बस{" "}
+                    <span className="text-xs font-sans font-normal text-cream/40">#90s</span>
                   </h3>
                 </div>
                 <div className="text-right">
@@ -279,7 +282,9 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
                 <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-black/40 border border-white/20 shadow-md">
                   <img
                     src={coverUrl}
-                    onError={(e) => { e.currentTarget.src = FALLBACK_ARTWORK; }}
+                    onError={(e) => {
+                      e.currentTarget.src = FALLBACK_ARTWORK;
+                    }}
                     alt={`Artwork for ${songTitle}`}
                     className="h-full w-full object-cover"
                   />
@@ -295,9 +300,7 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
                   <p className="truncate text-[0.72rem] font-medium text-cream/70 mt-0.5">
                     {artistName}
                   </p>
-                  <p className="truncate text-[0.62rem] text-cream/40 italic">
-                    {albumName}
-                  </p>
+                  <p className="truncate text-[0.62rem] text-cream/40 italic">{albumName}</p>
                 </div>
               </div>
 
@@ -456,7 +459,6 @@ export function ShareTicket({ currentTrack, hiddenOnMobile = false }: Props) {
                   digitalbus.me
                 </span>
               </div>
-
             </div>
           </div>
         </div>

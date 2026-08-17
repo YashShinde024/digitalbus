@@ -16,7 +16,7 @@ Instead of being another music player with a playlist, Digital Bus turns listeni
 
 ## Features
 
-- 🚌 Authentic Maharashtra ST (*महाराष्ट्र राज्य मार्ग परिवहन महामंडळ*) scenic background crossfade (Khandala, Bhor, Koyna Lake, Satara)
+- 🚌 Authentic Maharashtra ST (_महाराष्ट्र राज्य मार्ग परिवहन महामंडळ_) scenic background crossfade (Khandala, Bhor, Koyna Lake, Satara)
 - 🎵 Nostalgic Hindi & Bollywood music library
 - 🎶 77-track curated collection with embedded high-resolution artwork
 - 🔀 Shuffled unique queue with automatic next-track transitions
@@ -34,16 +34,16 @@ Instead of being another music player with a playlist, Digital Bus turns listeni
 
 ## Keyboard Controls
 
-| Key | Action |
-|-----|--------|
-| `Space` | Play / Pause current song |
-| `N` / `P` | Next / Previous track |
-| `Q` | Open / Close Playlist Queue |
-| `T` | Open / Close Share Ticket Modal |
-| `S` | Toggle Shuffle mode |
-| `M` | Mute / Unmute music |
-| `←` / `→` | Seek backward / forward 5 seconds |
-| `B` | "अरे! बस रोक क्यों दी? 🚌" (Easter egg horn toast) |
+| Key       | Action                                             |
+| --------- | -------------------------------------------------- |
+| `Space`   | Play / Pause current song                          |
+| `N` / `P` | Next / Previous track                              |
+| `Q`       | Open / Close Playlist Queue                        |
+| `T`       | Open / Close Share Ticket Modal                    |
+| `S`       | Toggle Shuffle mode                                |
+| `M`       | Mute / Unmute music                                |
+| `←` / `→` | Seek backward / forward 5 seconds                  |
+| `B`       | "अरे! बस रोक क्यों दी? 🚌" (Easter egg horn toast) |
 
 Shortcuts are disabled when typing in input fields. Space does not scroll the page when used as a player shortcut.
 
@@ -51,18 +51,18 @@ Shortcuts are disabled when typing in input fields. Space does not scroll the pa
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | [TanStack Start](https://tanstack.com/start) (React meta-framework with SSR) |
-| UI Library | [React 19](https://react.dev) |
-| Language | [TypeScript](https://www.typescriptlang.org/) |
-| Bundler | [Vite 8](https://vite.dev/) |
-| Styling | [Tailwind CSS v4](https://tailwindcss.com/) |
-| Audio | HTML5 Audio API + Web Audio API (ambient engine) |
-| Server | [Nitro](https://nitro.build/) (serverless functions for presence) |
-| Icons | [Lucide React](https://lucide.dev/) |
-| Routing | [TanStack Router](https://tanstack.com/router) (file-based) |
-| Deployment | [Vercel](https://vercel.com/) |
+| Layer      | Technology                                                                   |
+| ---------- | ---------------------------------------------------------------------------- |
+| Framework  | [TanStack Start](https://tanstack.com/start) (React meta-framework with SSR) |
+| UI Library | [React 19](https://react.dev)                                                |
+| Language   | [TypeScript](https://www.typescriptlang.org/)                                |
+| Bundler    | [Vite 8](https://vite.dev/)                                                  |
+| Styling    | [Tailwind CSS v4](https://tailwindcss.com/)                                  |
+| Audio      | HTML5 Audio API + Web Audio API (ambient engine)                             |
+| Server     | [Nitro](https://nitro.build/) (serverless functions for presence)            |
+| Icons      | [Lucide React](https://lucide.dev/)                                          |
+| Routing    | [TanStack Router](https://tanstack.com/router) (file-based)                  |
+| Deployment | [Vercel](https://vercel.com/)                                                |
 
 ---
 
