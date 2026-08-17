@@ -35,13 +35,16 @@ export function BackgroundScene({
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Preload all 4 backgrounds immediately
+  // Load the next background image progressively before rotation rather than downloading all 4 at once on initial paint
   useEffect(() => {
-    BACKGROUNDS.forEach((bg) => {
+    // Preload next image in sequence
+    const nextIdx = (currentIndex + 1) % BACKGROUNDS.length;
+    const nextBg = BACKGROUNDS[nextIdx];
+    if (nextBg) {
       const img = new Image();
-      img.src = bg.src;
-    });
-  }, []);
+      img.src = nextBg.src;
+    }
+  }, [currentIndex]);
 
   // Automatic background rotation timer with smooth crossfade
   useEffect(() => {

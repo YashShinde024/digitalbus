@@ -18,13 +18,16 @@ All Digital Bus components live in `src/components/digital-bus/`. The `DigitalBu
 
 ## Audio Architecture
 
-The audio system uses a **single persistent `HTMLAudioElement`** managed by `src/hooks/useAudioPlayer.ts`. Key rules:
+The audio system uses a **single persistent hidden YouTube IFrame Player instance** managed by `src/hooks/useAudioPlayer.ts`. Key rules:
 
-- Never create multiple Audio elements
-- Never destroy/recreate the audio element during seeking or track changes
-- The audio element is exposed globally via `window.digitalBusAudio` for keyboard shortcuts
-- `isDraggingRef` prevents `timeupdate` from overwriting the user's seek position during drag
-- Auto-play is tracked via `autoPlayNextRef` to distinguish user-initiated play from automatic next-track transitions
+- Never create multiple YouTube Player instances
+- Never destroy/recreate the player during seeking, track changes, or progress polling
+- The audio player state is exposed globally via a stable `window.digitalBusAudio` shim using property getters/setters for keyboard shortcuts
+- Active playback metadata is strictly committed upon receiving the `YT.PlayerState.PLAYING` event and verifying `getVideoData().video_id` against the active request token
+- `playbackRequestIdRef` and `currentRequestRef` track monotonic request tokens to prevent race conditions during rapid track skipping
+- `isDraggingRef` prevents progress polling from overwriting the user's seek position during slider drag
+- Shuffle generates a single stable queue cycle using Fisher-Yates and advances a pointer without reshuffling on every track transition
+- History stack records backward navigation explicitly with `{ recordHistory: false }` to avoid navigation corruptions
 
 ## Toast / Notification System
 

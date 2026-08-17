@@ -18,7 +18,7 @@ Instead of being another music player with a playlist, Digital Bus turns listeni
 
 - 🚌 Authentic Maharashtra ST (_महाराष्ट्र राज्य मार्ग परिवहन महामंडळ_) scenic background crossfade (Khandala, Bhor, Koyna Lake, Satara)
 - 🎵 Nostalgic Hindi & Bollywood music library
-- 🎶 77-track curated collection with embedded high-resolution artwork
+- 🎶 77-track curated collection with high-resolution album artwork
 - 🔀 Shuffled unique queue with automatic next-track transitions
 - 🪟 Premium glassmorphic music player with frosted glass styling
 - 📱 Responsive mobile experience: floating mini player capsule, direct queue access, and swipeable expanded player sheet
@@ -58,7 +58,7 @@ Shortcuts are disabled when typing in input fields. Space does not scroll the pa
 | Language   | [TypeScript](https://www.typescriptlang.org/)                                |
 | Bundler    | [Vite 8](https://vite.dev/)                                                  |
 | Styling    | [Tailwind CSS v4](https://tailwindcss.com/)                                  |
-| Audio      | HTML5 Audio API + Web Audio API (ambient engine)                             |
+| Audio      | YouTube IFrame Player API + Web Audio API (ambient engine)                   |
 | Server     | [Nitro](https://nitro.build/) (serverless functions for presence)            |
 | Icons      | [Lucide React](https://lucide.dev/)                                          |
 | Routing    | [TanStack Router](https://tanstack.com/router) (file-based)                  |
@@ -72,35 +72,37 @@ Shortcuts are disabled when typing in input fields. Space does not scroll the pa
 
 TanStack Start with file-based routing (`src/routes/`). Three routes: index (homepage), about, and a custom 404. All Digital Bus components live in `src/components/digital-bus/`.
 
-### Audio Architecture
+### Media & Streaming Architecture
 
-A single persistent `HTMLAudioElement` managed by the `useAudioPlayer` hook. The audio element is created once and reused across track changes — never destroyed during seeking or track switches. Playback state, progress, and duration are synchronized via native audio events (`timeupdate`, `canplay`, `ended`, `error`).
+Media playback is streamed externally using the **YouTube IFrame Player API** via a single persistent hidden player controlled by `useAudioPlayer.ts`. This architecture provides zero local bandwidth overhead while maintaining a custom, premium glassmorphic UI.
+
+Key architectural invariants:
+- **Authoritative Playback Synchronization:** Active track index and UI metadata are only committed upon receiving the YouTube `PLAYING` state change matching the requested video token and verified `getVideoData().video_id`.
+- **Request Generation Tokens:** Rapid track clicks increment a monotonic request ID (`playbackRequestIdRef`) and record pending selections without permitting stale buffering events from older requests to overwrite active metadata.
+- **Error Protection & Timers:** Video error codes (2, 5, 100, 101, 150) are tracked per video ID to prevent loops. Stale auto-skip timers are cancelled upon every new user request and on unmount.
+- **Stable Global Audio Shim:** `window.digitalBusAudio` is registered once and reads active player state via references, ensuring compatibility with centralized keyboard shortcuts without recreating objects during polling.
 
 ### Playlist & Shuffle Logic
 
-77 tracks defined in `src/data/playlist.ts` with metadata (title, artist, album, year, audio path, cover path). On each session, a Fisher-Yates shuffle generates a unique play order. Queue index is persisted in `localStorage` so returning visitors continue from where they left off.
+77 tracks defined in `src/data/playlist.ts` with metadata (title, artist, album, year, cover path, and verified unique `youtubeId`). A Fisher-Yates shuffle creates a stable queue cycle upon enabling shuffle or exhausting the queue, rather than regenerating on every track switch. Queue index is persisted in `localStorage`.
 
 ### Presence System
 
-Server-side in-memory session map (`src/lib/presence.ts`) using TanStack Start server functions. Clients ping every 10 seconds with a unique persistent client ID. Sessions expire after 25 seconds of inactivity.
+Lightweight client presence pinging (`src/lib/presence.ts`) tracking active bus passengers.
 
 ### Notification / Toast System
 
 Single-toast policy enforced by `ToastSystem.tsx`. Only one notification can be visible at a time. Supports three toast types: `b_key` (bus horn), `xpert_promo` (Xpert Melody), and `custom_banner`. Auto-dismisses after configurable duration.
 
-### Metadata & Artwork Handling
-
-ID3v2 tags are parsed directly from MP3 files at runtime (`src/lib/id3.ts`). The parser reads the first 256KB of each file to extract title, artist, album, and embedded cover art. Parsed metadata is cached in memory.
-
 ### Deployment
 
-Deployed to Vercel via TanStack Start's Nitro integration. Server functions (presence) run as serverless functions. Static assets (songs, images) are served from the `public/` directory.
+Deployed to Vercel via TanStack Start's Nitro integration. Static artwork (`public/covers/`, `public/backgrounds/`) is served efficiently with edge caching.
 
 ---
 
 ## Music
 
-Songs are stored as MP3 files in `public/Songs/`. Track metadata is defined in `src/data/playlist.ts` and augmented at runtime by parsing embedded ID3 tags. Album artwork is extracted from ID3 APIC frames when available, with a fallback to the bus-stop background image.
+77 nostalgic Hindi and Bollywood tracks from the golden era are curated in `src/data/playlist.ts`. Media streams directly from YouTube via embeddable video IDs, with high-resolution artwork displayed locally.
 
 ---
 
@@ -142,8 +144,7 @@ npm run preview
 ```
 digital-bus/
 ├── public/
-│   ├── Songs/                    # 77 MP3 audio files
-│   ├── covers/                   # 77 extracted real album artwork images
+│   ├── covers/                   # 77 album artwork images
 │   ├── backgrounds/              # 4 Maharashtra ST scenic background artworks
 │   ├── og-image.png              # Open Graph share image
 │   ├── favicon.svg               # Site favicon
@@ -170,15 +171,15 @@ digital-bus/
 │   │       ├── MusicLinks.tsx     # Spotify, YouTube Music, Apple Music streaming links
 │   │       └── Footer.tsx         # Attributions & external links
 │   ├── hooks/
-│   │   ├── useAudioPlayer.ts     # Core persistent audio engine
+│   │   ├── useAudioPlayer.ts     # Core YouTube streaming & state synchronization engine
 │   │   ├── useKeyboardShortcuts.ts # Centralized keyboard shortcut handler
 │   │   └── useClock.ts           # Time & date ticker hook
 │   ├── lib/
 │   │   ├── audioEffects.ts       # Web Audio API ambient synthesizer
-│   │   ├── id3.ts                # ID3v2 metadata & artwork parser
-│   │   └── presence.ts           # Serverless passenger presence tracking
+│   │   ├── playlistValidator.ts  # Development & build-time playlist validator
+│   │   └── presence.ts           # Passenger presence tracking
 │   ├── data/
-│   │   └── playlist.ts           # 77 curated tracks & streaming URLs
+│   │   └── playlist.ts           # 77 curated tracks with verified YouTube IDs
 │   ├── routes/
 │   │   ├── __root.tsx            # Root layout, head metadata, 404
 │   │   ├── index.tsx             # Homepage route
@@ -214,7 +215,7 @@ If you enjoy the Digital Bus experience:
 
 ## Music & Content Disclaimer
 
-The music files included in this project are used for personal and educational purposes. Digital Bus does not claim ownership or licensing rights over any of the songs in the playlist. All music rights belong to their respective artists, composers, and rights holders. If you are a rights holder and would like content removed, please reach out.
+The media accessed in this project is streamed directly via the YouTube IFrame API from YouTube for personal and educational purposes. Digital Bus does not host, re-encode, or redistribute raw audio files. All music rights belong to their respective artists, composers, and rights holders.
 
 ---
 
